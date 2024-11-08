@@ -14,7 +14,7 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
-            <body className={FONTS.alpha.className}>
+            <body className={`${FONTS.alpha.className} w-svw bg-ginaGray`}>
                 <Header />
                 {children}
                 <Footer />
