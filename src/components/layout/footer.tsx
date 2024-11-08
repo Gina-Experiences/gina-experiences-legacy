@@ -12,7 +12,7 @@ import {
 
 const Footer = () => {
     return (
-        <footer className="w-full text-ginaWhite bg-ginaBlue flex py-16 px-8 justify-center items-center">
+        <footer className="w-full text-ginaWhite bg-ginaBlue flex py-10 px-8 justify-center items-center">
             <div className="flex flex-col items-center sm:items-end">
                 <div className="max-w-screen-2xl border-b border-b-ginaWhite flex justify-between items-center sm:items-start flex-col sm:flex-row pb-4">
                     <div className="w-2/5 lg:w-1/4 flex items-center sm:items-start justify-center mr-0 my-12 sm:mr-8 sm:my-0">

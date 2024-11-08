@@ -36,13 +36,13 @@ const Header = () => {
 
     return (
         // Main navigation container, centered and full width
-        <nav className="w-full flex justify-center items-center">
+        <nav className="w-full flex justify-center items-center absolute z-20">
             {/* Inner container with maximum width and height for the navigation bar */}
-            <div className="w-full max-w-screen-2xl h-16 mt-8 items-center flex justify-between">
+            <div className="w-full max-w-screen-2xl h-16 mt-16 items-center flex justify-between">
                 {/* Two sections separating logo and the navigation links */}
 
                 {/* Logo */}
-                <div className="flex justify-end rounded-r-full bg-ginaWhite h-full px-12 xl:w-1/5 w-2/6">
+                <div className="flex justify-end rounded-r-full bg-ginaWhite h-full px-12 md:w-1/5 w-3/6">
                     <div className="flex items-center">
                         <Image
                             src="/images/gina/logo.png"
@@ -79,7 +79,7 @@ const Header = () => {
                             Sign Up
                         </button>
                     </div>
-                    <div className="block xl:hidden">
+                    <div className="block xl:hidden text-ginaOrange">
                         <FaBars size={24} />
                     </div>
                 </div>
