@@ -1,7 +1,9 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
+import Image from 'next/image';
 import Link from 'next/link';
+import { FaBars } from 'react-icons/fa6';
 
 const Header = () => {
     const pathname = usePathname();
@@ -26,24 +28,62 @@ const Header = () => {
             name: 'Contact Us',
             href: '/contact-us',
         },
+        {
+            name: 'Testimonials',
+            href: '/testimonials',
+        },
     ];
 
     return (
-        <nav className="p-10 flex items-center justify-center space-x-6">
-            <span>Header Links:</span>
-            {Links.map((link) => (
-                <Link
-                    key={link.name}
-                    href={link.href}
-                    className={`${
-                        pathname === link.href
-                            ? 'font-bold text-ginaOrange'
-                            : 'text-ginaYellow'
-                    } hover:text-ginaGreen transition duration-200`}
-                >
-                    {link.name}
-                </Link>
-            ))}
+        // Main navigation container, centered and full width
+        <nav className="w-full flex justify-center items-center absolute z-20">
+            {/* Inner container with maximum width and height for the navigation bar */}
+            <div className="w-full max-w-screen-2xl h-16 mt-16 items-center flex justify-between">
+                {/* Two sections separating logo and the navigation links */}
+
+                {/* Logo */}
+                <div className="flex justify-end rounded-r-full bg-ginaWhite h-full px-12 md:w-1/5 w-3/6">
+                    <div className="flex items-center">
+                        <Image
+                            src="/images/gina/logo.png"
+                            alt="Gina Experiences Logo"
+                            quality={100}
+                            width={80}
+                            height={80}
+                        />
+                    </div>
+                </div>
+
+                {/* Navigation Links */}
+                <div className="flex items-center justify-between rounded-l-full bg-ginaWhite w-auto h-full px-12 space-x-0 xl:space-x-12">
+                    <div className="space-x-6 hidden xl:flex">
+                        {Links.map((link) => (
+                            <Link
+                                key={link.name}
+                                href={link.href}
+                                className={`${
+                                    pathname === link.href
+                                        ? 'font-bold text-ginaOrange'
+                                        : 'text-ginaBlack'
+                                } hover:text-ginaYellow transition duration-200`}
+                            >
+                                {link.name}
+                            </Link>
+                        ))}
+                    </div>
+                    <div className="space-x-2 hidden xl:flex">
+                        <button className="border border-ginaYellow text-ginaYellow bg-ginaWhite rounded-lg w-24 p-1">
+                            Login
+                        </button>
+                        <button className="border border-ginaYellow text-ginaWhite bg-ginaYellow rounded-lg w-24 p-1">
+                            Sign Up
+                        </button>
+                    </div>
+                    <div className="block xl:hidden text-ginaOrange">
+                        <FaBars size={24} />
+                    </div>
+                </div>
+            </div>
         </nav>
     );
 };

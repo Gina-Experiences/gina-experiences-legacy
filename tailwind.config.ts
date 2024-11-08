@@ -16,6 +16,13 @@ const config: Config = {
                 ginaBlue: COLORS.ginaBlue,
                 ginaGreen: COLORS.ginaGreen,
                 ginaOrange: COLORS.ginaOrange,
+                ginaWhite: COLORS.ginaWhite,
+                ginaGray: COLORS.ginaGray,
+                ginaBlack: COLORS.ginaBlack,
+                ginaLightYellow: COLORS.ginaLightYellow,
+            },
+            width: {
+                '1/5': '20%',
             },
         },
     },
