@@ -2,9 +2,17 @@ import Image from 'next/image';
 
 export default function AboutHero() {
     return (
-        <div className="flex flex-col items-center justify-center w-svw mb-36 md:mb-0">
-            <div className="w-full max-w-screen-2xl h-svh p-8">
-                <div className="w-full h-full md:h-5/6 bg-[url('/images/about/hero-mission.jpg')] bg-cover bg-center rounded-3xl flex flex-col items-start justify-end text-ginaWhite space-y-4 lg:space-y-8 p-10 md:p-24">
+        <div className="flex flex-col items-center justify-center w-svw mb-28">
+            <div className="relative w-full max-w-screen-2xl h-svh p-8">
+                <Image
+                    src="/images/about/hero-mission.jpg"
+                    alt="Gina Experiences Logo"
+                    quality={100}
+                    width={1500}
+                    height={1500}
+                    className="rounded-3xl w-full h-full object-cover object-center"
+                />
+                <div className="absolute top-0 left-0 w-full h-full flex flex-col items-start justify-end text-ginaWhite space-y-4 lg:space-y-8 p-16 md:p-24">
                     <span className="text-3xl lg:text-6xl font-bold">
                         Who We Are
                     </span>
