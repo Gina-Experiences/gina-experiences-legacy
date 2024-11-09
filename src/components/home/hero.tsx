@@ -1,6 +1,6 @@
 export default function Hero() {
    return (
-    <div className="flex flex-col items-center w-11/12 h-full text-white rounded-lg p-10 m-12 space-y-5 bg-gradient-to-b from-ginaOrange">
+    <div className="flex flex-col justify-center items-center w-11/12 max-w-screen-2xl h-full lg:h-[400px] text-white rounded-lg p-10 m-24 space-y-5 bg-gradient-to-b from-ginaOrange">
         <div className=""> 
             <span className="">Gina Experiences</span>
         </div>

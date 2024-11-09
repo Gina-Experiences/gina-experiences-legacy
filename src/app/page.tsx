@@ -4,7 +4,7 @@ import Newsletter from "@/components/newsletter";
 
 export default function Home() {
     return (
-        <div className="flex flex-col items-center justify-center w-svw h-svh">
+        <div className="flex flex-col items-center justify-center">
             <Hero />
             <Guide />
             <Services />
