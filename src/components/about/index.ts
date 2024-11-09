@@ -1,4 +1,7 @@
-// import ExampleContainer0 from '@/components/home/example-container-0'
-// import ExampleContainer1 from '@/components/home/example-container-1'
+import AboutHero from '@/components/about/about-hero';
+import AboutGina from '@/components/about/about-gina';
+import AboutMV from '@/components/about/about-mv';
+import AboutExperiences from '@/components/about/about-experiences';
+import AboutTeam from '@/components/about/about-team';
 
-// export { ExampleContainer0, ExampleContainer1 }
+export { AboutHero, AboutGina, AboutMV, AboutExperiences, AboutTeam };
