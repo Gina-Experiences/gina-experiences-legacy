@@ -38,11 +38,11 @@ const Header = () => {
         // Main navigation container, centered and full width
         <nav className="w-full flex justify-center items-center absolute z-20">
             {/* Inner container with maximum width and height for the navigation bar */}
-            <div className="w-full max-w-screen-2xl h-16 mt-16 items-center flex justify-between">
+            <div className="w-full max-w-screen-2xl h-16 mt-16 items-center flex justify-between px-8">
                 {/* Two sections separating logo and the navigation links */}
 
                 {/* Logo */}
-                <div className="flex justify-end rounded-r-full bg-ginaWhite h-full px-12 md:w-1/5 w-3/6">
+                <div className="flex justify-end rounded-r-full bg-ginaWhite h-full px-12 lg:w-1/5 w-3/6">
                     <div className="flex items-center">
                         <Image
                             src="/images/gina/logo.png"
@@ -72,10 +72,10 @@ const Header = () => {
                         ))}
                     </div>
                     <div className="space-x-2 hidden xl:flex">
-                        <button className="border border-ginaYellow text-ginaYellow bg-ginaWhite rounded-lg w-24 p-1">
+                        <button className="border border-ginaLightYellow text-ginaLightYellow hover:border-ginaOrange hover:text-ginaOrange duration-200 bg-ginaWhite rounded-lg w-24 p-1">
                             Login
                         </button>
-                        <button className="border border-ginaYellow text-ginaWhite bg-ginaYellow rounded-lg w-24 p-1">
+                        <button className="border border-ginaLightYellow text-ginaWhite bg-ginaLightYellow hover:border-ginaOrange hover:bg-ginaOrange duration-200 rounded-lg w-24 p-1">
                             Sign Up
                         </button>
                     </div>

@@ -11,6 +11,33 @@ import {
 } from 'react-icons/fa6';
 
 const Footer = () => {
+    const socialMediaLinks = [
+        {
+            href: 'https://web.facebook.com/ginaexperiences',
+            icon: FaFacebookF,
+            size: 20,
+            padding: 'p-3',
+        },
+        {
+            href: 'https://www.instagram.com/ginaexperiences/',
+            icon: FaInstagram,
+            size: 25,
+            padding: 'p-2',
+        },
+        {
+            href: 'https://www.tiktok.com/@ginaexperiences',
+            icon: FaTiktok,
+            size: 30,
+            padding: 'p-3',
+        },
+        {
+            href: 'https://www.linkedin.com/company/ginaexperiences/',
+            icon: FaLinkedinIn,
+            size: 30,
+            padding: 'p-3',
+        },
+    ];
+
     return (
         <footer className="w-full text-ginaWhite bg-ginaBlue flex py-10 px-8 justify-center items-center">
             <div className="flex flex-col items-center sm:items-end">
@@ -29,12 +56,12 @@ const Footer = () => {
                         <div className="flex flex-col items-center sm:items-start">
                             <span className="text-3xl font-bold">COMPANY</span>
                             <button>About us</button>
-                            <button>Join us us</button>
+                            <button>Join us</button>
                         </div>
                         <div className="flex flex-col items-center sm:items-start">
                             <span className="text-3xl font-bold">HELP</span>
-                            <button>Sevices</button>
-                            <button>FAQ</button>
+                            <button>Services</button>
+                            <button>FAQs</button>
                         </div>
                         <div className="flex flex-col items-center sm:items-start">
                             <span className="text-3xl font-bold">LEGAL</span>
@@ -56,24 +83,28 @@ const Footer = () => {
                                 +63 917 108 6757
                             </span>
                             <div className="flex space-x-4 my-10">
-                                <button className="bg-ginaWhite w-10 h-10 p-3 text-ginaBlue rounded-full flex items-center justify-center">
-                                    <FaFacebookF size={20} />
-                                </button>
-                                <button className="bg-ginaWhite w-10 h-10 p-2 text-ginaBlue rounded-full flex items-center justify-center">
-                                    <FaInstagram size={25} />
-                                </button>
-                                <button className="bg-ginaWhite w-10 h-10 p-3 text-ginaBlue rounded-full flex items-center justify-center">
-                                    <FaTiktok size={30} />
-                                </button>
-                                <button className="bg-ginaWhite w-10 h-10 p-3 text-ginaBlue rounded-full flex items-center justify-center">
-                                    <FaLinkedinIn size={30} />
-                                </button>
+                                {socialMediaLinks.map(
+                                    (
+                                        { href, icon: Icon, size, padding },
+                                        index
+                                    ) => (
+                                        <a
+                                            key={index}
+                                            href={href}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className={`bg-ginaWhite w-10 h-10 ${padding} text-ginaBlue rounded-full flex items-center justify-center`}
+                                        >
+                                            <Icon size={size} />
+                                        </a>
+                                    )
+                                )}
                             </div>
                         </div>
                     </div>
                 </div>
                 <div className="flex justify-between w-72 pt-2">
-                    <button>FAQ</button>
+                    <button>FAQs</button>
                     <button>Privacy</button>
                     <button>Terms & Conditions</button>
                 </div>
