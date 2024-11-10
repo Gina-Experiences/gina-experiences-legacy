@@ -27,7 +27,7 @@ export default function AboutMV() {
                     </span>
                     <Image
                         src="/images/about/hero-mission.jpg"
-                        alt="Gina Experiences Logo"
+                        alt="Mission"
                         quality={100}
                         width={600}
                         height={600}

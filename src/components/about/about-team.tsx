@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import {
     AboutTeamCard1,
     AboutTeamCard2,
@@ -46,13 +45,21 @@ export default function AboutTeam() {
                 <div className="bg-[url('/images/team/joson.png')] bg-cover bg-center w-full h-full min-h-96 rounded-3xl"></div>
             </div>
 
-            {teamData.map((team, index) =>
-                index % 2 === 0 ? (
-                    <AboutTeamCard1 key={index} team={team} />
-                ) : (
-                    <AboutTeamCard2 key={index} team={team} />
-                )
-            )}
+            {teamData.map((team, index) => (
+                <div key={index}>
+                    <div className="w-full flex flex-col items-center justify-center space-y-12 md:hidden">
+                        <AboutTeamCard1 team={team} />
+                    </div>
+
+                    <div className="w-full hidden md:flex flex-col items-center justify-center space-y-12">
+                        {index % 2 === 0 ? (
+                            <AboutTeamCard1 team={team} />
+                        ) : (
+                            <AboutTeamCard2 team={team} />
+                        )}
+                    </div>
+                </div>
+            ))}
         </div>
     );
 }
