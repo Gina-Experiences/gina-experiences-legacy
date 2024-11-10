@@ -23,12 +23,16 @@ export function AboutTeamCard1({ team }: TeamCardProps) {
                 <span className="font-medium text-2xl pb-4">{team.title}</span>
                 <span className="text-justify">{team.description}</span>
             </div>
-            <div
-                className="bg-cover bg-center w-full h-full min-h-96 rounded-3xl"
-                style={{
-                    backgroundImage: `url(${team.image})`,
-                }}
-            ></div>
+            <div>
+                <Image
+                    src={team.image}
+                    alt={team.name}
+                    quality={100}
+                    width={600}
+                    height={600}
+                    className="rounded-3xl w-full h-[400px] object-cover object-center"
+                />
+            </div>
         </div>
     );
 }
@@ -36,12 +40,16 @@ export function AboutTeamCard1({ team }: TeamCardProps) {
 export function AboutTeamCard2({ team }: TeamCardProps) {
     return (
         <div className=" xl:w-4/6 grid grid-cols-1 md:grid-cols-2 mx-12 lg:mx-24 p-8 gap-12 bg-ginaWhite shadow-xl rounded-3xl">
-            <div
-                className="bg-cover bg-center w-full h-full min-h-96 rounded-3xl"
-                style={{
-                    backgroundImage: `url(${team.image})`,
-                }}
-            ></div>
+            <div>
+                <Image
+                    src={team.image}
+                    alt={team.name}
+                    quality={100}
+                    width={600}
+                    height={600}
+                    className="rounded-3xl w-full h-[400px] object-cover"
+                />
+            </div>
             <div className="flex flex-col space-y-1 justify-center">
                 <span
                     className="text-4xl font-bold bg-clip-text text-transparent"

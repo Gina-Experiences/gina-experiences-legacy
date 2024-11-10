@@ -7,7 +7,7 @@ export default function ExperiencesHero() {
                 <div className="relative w-full h-full rounded-3xl overflow-hidden">
                     <Image
                         src="/images/experiences/hero.jpg"
-                        alt="Gina Experiences Logo"
+                        alt="Hero"
                         quality={100}
                         width={1500}
                         height={1500}
