@@ -1,4 +1,4 @@
-import experiencesData from './experiences.json';
+import experienceData from './experience.json';
 import teamData from './team.json';
 
-export { experiencesData, teamData };
+export { experienceData, teamData };

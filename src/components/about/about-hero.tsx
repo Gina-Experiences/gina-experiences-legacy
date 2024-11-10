@@ -6,7 +6,7 @@ export default function AboutHero() {
             <div className="relative w-full max-w-screen-2xl h-svh p-8">
                 <Image
                     src="/images/about/hero-mission.jpg"
-                    alt="Gina Experiences Logo"
+                    alt="Hero"
                     quality={100}
                     width={1500}
                     height={1500}

@@ -7,4 +7,5 @@ export const COLORS = {
     ginaWhite: '#FCFCFC',
     ginaBlack: '#1E1E1E',
     ginaGray: '#ECECEC',
+    ginaDarkGray: '#696969',
 };
