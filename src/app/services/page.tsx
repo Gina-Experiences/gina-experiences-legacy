@@ -1,12 +1,14 @@
 import Image from 'next/image';
-import Hero from "@/components/services/hero";
+import { Hero, Activities, Hotels, Transport, Events } from '@/components/services';
 
 export default function Services() {
     return (
-        <div className="flex flex-col items-center justify-center w-svw h-svh">
-            <div className="w-full max-w-screen-2xl h-svh">
-                <Hero />
-            </div>
+        <div className="flex flex-col items-center justify-center">
+            <Hero />
+            <Activities />
+            <Hotels />
+            <Transport />
+            <Events />
         </div>
     );
 }
