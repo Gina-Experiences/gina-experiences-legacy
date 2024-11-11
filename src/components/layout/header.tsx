@@ -11,26 +11,32 @@ const Header = () => {
         {
             name: 'Home',
             href: '/',
+            target: '_self',
         },
         {
             name: 'About',
             href: '/about',
+            target: '_self',
         },
         {
             name: 'Experiences',
             href: '/experiences',
+            target: '_self',
         },
         {
             name: 'Services',
             href: '/services',
+            target: '_self',
         },
         {
             name: 'Contact Us',
-            href: '/contact-us',
+            href: 'https://www.messenger.com/t/109818234961571',
+            target: '_blank',
         },
         {
             name: 'Testimonials',
             href: '/testimonials',
+            target: '_self',
         },
     ];
 
@@ -61,6 +67,7 @@ const Header = () => {
                             <Link
                                 key={link.name}
                                 href={link.href}
+                                target={link.target}
                                 className={`${
                                     pathname === link.href
                                         ? 'font-bold text-ginaOrange'
