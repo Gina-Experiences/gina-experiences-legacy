@@ -25,13 +25,7 @@ export default function AboutHero() {
                         our experiences go beyond sightseeing. By partnering
                         with local artisans, guides, and communities, we offer
                         meaningful adventures that celebrate regional culture,
-                        heritage, and natural beauty. Whether through hands-on
-                        activities, curated events, or personalized tours, we
-                        strive to make each experience a memorable story that
-                        travelers carry with them long after their journey ends.
-                        Our commitment to sustainability and community support
-                        ensures that each adventure leaves a positive impact on
-                        the people and places we visit.
+                        heritage, and natural beauty.
                     </span>
                 </div>
             </div>
