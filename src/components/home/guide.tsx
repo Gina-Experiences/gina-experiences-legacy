@@ -3,36 +3,27 @@ import Image from "next/image";
 export default function Guide() {
    return (
       <div className="flex max-w-screen-2xl justify-center lg:justify-between my-12">
-         <div className="hidden w-8/12 lg:flex items-center text-ginaWhite space-x-1 mr-6">
+         <div className="hidden w-8/12 lg:flex items-center text-ginaWhite space-x-2 mr-3">
             <div className="flex flex-col w-1/3 h-full justify-center space-y-2">
-               <Image
-                  src="/images/home/guide/beach.png"
-                  alt="Beach"
-                  quality={100}
-                  width={400}
-                  height={80}
-               />
-               <div className="flex flex-col w-full h-full p-8 text-start justify-end rounded-r-3xl text-xl bg-ginaBlue"><span className="font-bold">CHOOSE</span><span>YOUR</span><span>EXPERIENCE.</span></div>
+               <img src="/images/home/guide/beach.jpg"
+                  alt="beach"
+                  className="h-full rounded-r-3xl object-center object-cover shadow-lg"
+                  />
+               <div className="flex flex-col w-full h-1/3 p-8 text-start justify-end rounded-r-3xl text-xl bg-ginaBlue shadow-lg"><span className="font-bold">CHOOSE</span><span>YOUR</span><span>EXPERIENCE.</span></div>
             </div>
-            <div className="flex flex-col w-1/3 h-full justify-center space-y-1">
+            <div className="flex flex-col w-1/3 h-full justify-center space-y-2">
                <div className="flex items-center w-full h-full p-8 rounded-3xl text-xl bg-ginaGreen"><span>MAKE <span className="font-bold">A BOOKING.</span></span></div>
-               <Image
-                  src="/images/home/guide/strawberry.png"
-                  alt="Beach"
-                  quality={100}
-                  width={400}
-                  height={200}
-               />
+               <img src="/images/home/guide/field.jpg"
+                  alt="field"
+                  className="h-full rounded-3xl object-center object-cover shadow-lg"
+                  />
             </div>
-            <div className="flex flex-col w-1/3 h-full justify-center space-y-0.5">
-               <Image
-                  src="/images/home/guide/mountains.png"
-                  alt="Mountains"
-                  quality={100}
-                  width={400}
-                  height={80}
-               />               
-               <div className="w-full h-full h-[120px] p-6 rounded-3xl text-xl bg-ginaOrange"><span className="font-bold">ENJOY</span> YOUR ADVENTURE!</div>
+            <div className="flex flex-col w-1/3 h-full justify-center space-y-2">
+               <img src="/images/home/guide/mountains.jpg" 
+                  alt="Mountains" 
+                  className="h-full rounded-3xl object-center object-cover shadow-lg"
+                  />
+               <div className="w-full h-1/3 p-6 rounded-3xl text-xl bg-ginaOrange shadow-lg"><span className="font-bold">ENJOY</span> YOUR ADVENTURE!</div>
             </div>
          </div>
          <div className="flex flex-col w-11/12 lg:w-4/12 p-8 rounded-xl lg:shadow-lg items-center lg:items-end  lg:bg-ginaWhite space-y-5">
