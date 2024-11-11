@@ -10,7 +10,7 @@ export default function Home() {
             <Services />
             <Offers />
             <Events />
-            {/* <Newsletter /> */}
+            <Newsletter />
         </div>
     );
 }
