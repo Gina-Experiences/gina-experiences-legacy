@@ -3,7 +3,7 @@
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
-import { FaBars } from 'react-icons/fa6';
+import HeaderButton from '@/components/layout/header-button';
 
 const Header = () => {
     const pathname = usePathname();
@@ -80,7 +80,7 @@ const Header = () => {
                         </button>
                     </div>
                     <div className="block xl:hidden text-ginaOrange">
-                        <FaBars size={24} />
+                        <HeaderButton />
                     </div>
                 </div>
             </div>
