@@ -45,7 +45,7 @@ export default function ExperiencesList() {
                     onClick={handleLoadMore}
                     className="bg-ginaOrange text-ginaWhite py-3 px-8 rounded-xl hover:bg-ginaBlue duration-200"
                 >
-                    Load More
+                    View More
                 </button>
             )}
         </div>
