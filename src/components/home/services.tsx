@@ -2,9 +2,11 @@ import Image from "next/image"
 
 export default function Services() {
    return (
-      <div className="flex flex-col items-center text-center w-full max-w-screen-2xl lg:bg-ginaWhite px-12 lg:py-32 my-8 lg:my-12 2xl:rounded-3xl lg:shadow-xl space-y-5">
-         <h2 className="text-3xl mx-2 font-bold bg-[linear-gradient(90deg,rgba(255,209,0,1)0%,rgba(246,147,29,1)22%,rgba(0,160,75,1)78%,rgba(27,20,100,1)100%)] text-transparent bg-clip-text">BEST SERVICES FOR YOU!</h2>
-         <h3 className="mx-10">Try a Variety of Benefits When Using Our Services</h3>
+      <div className="flex flex-col items-center text-center w-full max-w-screen-2xl lg:bg-ginaWhite px-12 lg:py-32 my-8 lg:my-12 2xl:rounded-3xl lg:shadow-xl space-y-10">
+         <div className="mx-4 space-y-4">
+            <h2 className="text-3xl font-bold bg-[linear-gradient(90deg,rgba(255,209,0,1)0%,rgba(246,147,29,1)22%,rgba(0,160,75,1)78%,rgba(27,20,100,1)100%)] text-transparent bg-clip-text">BEST SERVICES FOR YOU!</h2>
+            <h3 className="">Try a Variety of Benefits When Using Our Services</h3>
+         </div>
          <div className="flex flex-col lg:flex-row space-y-6 lg:space-y-0 lg:space-x-6">
             <div className="relative flex justify-center">
                <Image 
@@ -51,7 +53,7 @@ export default function Services() {
                <div className="absolute flex items-center justify-center w-11/12 h-14 rounded-b-[1.5rem] bottom-0 bg-ginaOrange text-white font-bold ">EVENTS</div>
             </div>
          </div>
-         <button className=" flex w-1/6 py-6 h-10 justify-center items-center rounded-xl bg-ginaYellow text-white font-bold shadow-md">View Services!</button>
+         <button className=" flex px-6 py-2 h-10 justify-center items-center rounded-xl bg-ginaYellow text-white font-bold shadow-md">View Services!</button>
       </div>
    )
 }
