@@ -3,7 +3,7 @@ import { Hero, Activities, Hotels, Transport, Events } from '@/components/servic
 
 export default function Services() {
     return (
-        <div className="flex flex-col items-center justify-center">
+        <div className="flex flex-col items-center justify-center w-svw text-ginaBlack">
             <Hero />
             <Activities />
             <Hotels />
