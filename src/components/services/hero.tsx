@@ -5,7 +5,7 @@ export default function Hero() {
       <div className="flex flex-col items-center justify-center w-svw mb-28">
          <div className="w-full max-w-screen-2xl h-svh p-8">
             <div className="relative w-full h-full rounded-3xl overflow-hidden">
-               <img src="/images/services/hero/hero-img.svg" alt="Services Hero Banner" className="rounded-3xl w-full h-full object-cover object-center"/>
+               <img src="/images/services/hero/hero-banner.jpg" alt="Services Hero Banner" className="rounded-3xl w-full h-full object-cover object-center"/>
                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-ginaGreen w-full h-full rounded-3xl"></div>
                <div className="absolute inset-0 w-full h-full flex flex-col items-start justify-end text-ginaWhite space-y-4 lg:space-y-8 p-8 md:p-24 ">
                   <span className="text-3xl lg:text-6xl font-bold">
