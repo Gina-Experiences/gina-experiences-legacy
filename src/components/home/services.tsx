@@ -1,6 +1,11 @@
+'use client'
+
 import Image from "next/image"
+import { useRouter } from "next/navigation"
 
 export default function Services() {
+   const router = useRouter();
+
    return (
       <div className="flex flex-col items-center text-center w-full max-w-screen-2xl lg:bg-ginaWhite px-12 lg:py-32 my-8 lg:my-12 2xl:rounded-3xl lg:shadow-xl space-y-10">
          <div className="mx-4 space-y-4">
@@ -53,7 +58,8 @@ export default function Services() {
                <div className="absolute flex items-center justify-center w-11/12 h-14 rounded-b-[1.5rem] bottom-0 bg-ginaOrange text-white font-bold ">EVENTS</div>
             </div>
          </div>
-         <button className=" flex px-6 py-2 h-10 justify-center items-center rounded-xl bg-ginaYellow text-white font-bold shadow-md">View Services!</button>
+         <button className=" flex px-6 py-2 h-10 justify-center items-center rounded-xl bg-ginaYellow text-white font-bold shadow-md" 
+         onClick={() => router.push('/services')}>View Services!</button>
       </div>
    )
 }
