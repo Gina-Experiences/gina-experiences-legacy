@@ -19,7 +19,7 @@ export default function AboutMV() {
                         To enable a collaborative travel and tourism economy in
                         the Philippines
                     </span>
-                    <span className="text-lg pb-4">
+                    <span className="text-lg pb-4 sm:text-justify text-start">
                         We aim to connect travelers with local communities
                         through authentic, meaningful experiences, fostering
                         economic growth and cultural appreciation in countryside
