@@ -37,7 +37,7 @@ export default function Hero() {
                                 DISCOVER AUTHENTIC LOCAL EXPERIENCES
                             </h1>
                         </div>
-                        <span className="text-base lg:text-xl w-1/4">
+                        <span className="text-base lg:text-xl lg:w-1/4">
                         Immerse yourself in the local culture with unique experiences hosted by knowledgeable locals at <span className="font-bold">Gina Experiences.</span>
                         </span>
 
