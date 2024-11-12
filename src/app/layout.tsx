@@ -14,6 +14,9 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
+            <head>
+                <link rel="icon" href="/images/gina/logo-icon.png" />
+            </head>
             <body
                 className={`${FONTS.alpha.className} w-svw bg-ginaGray relative`}
             >

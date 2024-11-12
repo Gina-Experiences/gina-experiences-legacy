@@ -4,7 +4,7 @@
         "name": "Mary Gwyneth Joson",
         "title": "Chief Executive Officer / Founder",
         "description": "Mary is the visionary leader and founder of our team, guiding us with her deep passion and commitment to excellence. With a wealth of experience and an innovative mindset, she empowers our team to push boundaries and exceed expectations.",
-        "image": "/images/team/joson.png"
+        "image": "/images/team/joson.jpg"
     },
     {
         "id": 1,
@@ -18,6 +18,6 @@
         "name": "Angeline Mae Manalang",
         "title": "Chief Marketing Officer",
         "description": "Angeline is the creative spark behind our brand's voice, leading our marketing efforts with a blend of innovation and strategic insight. She crafts campaigns that resonate with audiences, building connections that reflect our values and vision.",
-        "image": "/images/team/manalang.png"
+        "image": "/images/team/manalang.jpg"
     }
 ]
