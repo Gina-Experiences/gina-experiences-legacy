@@ -25,7 +25,7 @@ export default function AboutGina() {
                         Gina Experiences
                     </span>
 
-                    <span className="mt-8 text-justify text-lg">
+                    <span className="mt-8 sm:text-justify text-lg text-start">
                         Gina helps travelers achieve authentic local experiences
                         that support local communities and promote experiential
                         tourism.{' '}

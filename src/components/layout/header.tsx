@@ -48,7 +48,7 @@ const Header = () => {
                 {/* Two sections separating logo and the navigation links */}
 
                 {/* Logo */}
-                <div className="flex justify-end rounded-r-full bg-ginaWhite h-full px-12 lg:w-1/5 w-3/6">
+                <div className="flex justify-end rounded-r-full bg-ginaWhite h-full px-12 lg:w-1/5 w-auto">
                     <div className="flex items-center">
                         <Image
                             src="/images/gina/logo.png"
