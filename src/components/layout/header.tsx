@@ -6,6 +6,7 @@ import Link from 'next/link';
 import HeaderButton from '@/components/layout/header-button';
 import LoginPopup from "./login-popup";
 import * as Dialog from "@radix-ui/react-dialog";
+import SignupPopup from "./signup-popup";
 
 const Header = () => {
     const pathname = usePathname();
@@ -82,9 +83,7 @@ const Header = () => {
                     </div>
                     <div className="space-x-2 hidden xl:flex">
                         <LoginPopup />
-                        <button className="border border-ginaLightYellow text-ginaWhite bg-ginaLightYellow hover:border-ginaOrange hover:bg-ginaOrange duration-200 rounded-lg w-24 p-1">
-                            Sign Up
-                        </button>
+                        <SignupPopup />
                     </div>
                     <div className="block xl:hidden text-ginaOrange">
                         <HeaderButton />
