@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { Hero, Guide, Services, Offers, Events } from '@/components/home';
-import Newsletter from '@/components/newsletter';
+import Newsletter from '@/components/layout/newsletter-popup';
 
 export default function Home() {
     return (
@@ -10,7 +10,6 @@ export default function Home() {
             <Services />
             <Offers />
             <Events />
-            <Newsletter />
         </div>
     );
 }
