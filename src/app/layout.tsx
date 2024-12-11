@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { FONTS } from '@/configurations';
 import './globals.css';
-import { Header, Footer } from '@/components/layout';
+import { Header, NewsletterBanner, Footer } from '@/components/layout';
 
 export const metadata: Metadata = {
     title: 'Gina Experiences',
@@ -22,6 +22,7 @@ export default function RootLayout({
             >
                 <Header />
                 {children}
+                <NewsletterBanner />
                 <Footer />
             </body>
         </html>
