@@ -1,8 +1,31 @@
+import { useState } from "react";
 import * as Dialog from "@radix-ui/react-dialog"
 import { X } from 'lucide-react';
 import Form from 'next/form'
 
 export default function NewsletterPopup() {
+   const [email, setEmail] = useState("Email");
+
+   const handleFocus = (
+      field: string, 
+      setValue: React.Dispatch<React.SetStateAction<string>>, 
+      defaultValue: string
+   ) => {
+      if (field === defaultValue) {
+         setValue("");
+      }
+   };
+
+   const handleBlur = (
+      field: string,
+      setValue: React.Dispatch<React.SetStateAction<string>>,
+      defaultValue: string
+   ) => {
+      if (field.trim() === "") {
+         setValue(defaultValue); 
+      }
+   };
+
    return(
       <div className="flex lg:rounded-3xl w-screen max-w-screen-lg bg-ginaWhite lg:shadow-xl">
          <Dialog.Close className="fixed right-0 m-8 cursor-pointer">
@@ -61,11 +84,16 @@ export default function NewsletterPopup() {
                </div>
             </div>
             <Form action="/" className="flex flex-col lg:flex-row items-center justify-center lg:space-x-4 space-y-5 lg:space-y-0">
-               <input type="text" name="query" className="flex p-2 px-4 text-xs items-center text-ginaYellow border border-2 border-ginaYellow rounded-lg"/>
-               <Dialog.Close className="flex justify-center items-center rounded-xl bg-ginaYellow px-4 py-2 text-white text-sm font-medium hover:bg-ginaYellow/80 focus:ring focus:ring-ginaOrange/75 shadow-md">
-               Subscribe
-               </Dialog.Close>
+               <input type="text" 
+               value={email}
+               onChange={(e) => setEmail(e.target.value)}
+               onFocus={() => handleFocus(email, setEmail, "Email")}
+               onBlur={() => handleBlur(email, setEmail, "Email")}
+               className="flex p-2 px-4 text-xs items-center text-ginaBlue border border-2 border-ginaBlue rounded-lg"/>
             </Form>
+            <button className="flex justify-center items-center rounded-xl bg-ginaBlue px-4 py-2 text-white text-sm font-medium hover:bg-ginaBlue/80 focus:ring focus:ring-ginaBlue/75 shadow-md">
+            Subscribe
+            </button>
          </div>
       </div>
    )
