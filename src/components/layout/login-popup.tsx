@@ -1,11 +1,14 @@
 import Form from "next/form";
 import * as Dialog from "@radix-ui/react-dialog";
-import { X, EyeOff } from "lucide-react";
+import { X, EyeOff, Eye } from "lucide-react";
 import { useState } from "react";
 
 const LoginPopup  = () => {
    const [email, setEmail] = useState("Email");
    const [password, setPassword] = useState("Password");
+   const [passwordVisible, setPasswordVisible] = useState(false);
+
+   const togglePasswordVisibility = () => setPasswordVisible(!passwordVisible);
 
    const handleFocus = (
       field: string, 
@@ -35,8 +38,7 @@ const LoginPopup  = () => {
          <Dialog.Title></Dialog.Title>
          <Dialog.Portal>
             <Dialog.Overlay className="fixed inset-0 backdrop-blur-md"/>
-            <Dialog.Content className="fixed
-               top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+            <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50">
                <div className="flex lg:rounded-3xl w-screen max-w-screen-lg bg-ginaWhite lg:shadow-xl">
                   <Dialog.Close className="fixed right-0 m-8 cursor-pointer">
                      <X className="text-gray opacity-40 hover:opacity-100" />
@@ -59,7 +61,7 @@ const LoginPopup  = () => {
                            <div className="w-full h-1/3 rounded-3xl bg-ginaYellow"></div>
                         </div>
                         <div className="flex flex-col w-1/2 h-full space-y-2">
-                           <div className="w-full h-1/2 rounded-3xl bg-ginaOrange shadow-md"></div>
+                           <div className="w-full h-1/2 rounded-3xl bg-ginaBlue shadow-md"></div>
                            <img src="/images/newsletter/church.jpg" 
                            alt="Church"
                            className="object-cover object-center w-full h-full rounded-3xl" 
@@ -76,26 +78,32 @@ const LoginPopup  = () => {
                         onChange={(e) => setEmail(e.target.value)}
                         onFocus={() => handleFocus(email, setEmail, "Email")}
                         onBlur={() => handleBlur(email, setEmail, "Email")}
-                        className="flex w-full p-2 px-4 text-xs items-center text-ginaYellow border border-2 border-ginaYellow rounded-lg"/>
+                        className="flex w-full p-2 px-4 text-xs items-center text-ginaBlue border border-2 border-ginaBlue rounded-lg"/>
                         <div className="relative w-full max-w-md">
-                           <input type="text"
+                           <input 
+                           type={passwordVisible ? "text" : "password"}
                            value={password}
                            onChange={(e) => setPassword(e.target.value)}
                            onFocus={() => handleFocus(password, setPassword, "Password")}
                            onBlur={() => handleBlur(password, setPassword, "Password")}
-                           className="flex w-full p-2 px-4 text-xs items-center text-ginaYellow border border-2 border-ginaYellow rounded-lg"/>
-                           {/* <EyeOff /> */}
+                           className="flex w-full p-2 px-4 text-xs items-center text-ginaBlue border border-2 border-ginaBlue rounded-lg"/>
+                           <div 
+                              className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer" 
+                              onClick={togglePasswordVisibility}
+                           >
+                              {passwordVisible ? <Eye size={20} /> : <EyeOff size={20} />}
+                           </div>
                         </div>
                      </Form>
                      <div className="flex space-x-4">
-                        <Dialog.Close className="flex justify-center items-center rounded-xl px-8 py-2 text-sm text-ginaYellow  font-medium border border-2 border-ginaYellow hover:bg-ginaGray focus:ring focus:ring-ginaOrange/50 shadow-md">
+                        <button className="flex justify-center items-center rounded-xl px-8 py-2 text-sm text-ginaBlue  font-medium border border-2 border-ginaBlue hover:bg-ginaGray focus:ring focus:ring-ginaBlue/50 shadow-md">
                         Sign Up
-                        </Dialog.Close>
-                        <Dialog.Close className="flex justify-center items-center rounded-xl bg-ginaYellow px-10 py-2 text-white text-sm font-medium hover:bg-ginaYellow/80 focus:ring focus:ring-ginaOrange/50 shadow-md">
+                        </button>
+                        <button className="flex justify-center items-center rounded-xl bg-ginaBlue px-10 py-2 text-white text-sm font-medium hover:bg-ginaBlue/80 focus:ring focus:ring-ginaBlue/50 shadow-md">
                         Login
-                        </Dialog.Close>
+                        </button>
                      </div>
-                        <p className="text-ginaYellow text-sm cursor-pointer">Forgot Password?</p>
+                        <p className="text-ginaBlue text-sm cursor-pointer">Forgot Password?</p>
                   </div>
                </div>
             </Dialog.Content>

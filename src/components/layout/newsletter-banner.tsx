@@ -16,8 +16,7 @@ const NewsletterBanner = () => {
             <Dialog.Title></Dialog.Title>
             <Dialog.Portal>
                <Dialog.Overlay className="fixed inset-0 backdrop-blur-md" />
-               <Dialog.Content className="fixed
-               top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+               <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
                   <NewsletterPopup />
                </Dialog.Content>
             </Dialog.Portal>
