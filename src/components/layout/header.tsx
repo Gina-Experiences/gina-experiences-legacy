@@ -4,9 +4,9 @@ import { usePathname } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import HeaderButton from '@/components/layout/header-button';
-import LoginPopup from "./login-popup";
-import * as Dialog from "@radix-ui/react-dialog";
-import SignupPopup from "./signup-popup";
+import LoginPopup from './login-popup';
+import * as Dialog from '@radix-ui/react-dialog';
+import SignupPopup from './signup-popup';
 
 const Header = () => {
     const pathname = usePathname();
@@ -35,11 +35,6 @@ const Header = () => {
             name: 'Contact Us',
             href: 'https://www.messenger.com/t/109818234961571',
             target: '_blank',
-        },
-        {
-            name: 'Testimonials',
-            href: '/testimonials',
-            target: '_self',
         },
     ];
 
