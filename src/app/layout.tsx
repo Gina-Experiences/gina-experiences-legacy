@@ -18,12 +18,15 @@ export default function RootLayout({
                 <link rel="icon" href="/images/gina/logo-icon.png" />
             </head>
             <body
-                className={`${FONTS.alpha.className} w-svw bg-ginaGray relative`}
+                className={`${FONTS.alpha.className} w-svw bg-ginaWhite relative`}
             >
-                <Header />
-                {children}
-                <NewsletterBanner />
-                <Footer />
+                <div id="modal-root"></div>
+                <div className="relative">
+                    <Header />
+                    {children}
+                    <NewsletterBanner />
+                    <Footer />
+                </div>
             </body>
         </html>
     );
