@@ -2,7 +2,7 @@ import Image from 'next/image';
 
 export default function Events() {
     return (
-        <div className="flex justify-center lg:w-11/12 max-w-screen-xl rounded-2xl lg:p-12 lg:m-12 lg:bg-ginaWhite">
+        <div className="flex justify-center lg:w-11/12 max-w-screen-xl rounded-2xl lg:p-12 lg:m-12 lg:shadow-xl">
             <Image
                 src="/images/home/events/legazpi.png"
                 alt="orange-icon"
