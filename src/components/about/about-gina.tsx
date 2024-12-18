@@ -11,6 +11,7 @@ export default function AboutGina() {
                         quality={100}
                         width={500}
                         height={500}
+                        className="w-auto h-auto"
                     />
                 </div>
                 <div className="flex flex-col p-8">

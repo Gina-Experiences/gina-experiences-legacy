@@ -1,94 +1,141 @@
 'use client';
 
+import { useState, useRef, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
-import HeaderButton from '@/components/layout/header-button';
-import LoginPopup from './login-popup';
-import * as Dialog from '@radix-ui/react-dialog';
-import SignupPopup from './signup-popup';
+import { FaBars } from 'react-icons/fa6';
+import { LoginPopup, SignupPopup } from '@/components/popup';
+import { ModalButton } from '@/components/layout';
 
 const Header = () => {
     const pathname = usePathname();
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const sidebarRef = useRef<HTMLDivElement>(null);
+    const modalRef = useRef<HTMLDivElement | null>(null);
+
     const Links = [
-        {
-            name: 'Home',
-            href: '/',
-            target: '_self',
-        },
-        {
-            name: 'About',
-            href: '/about',
-            target: '_self',
-        },
-        {
-            name: 'Experiences',
-            href: '/experiences',
-            target: '_self',
-        },
-        {
-            name: 'Services',
-            href: '/services',
-            target: '_self',
-        },
+        { name: 'Home', href: '/', target: '_self' },
+        { name: 'About', href: '/about', target: '_self' },
+        { name: 'Experiences', href: '/experiences', target: '_self' },
+        { name: 'Services', href: '/services', target: '_self' },
         {
             name: 'Contact Us',
             href: 'https://www.messenger.com/t/109818234961571',
             target: '_blank',
         },
-        {
-            name: 'Testimonials',
-            href: '/testimonials',
-            target: '_self',
-        },
     ];
 
-    return (
-        // Main navigation container, centered and full width
-        <nav className="w-full flex justify-center items-center absolute z-20">
-            {/* Inner container with maximum width and height for the navigation bar */}
-            <div className="w-full max-w-screen-2xl h-16 mt-16 items-center flex justify-between px-8">
-                {/* Two sections separating logo and the navigation links */}
+    const toggleSidebar = () => setIsSidebarOpen((prev) => !prev);
 
-                {/* Logo */}
-                <div className="flex justify-end rounded-r-full bg-ginaWhite h-full px-12 lg:w-1/5 w-auto">
-                    <div className="flex items-center">
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            const target = event.target as Node;
+            if (
+                sidebarRef.current &&
+                !sidebarRef.current.contains(target) &&
+                (!modalRef.current || !modalRef.current.contains(target))
+            ) {
+                setIsSidebarOpen(false);
+            }
+        };
+
+        if (isSidebarOpen) {
+            document.addEventListener('mousedown', handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [isSidebarOpen]);
+
+    const renderLinks = (isMobile: boolean) => (
+        <div
+            className={`${isMobile ? 'flex-col p-16' : 'flex-row'} flex items-center justify-between xl:h-auto h-full gap-6`}
+        >
+            <div className="flex flex-col xl:flex-row gap-4">
+                {Links.map((link) => (
+                    <Link
+                        key={link.name}
+                        href={link.href}
+                        target={link.target}
+                        onClick={isMobile ? toggleSidebar : undefined}
+                        className={`${
+                            pathname === link.href
+                                ? 'font-bold text-ginaOrange'
+                                : 'text-ginaBlack'
+                        } hover:text-ginaYellow transition duration-200`}
+                    >
+                        {link.name}
+                    </Link>
+                ))}
+            </div>
+
+            <div className="flex flex-col xl:flex-row gap-4 xl:w-auto w-full">
+                <ModalButton
+                    buttonContent="Login"
+                    buttonClassName="border border-ginaLightYellow text-ginaLightYellow hover:border-ginaBlue hover:text-ginaBlue duration-200 bg-ginaWhite rounded-lg w-full xl:w-24 p-1"
+                >
+                    <div ref={modalRef}>
+                        <LoginPopup />
+                    </div>
+                </ModalButton>
+                <ModalButton
+                    buttonContent="Sign Up"
+                    buttonClassName="border border-ginaLightYellow text-ginaWhite bg-ginaLightYellow hover:border-ginaBlue hover:bg-ginaBlue duration-200 rounded-lg w-full xl:w-24 p-1"
+                >
+                    <div ref={modalRef}>
+                        <SignupPopup />
+                    </div>
+                </ModalButton>
+            </div>
+        </div>
+    );
+
+    return (
+        <nav className="w-full flex justify-center items-center absolute z-20">
+            <div className="w-full max-w-screen-2xl h-16 mt-16 items-center flex justify-between px-8">
+                <div className="flex justify-end rounded-r-full bg-ginaWhite h-full px-12 py-3 lg:w-1/5 w-auto">
+                    <Link href="/" className="flex items-center">
                         <Image
                             src="/images/gina/logo.png"
                             alt="Gina Experiences Logo"
                             quality={100}
-                            width={80}
-                            height={80}
+                            width={100}
+                            height={100}
+                            className="w-auto h-full"
                         />
-                    </div>
+                    </Link>
                 </div>
 
-                {/* Navigation Links */}
-                <div className="flex items-center justify-between rounded-l-full bg-ginaWhite w-auto h-full px-12 space-x-0 xl:space-x-12">
-                    <div className="space-x-6 hidden xl:flex">
-                        {Links.map((link) => (
-                            <Link
-                                key={link.name}
-                                href={link.href}
-                                target={link.target}
-                                className={`${
-                                    pathname === link.href
-                                        ? 'font-bold text-ginaOrange'
-                                        : 'text-ginaBlack'
-                                } hover:text-ginaYellow transition duration-200`}
-                            >
-                                {link.name}
-                            </Link>
-                        ))}
-                    </div>
-                    <div className="space-x-2 hidden xl:flex">
-                        <LoginPopup />
-                        <SignupPopup />
-                    </div>
-                    <div className="block xl:hidden text-ginaOrange">
-                        <HeaderButton />
-                    </div>
+                <div className="hidden xl:flex items-center justify-between rounded-l-full w-auto h-full px-12 gap-12 bg-ginaWhite">
+                    {renderLinks(false)}
                 </div>
+
+                <div className="xl:hidden px-12 gap-12 bg-ginaWhite rounded-l-full h-full flex items-center">
+                    <button
+                        className=" text-ginaOrange hover:text-ginaBlue transition-all duration-200 ease-in-out"
+                        onClick={toggleSidebar}
+                    >
+                        <FaBars size={20} />
+                    </button>
+                </div>
+            </div>
+
+            <div
+                ref={sidebarRef}
+                className={`xl:hidden fixed top-0 right-0 h-screen w-64 rounded-l-3xl bg-ginaWhite shadow-lg z-30 transform shadow-xl ${
+                    isSidebarOpen ? 'translate-x-0' : 'translate-x-full'
+                } transition-transform duration-200`}
+            >
+                <button
+                    className="absolute top-4 right-6 text-ginaBlue opacity-50 hover:opacity-100 text-3xl transition-all duration-200 ease-in-out"
+                    onClick={toggleSidebar}
+                >
+                    &times;
+                </button>
+
+                {renderLinks(true)}
             </div>
         </nav>
     );
