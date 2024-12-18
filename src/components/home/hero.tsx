@@ -1,21 +1,18 @@
-'use client'
+'use client';
 
-import Image from "next/image";
-import { useRouter } from "next/navigation";
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { MapPin } from 'lucide-react';
-
 
 export default function Hero() {
     const App = () => {
-        return (
-            <MapPin />
-        );
+        return <MapPin />;
     };
 
     const router = useRouter();
 
     return (
-    <div className="flex flex-col items-center justify-center w-svw mb-28">
+        <div className="flex flex-col items-center justify-center w-svw mb-28">
             <div className="relative w-full max-w-screen-2xl h-svh p-8">
                 <div className="relative w-full h-full rounded-3xl overflow-hidden">
                     <Image
@@ -31,20 +28,29 @@ export default function Hero() {
                         <div className="flex flex-col space-y-3">
                             <div className="flex space-x-2">
                                 <MapPin />
-                                <span className="font-normal text-base">Gina Experiences</span>
+                                <span className="font-normal text-base">
+                                    Gina Experiences
+                                </span>
                             </div>
                             <h1 className="text-3xl lg:text-6xl font-bold">
                                 DISCOVER AUTHENTIC LOCAL EXPERIENCES
                             </h1>
                         </div>
                         <span className="text-base lg:text-xl lg:w-1/4">
-                        Immerse yourself in the local culture with unique experiences hosted by knowledgeable locals at <span className="font-bold">Gina Experiences.</span>
+                            Immerse yourself in the local culture with unique
+                            experiences hosted by knowledgeable locals at{' '}
+                            <span className="font-bold">Gina Experiences.</span>
                         </span>
 
-                        <button className="px-8 py-2 text-ginaOrange text-base font-bold bg-ginaWhite rounded-lg" onClick={() => router.push('/experiences')}>BOOK NOW!</button>
+                        <button
+                            className="px-8 py-2 text-ginaOrange text-base font-bold bg-ginaWhite rounded-lg"
+                            onClick={() => router.push('/experiences')}
+                        >
+                            BOOK NOW!
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
-   );
+    );
 }
