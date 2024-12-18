@@ -80,7 +80,7 @@ const LoginPopup = () => {
                         onChange={(e) => setEmail(e.target.value)}
                         onFocus={() => handleFocus(email, setEmail, 'Email')}
                         onBlur={() => handleBlur(email, setEmail, 'Email')}
-                        className="flex w-full p-2 px-4 text-xs items-center text-ginaBlue border border-2 border-ginaBlue rounded-lg"
+                        className="flex w-full p-2 px-4 text-xs items-center text-ginaBlue border-2 border-ginaBlue rounded-lg"
                     />
                     <div className="relative w-full max-w-md">
                         <input
@@ -93,7 +93,7 @@ const LoginPopup = () => {
                             onBlur={() =>
                                 handleBlur(password, setPassword, 'Password')
                             }
-                            className="flex w-full p-2 px-4 text-xs items-center text-ginaBlue border border-2 border-ginaBlue rounded-lg"
+                            className="flex w-full p-2 px-4 text-xs items-center text-ginaBlue border-2 border-ginaBlue rounded-lg"
                         />
                         <div
                             className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer"
@@ -108,7 +108,7 @@ const LoginPopup = () => {
                     </div>
                 </Form>
                 <div className="flex space-x-4">
-                    <button className="flex justify-center items-center rounded-xl px-8 py-2 text-sm text-ginaBlue  font-medium border border-2 border-ginaBlue hover:bg-ginaGray focus:ring focus:ring-ginaBlue/50 shadow-md">
+                    <button className="flex justify-center items-center rounded-xl px-8 py-2 text-sm text-ginaBlue  font-medium border-2 border-ginaBlue hover:bg-ginaGray focus:ring focus:ring-ginaBlue/50 shadow-md">
                         Sign Up
                     </button>
                     <button className="flex justify-center items-center rounded-xl bg-ginaBlue px-10 py-2 text-white text-sm font-medium hover:bg-ginaBlue/80 focus:ring focus:ring-ginaBlue/50 shadow-md">
