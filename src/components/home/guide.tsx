@@ -54,6 +54,7 @@ export default function Guide() {
                             quality={100}
                             width={60}
                             height={60}
+                            className="w-auto h-auto"
                         />
                         <div className="hidden md:table w-2 h-20 rounded bg-ginaOrange mx-4"></div>
                         <p className="">
@@ -68,6 +69,7 @@ export default function Guide() {
                             quality={100}
                             width={60}
                             height={60}
+                            className="w-auto h-auto"
                         />
                         <div className="hidden md:table w-2 h-20 rounded bg-ginaBlue mx-4"></div>
                         <p className="">
@@ -82,6 +84,7 @@ export default function Guide() {
                             quality={100}
                             width={60}
                             height={60}
+                            className="w-auto h-auto"
                         />
                         <div className="hidden md:table w-2 h-20 rounded bg-ginaGreen mx-4"></div>
                         <p className="">

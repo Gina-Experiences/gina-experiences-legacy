@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 import { FONTS } from '@/configurations';
 import './globals.css';
-import { Header, NewsletterBanner, Footer } from '@/components/layout';
+import { Header, Footer } from '@/components/layout';
+import { NewsletterBanner } from '@/components/popup';
 
 export const metadata: Metadata = {
     title: 'Gina Experiences',

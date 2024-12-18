@@ -1,5 +1,6 @@
 import Header from '@/components/layout/header';
 import Footer from '@/components/layout/footer';
-import NewsletterBanner from '@/components/layout/newsletter-banner';
+import ModalButton from '@/components/layout/modal-button';
+import DropdownButton from '@/components/layout/dropdrown-button';
 
-export { Header, NewsletterBanner, Footer };
+export { Header, Footer, ModalButton, DropdownButton };

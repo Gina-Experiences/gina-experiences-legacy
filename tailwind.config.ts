@@ -1,4 +1,5 @@
 import type { Config } from 'tailwindcss';
+import { COLORS } from './src/configurations/colors';
 
 export default {
     content: [
@@ -11,6 +12,15 @@ export default {
             colors: {
                 background: 'var(--background)',
                 foreground: 'var(--foreground)',
+                ginaYellow: COLORS.ginaYellow,
+                ginaBlue: COLORS.ginaBlue,
+                ginaGreen: COLORS.ginaGreen,
+                ginaOrange: COLORS.ginaOrange,
+                ginaWhite: COLORS.ginaWhite,
+                ginaGray: COLORS.ginaGray,
+                ginaDarkGray: COLORS.ginaDarkGray,
+                ginaBlack: COLORS.ginaBlack,
+                ginaLightYellow: COLORS.ginaLightYellow,
             },
         },
     },
