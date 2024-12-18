@@ -124,7 +124,7 @@ const Header = () => {
 
             <div
                 ref={sidebarRef}
-                className={`xl:hidden fixed top-0 right-0 h-screen w-64 rounded-l-3xl bg-ginaWhite shadow-lg z-30 transform shadow-xl ${
+                className={`xl:hidden fixed top-0 right-0 h-screen w-64 rounded-l-3xl bg-ginaWhite z-30 transform shadow-xl ${
                     isSidebarOpen ? 'translate-x-0' : 'translate-x-full'
                 } transition-transform duration-200`}
             >

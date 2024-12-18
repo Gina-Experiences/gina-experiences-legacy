@@ -115,7 +115,7 @@ const SignupPopup = () => {
                                     'First Name'
                                 )
                             }
-                            className="flex w-full p-2 px-4 text-xs items-center text-ginaBlue border border-2 border-ginaBlue rounded-lg"
+                            className="flex w-full p-2 px-4 text-xs items-center text-ginaBlue border-2 border-ginaBlue rounded-lg"
                             required
                         />
                         <input
@@ -128,7 +128,7 @@ const SignupPopup = () => {
                             onBlur={() =>
                                 handleBlur(lastName, setLastName, 'Last Name')
                             }
-                            className="flex w-full p-2 px-4 text-xs items-center text-ginaBlue border border-2 border-ginaBlue rounded-lg"
+                            className="flex w-full p-2 px-4 text-xs items-center text-ginaBlue border-2 border-ginaBlue rounded-lg"
                             required
                         />
                     </div>
@@ -152,14 +152,14 @@ const SignupPopup = () => {
                                     'Date of Birth'
                                 )
                             }
-                            className="flex w-1/2 p-2 px-4 text-xs items-center text-ginaBlue border border-2 border-ginaBlue rounded-lg"
+                            className="flex w-1/2 p-2 px-4 text-xs items-center text-ginaBlue border-2 border-ginaBlue rounded-lg"
                             required
                         />
                         <select
                             id="gender"
                             value={gender}
                             onChange={handleGenderChange}
-                            className="w-1/2 p-2 px-4 text-xs items-center text-ginaBlue border border-2 border-ginaBlue rounded-lg"
+                            className="w-1/2 p-2 px-4 text-xs items-center text-ginaBlue border-2 border-ginaBlue rounded-lg"
                             required
                         >
                             <option value="" disabled>
@@ -192,7 +192,7 @@ const SignupPopup = () => {
                                 'Contact Number'
                             )
                         }
-                        className="flex w-full p-2 px-4 text-xs items-center text-ginaBlue border border-2 border-ginaBlue rounded-lg"
+                        className="flex w-full p-2 px-4 text-xs items-center text-ginaBlue border-2 border-ginaBlue rounded-lg"
                         required
                     />
                     <input
@@ -205,7 +205,7 @@ const SignupPopup = () => {
                         onBlur={() =>
                             handleBlur(address, setAddress, 'Address')
                         }
-                        className="flex w-full p-2 px-4 text-xs items-center text-ginaBlue border border-2 border-ginaBlue rounded-lg"
+                        className="flex w-full p-2 px-4 text-xs items-center text-ginaBlue border-2 border-ginaBlue rounded-lg"
                         required
                     />
                     <input
@@ -214,7 +214,7 @@ const SignupPopup = () => {
                         onChange={(e) => setEmail(e.target.value)}
                         onFocus={() => handleFocus(email, setEmail, 'Email')}
                         onBlur={() => handleBlur(email, setEmail, 'Email')}
-                        className="flex w-full p-2 px-4 text-xs items-center text-ginaBlue border border-2 border-ginaBlue rounded-lg"
+                        className="flex w-full p-2 px-4 text-xs items-center text-ginaBlue border-2 border-ginaBlue rounded-lg"
                         required
                     />
 
@@ -229,7 +229,7 @@ const SignupPopup = () => {
                             onBlur={() =>
                                 handleBlur(password, setPassword, 'Password')
                             }
-                            className="flex w-full p-2 px-4 text-xs items-center text-ginaBlue border border-2 border-ginaBlue rounded-lg"
+                            className="flex w-full p-2 px-4 text-xs items-center text-ginaBlue border-2 border-ginaBlue rounded-lg"
                             required
                         />
                         <div
@@ -263,7 +263,7 @@ const SignupPopup = () => {
                                     'Confirm Password'
                                 )
                             }
-                            className="flex w-full p-2 px-4 text-xs items-center text-ginaBlue border border-2 border-ginaBlue rounded-lg"
+                            className="flex w-full p-2 px-4 text-xs items-center text-ginaBlue border-2 border-ginaBlue rounded-lg"
                             required
                         />
                         <div
@@ -295,7 +295,7 @@ const SignupPopup = () => {
 
                 <button
                     type="submit"
-                    className="flex justify-center items-center rounded-xl px-8 py-2 text-sm text-ginaWhite bg-ginaBlue font-medium border border-2 border-ginaBlue hover:bg-ginaWhite hover:text-ginaBlue focus:ring focus:ring-ginaBlue/50 shadow-md"
+                    className="flex justify-center items-center rounded-xl px-8 py-2 text-sm text-ginaWhite bg-ginaBlue font-medium border-2 border-ginaBlue hover:bg-ginaWhite hover:text-ginaBlue focus:ring focus:ring-ginaBlue/50 shadow-md"
                 >
                     Sign Up
                 </button>
