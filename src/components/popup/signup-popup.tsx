@@ -53,8 +53,8 @@ const SignupPopup = () => {
     };
 
     return (
-        <div className="flex lg:rounded-3xl w-screen max-w-screen-lg bg-ginaWhite lg:shadow-xl">
-            <div className="hidden w-2/3 lg:flex flex-col items-center p-12 space-y-2">
+        <div className="flex flex-col lg:flex-row rounded-3xl w-full max-w-screen-lg bg-ginaWhite lg:p-0 sm:p-8 p-2">
+            <div className="hidden w-full lg:flex flex-col items-center p-12 space-y-2">
                 <div className="flex w-full h-1/3 items-center justify-center space-x-2">
                     <div className="w-1/3 h-full rounded-3xl bg-ginaBlue"></div>
                     <img
@@ -83,7 +83,7 @@ const SignupPopup = () => {
                     </div>
                 </div>
             </div>
-            <div className="flex flex-col w-screen lg:w-1/2 p-8 text-center items-center text-ginaBlack justify-center space-y-8">
+            <div className="flex flex-col w-full p-8 text-center items-center text-ginaBlack justify-center space-y-8">
                 <h2 className="text-4xl font-bold lg:text-end bg-[linear-gradient(90deg,rgba(255,209,0,1)0%,rgba(246,147,29,1)30%,rgba(0,160,75,1)78%,rgba(27,20,100,1)100%)] text-transparent bg-clip-text">
                     Start Your Next <br />
                     Adventure!
