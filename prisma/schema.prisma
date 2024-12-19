@@ -1,0 +1,177 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Accounts {
+  account_id        String   @id @default(uuid())
+  email             String   @unique
+  password          String
+  role              Role
+  firstname         String
+  lastname          String
+  gender            String
+  birthdate         DateTime
+  phone             String   @unique
+  address           String
+  registration_date DateTime @default(now())
+  imagelink         String
+  last_active_date  DateTime
+  is_active         Boolean  @default(true)
+
+  Customers Customers?
+  Admin     Admin?
+}
+
+model Customers {
+  customer_id  String         @id @default(uuid())
+  account_id   String         @unique
+  ltv          Float
+  Account      Accounts       @relation(fields: [account_id], references: [account_id])
+  Transactions Transactions[]
+}
+
+model Admin {
+  admin_id   String   @id @default(uuid())
+  account_id String   @unique
+  Account    Accounts @relation(fields: [account_id], references: [account_id])
+}
+
+model Transactions {
+  transaction_id     String             @id @default(uuid())
+  customer_id        String
+  product_id         String
+  transaction_date   DateTime
+  total_Amount       Float
+  payment_status     PaymentStatus
+  transaction_status TransactionStatus
+
+  Customer Customers @relation(fields: [customer_id], references: [customer_id])
+  Product  Product   @relation(fields: [product_id], references: [product_id])
+
+  @@index([customer_id])
+  @@index([product_id])
+}
+
+model Product {
+  product_id   String   @id @default(uuid())
+  product_name String
+  product_type String
+
+  Transactions Transactions[]
+  Packages     Packages[]
+  Services     Services[]
+}
+
+model Packages {
+  package_id         String  @id @default(uuid())
+  product_id         String
+  highlights         String
+  what_you_get       String
+  what_to_expect     String
+  best_time_to_visit String
+  package_duration   String
+  faqs               String
+  package_price      Float
+
+  Product Product @relation(fields: [product_id], references: [product_id])
+}
+
+model Services {
+  service_id    String          @id @default(uuid())
+  product_id    String
+  service_type  String
+  service_price Float
+
+  Product        Product          @relation(fields: [product_id], references: [product_id])
+  Transportation Transportation[]
+  Activities     Activities[]
+  Events         Events[]
+  Hotels         Hotels[]
+}
+
+model Transportation {
+  transportation_id String @id @default(uuid())
+  service_id        String
+  vehicle_type      String
+  vehicle_info      String
+  capacity          Int
+  schedule          String
+  vehicle_price     Float
+
+  Service Services @relation(fields: [service_id], references: [service_id])
+}
+
+model Activities {
+  activity_id        String   @id @default(uuid())
+  service_id         String
+  highlights         String
+  what_you_get       String
+  what_to_expect     String
+  best_time_to_visit String
+  activity_date      DateTime
+  activity_duration  String
+  faqs               String
+  activity_price     Float
+
+  Service Services @relation(fields: [service_id], references: [service_id])
+}
+
+model Events {
+  event_id           String   @id @default(uuid())
+  service_id         String
+  highlights         String
+  location           String
+  what_you_get       String
+  what_to_expect     String
+  best_time_to_visit String
+  event_date         DateTime
+  event_duration     String
+  faqs               String
+  event_price        Float
+
+  Service Services @relation(fields: [service_id], references: [service_id])
+}
+
+model Hotels {
+  hotel_id       String  @id @default(uuid())
+  service_id     String
+  hotel_name     String
+  room_type      String
+  what_you_get   String
+  what_to_expect String
+  amenities      String
+  highlights     String
+  duration       String
+  faqs           String
+  hotel_price    Float
+
+  Service Services @relation(fields: [service_id], references: [service_id])
+}
+
+enum Role {
+  customer
+  admin
+}
+
+enum PaymentStatus {
+  paid
+  pending
+  failed
+}
+
+enum TransactionStatus {
+  completed
+  failed
+  pending
+}
