@@ -14,42 +14,43 @@ datasource db {
 }
 
 model Accounts {
-  account_id        Int      @id @default(autoincrement())
+  account_id        String   @id @default(uuid())
   email             String   @unique
   password          String
   role              Role
-  fname             String
-  lname             String
+  firstname         String
+  lastname          String
   gender            String
   birthdate         DateTime
   phone             String   @unique
   address           String
   registration_date DateTime @default(now())
-  imagelink         String?
+  imagelink         String
   last_active_date  DateTime
+  is_active         Boolean  @default(true)
 
   Customers Customers?
   Admin     Admin?
 }
 
 model Customers {
-  customer_id  Int            @id @default(autoincrement())
-  account_id   Int            @unique
-  ltv          Float // Calculated Lifetime Value
+  customer_id  String         @id @default(uuid())
+  account_id   String         @unique
+  ltv          Float
   Account      Accounts       @relation(fields: [account_id], references: [account_id])
   Transactions Transactions[]
 }
 
 model Admin {
-  admin_id   Int      @id @default(autoincrement())
-  account_id Int      @unique
+  admin_id   String   @id @default(uuid())
+  account_id String   @unique
   Account    Accounts @relation(fields: [account_id], references: [account_id])
 }
 
 model Transactions {
-  transaction_id     Int               @id @default(autoincrement())
-  customer_id        Int
-  product_id         Int
+  transaction_id     String             @id @default(uuid())
+  customer_id        String
+  product_id         String
   transaction_date   DateTime
   total_Amount       Float
   payment_status     PaymentStatus
@@ -63,19 +64,18 @@ model Transactions {
 }
 
 model Product {
-  product_id   Int    @id @default(autoincrement())
+  product_id   String   @id @default(uuid())
   product_name String
   product_type String
 
-  Transactions Transactions[] // Bidirectional relation
-
-  Packages Packages[]
-  Services Services[]
+  Transactions Transactions[]
+  Packages     Packages[]
+  Services     Services[]
 }
 
 model Packages {
-  package_id         Int    @id @default(autoincrement())
-  product_id         Int
+  package_id         String  @id @default(uuid())
+  product_id         String
   highlights         String
   what_you_get       String
   what_to_expect     String
@@ -88,8 +88,8 @@ model Packages {
 }
 
 model Services {
-  service_id    Int    @id @default(autoincrement())
-  product_id    Int
+  service_id    String          @id @default(uuid())
+  product_id    String
   service_type  String
   service_price Float
 
@@ -101,8 +101,8 @@ model Services {
 }
 
 model Transportation {
-  transportation_id Int    @id @default(autoincrement())
-  service_id        Int
+  transportation_id String @id @default(uuid())
+  service_id        String
   vehicle_type      String
   vehicle_info      String
   capacity          Int
@@ -113,8 +113,8 @@ model Transportation {
 }
 
 model Activities {
-  activity_id        Int      @id @default(autoincrement())
-  service_id         Int
+  activity_id        String   @id @default(uuid())
+  service_id         String
   highlights         String
   what_you_get       String
   what_to_expect     String
@@ -128,8 +128,8 @@ model Activities {
 }
 
 model Events {
-  event_id           Int      @id @default(autoincrement())
-  service_id         Int
+  event_id           String   @id @default(uuid())
+  service_id         String
   highlights         String
   location           String
   what_you_get       String
@@ -144,8 +144,8 @@ model Events {
 }
 
 model Hotels {
-  hotel_id       Int    @id @default(autoincrement())
-  service_id     Int
+  hotel_id       String  @id @default(uuid())
+  service_id     String
   hotel_name     String
   room_type      String
   what_you_get   String

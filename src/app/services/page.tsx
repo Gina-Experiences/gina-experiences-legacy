@@ -1,5 +1,11 @@
 import Image from 'next/image';
-import { Hero, Activities, Hotels, Transport, Events } from '@/components/services';
+import {
+    Hero,
+    Activities,
+    Hotels,
+    Transport,
+    Events,
+} from '@/components/services';
 
 export default function Services() {
     return (

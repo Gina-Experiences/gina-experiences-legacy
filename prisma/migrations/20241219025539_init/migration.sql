@@ -1,18 +1,19 @@
 -- CreateTable
 CREATE TABLE `Accounts` (
-    `account_id` INTEGER NOT NULL AUTO_INCREMENT,
+    `account_id` VARCHAR(191) NOT NULL,
     `email` VARCHAR(191) NOT NULL,
     `password` VARCHAR(191) NOT NULL,
     `role` ENUM('customer', 'admin') NOT NULL,
-    `fname` VARCHAR(191) NOT NULL,
-    `lname` VARCHAR(191) NOT NULL,
+    `firstname` VARCHAR(191) NOT NULL,
+    `lastname` VARCHAR(191) NOT NULL,
     `gender` VARCHAR(191) NOT NULL,
     `birthdate` DATETIME(3) NOT NULL,
     `phone` VARCHAR(191) NOT NULL,
     `address` VARCHAR(191) NOT NULL,
     `registration_date` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    `imagelink` VARCHAR(191) NULL,
+    `imagelink` VARCHAR(191) NOT NULL,
     `last_active_date` DATETIME(3) NOT NULL,
+    `is_active` BOOLEAN NOT NULL DEFAULT true,
 
     UNIQUE INDEX `Accounts_email_key`(`email`),
     UNIQUE INDEX `Accounts_phone_key`(`phone`),
@@ -21,8 +22,8 @@ CREATE TABLE `Accounts` (
 
 -- CreateTable
 CREATE TABLE `Customers` (
-    `customer_id` INTEGER NOT NULL AUTO_INCREMENT,
-    `account_id` INTEGER NOT NULL,
+    `customer_id` VARCHAR(191) NOT NULL,
+    `account_id` VARCHAR(191) NOT NULL,
     `ltv` DOUBLE NOT NULL,
 
     UNIQUE INDEX `Customers_account_id_key`(`account_id`),
@@ -31,8 +32,8 @@ CREATE TABLE `Customers` (
 
 -- CreateTable
 CREATE TABLE `Admin` (
-    `admin_id` INTEGER NOT NULL AUTO_INCREMENT,
-    `account_id` INTEGER NOT NULL,
+    `admin_id` VARCHAR(191) NOT NULL,
+    `account_id` VARCHAR(191) NOT NULL,
 
     UNIQUE INDEX `Admin_account_id_key`(`account_id`),
     PRIMARY KEY (`admin_id`)
@@ -40,9 +41,9 @@ CREATE TABLE `Admin` (
 
 -- CreateTable
 CREATE TABLE `Transactions` (
-    `transaction_id` INTEGER NOT NULL AUTO_INCREMENT,
-    `customer_id` INTEGER NOT NULL,
-    `product_id` INTEGER NOT NULL,
+    `transaction_id` VARCHAR(191) NOT NULL,
+    `customer_id` VARCHAR(191) NOT NULL,
+    `product_id` VARCHAR(191) NOT NULL,
     `transaction_date` DATETIME(3) NOT NULL,
     `total_Amount` DOUBLE NOT NULL,
     `payment_status` ENUM('paid', 'pending', 'failed') NOT NULL,
@@ -55,7 +56,7 @@ CREATE TABLE `Transactions` (
 
 -- CreateTable
 CREATE TABLE `Product` (
-    `product_id` INTEGER NOT NULL AUTO_INCREMENT,
+    `product_id` VARCHAR(191) NOT NULL,
     `product_name` VARCHAR(191) NOT NULL,
     `product_type` VARCHAR(191) NOT NULL,
 
@@ -64,8 +65,8 @@ CREATE TABLE `Product` (
 
 -- CreateTable
 CREATE TABLE `Packages` (
-    `package_id` INTEGER NOT NULL AUTO_INCREMENT,
-    `product_id` INTEGER NOT NULL,
+    `package_id` VARCHAR(191) NOT NULL,
+    `product_id` VARCHAR(191) NOT NULL,
     `highlights` VARCHAR(191) NOT NULL,
     `what_you_get` VARCHAR(191) NOT NULL,
     `what_to_expect` VARCHAR(191) NOT NULL,
@@ -79,8 +80,8 @@ CREATE TABLE `Packages` (
 
 -- CreateTable
 CREATE TABLE `Services` (
-    `service_id` INTEGER NOT NULL AUTO_INCREMENT,
-    `product_id` INTEGER NOT NULL,
+    `service_id` VARCHAR(191) NOT NULL,
+    `product_id` VARCHAR(191) NOT NULL,
     `service_type` VARCHAR(191) NOT NULL,
     `service_price` DOUBLE NOT NULL,
 
@@ -89,8 +90,8 @@ CREATE TABLE `Services` (
 
 -- CreateTable
 CREATE TABLE `Transportation` (
-    `transportation_id` INTEGER NOT NULL AUTO_INCREMENT,
-    `service_id` INTEGER NOT NULL,
+    `transportation_id` VARCHAR(191) NOT NULL,
+    `service_id` VARCHAR(191) NOT NULL,
     `vehicle_type` VARCHAR(191) NOT NULL,
     `vehicle_info` VARCHAR(191) NOT NULL,
     `capacity` INTEGER NOT NULL,
@@ -102,8 +103,8 @@ CREATE TABLE `Transportation` (
 
 -- CreateTable
 CREATE TABLE `Activities` (
-    `activity_id` INTEGER NOT NULL AUTO_INCREMENT,
-    `service_id` INTEGER NOT NULL,
+    `activity_id` VARCHAR(191) NOT NULL,
+    `service_id` VARCHAR(191) NOT NULL,
     `highlights` VARCHAR(191) NOT NULL,
     `what_you_get` VARCHAR(191) NOT NULL,
     `what_to_expect` VARCHAR(191) NOT NULL,
@@ -118,8 +119,8 @@ CREATE TABLE `Activities` (
 
 -- CreateTable
 CREATE TABLE `Events` (
-    `event_id` INTEGER NOT NULL AUTO_INCREMENT,
-    `service_id` INTEGER NOT NULL,
+    `event_id` VARCHAR(191) NOT NULL,
+    `service_id` VARCHAR(191) NOT NULL,
     `highlights` VARCHAR(191) NOT NULL,
     `location` VARCHAR(191) NOT NULL,
     `what_you_get` VARCHAR(191) NOT NULL,
@@ -135,8 +136,8 @@ CREATE TABLE `Events` (
 
 -- CreateTable
 CREATE TABLE `Hotels` (
-    `hotel_id` INTEGER NOT NULL AUTO_INCREMENT,
-    `service_id` INTEGER NOT NULL,
+    `hotel_id` VARCHAR(191) NOT NULL,
+    `service_id` VARCHAR(191) NOT NULL,
     `hotel_name` VARCHAR(191) NOT NULL,
     `room_type` VARCHAR(191) NOT NULL,
     `what_you_get` VARCHAR(191) NOT NULL,
