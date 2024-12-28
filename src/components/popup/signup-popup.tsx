@@ -7,7 +7,10 @@ import React, { useState } from 'react';
 const SignupPopup = () => {
     const [firstName, setFirstName] = useState('First Name');
     const [lastName, setLastName] = useState('Last Name');
-    const [Birthdate, setBirthdate] = useState('Date of Birth');
+    const [Birthdate, setBirthdate] = useState(() => {
+        const today = new Date();
+        return today.toISOString().split('T')[0];
+    });
     const [gender, setGender] = useState('');
     const [contactNum, setContactNum] = useState('Contact Number');
     const [address, setAddress] = useState('Address');
@@ -133,26 +136,10 @@ const SignupPopup = () => {
                         />
                     </div>
 
-                    <div className="flex space-x-2">
+                    <div className="flex w-full space-x-2">
                         <input
-                            type="text"
-                            value={Birthdate}
-                            onChange={(e) => setBirthdate(e.target.value)}
-                            onFocus={() =>
-                                handleFocus(
-                                    Birthdate,
-                                    setBirthdate,
-                                    'Date of Birth'
-                                )
-                            }
-                            onBlur={() =>
-                                handleBlur(
-                                    Birthdate,
-                                    setBirthdate,
-                                    'Date of Birth'
-                                )
-                            }
-                            className="flex w-1/2 p-2 px-4 text-xs items-center text-ginaBlue border-2 border-ginaBlue rounded-lg"
+                            type="date"
+                            className="w-1/2 p-2 px-4 text-xs text-ginaBlue border-2 border-ginaBlue rounded-lg"
                             required
                         />
                         <select
