@@ -1,6 +1,109 @@
 import { prisma } from './prisma';
 import bcrypt from 'bcryptjs';
 import { Role } from '@prisma/client';
+import jwt from 'jsonwebtoken';
+import { cookies } from 'next/headers';
+
+const JWT_SECRET = process.env.JWT_SECRET;
+const TOKEN_EXPIRATION = '1h'; // Token expiration (1 hour)
+
+// POST: Login
+export async function login(email: string, password: string) {
+  console.log(JWT_SECRET)
+  try {
+    const account = await prisma.accounts.findUnique({
+      where: { email },
+    });
+
+    if (!account || !(await bcrypt.compare(password, account.password))) {
+      return { error: 'Invalid email or password' };
+    }
+
+    if (!account.is_active) {
+      return { error: 'Account is deactivated' };
+    }
+
+    // Create JWT token
+    const token = jwt.sign(
+      {
+        user_id: account.account_id,
+        role: account.role,
+      },
+      JWT_SECRET,
+      { expiresIn: TOKEN_EXPIRATION }
+    );
+
+    // Set token as an HTTP-only cookie using Next.js cookies API
+    const cookieStore = await cookies();
+    cookieStore.set('auth_token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      path: '/',
+      maxAge: 3600, // 1 hour
+    });
+
+    // Update last_active_date
+    await prisma.accounts.update({
+      where: { account_id: account.account_id },
+      data: { last_active_date: new Date() },
+    });
+
+    return { success: true, message: 'Login successful' };
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      return { error: error.message };
+    }
+    return { error: 'An unknown error occurred' };
+  }
+}
+
+// GET: Get specific account (validate token)
+export async function getAccount(token: string) {
+  try {
+    if (!token) {
+      return { error: 'No token provided' };
+    }
+
+    let decoded;
+    try {
+      decoded = jwt.verify(token, JWT_SECRET);
+    } catch (err) {
+      return { error: 'Invalid or expired token' };
+    }
+
+    const { user_id } = decoded as { user_id: string };
+
+    const account = await prisma.accounts.findUnique({
+      where: { account_id: user_id },
+      select: {
+        account_id: true,
+        email: true,
+        firstname: true,
+        lastname: true,
+        role: true,
+        gender: true,
+        birthdate: true,
+        phone: true,
+        address: true,
+        registration_date: true,
+        last_active_date: true,
+        imagelink: true,
+      },
+    });
+
+    if (!account) {
+      return { error: 'Account not found' };
+    }
+
+    return { account };
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      return { error: error.message };
+    }
+    return { error: 'An unknown error occurred' };
+  }
+}
 
 // POST: Create account/sign up
 export async function createAccount(data: {
@@ -90,36 +193,6 @@ export async function getAllAccounts() {
     });
 
     return { accounts };
-  } catch (error: unknown) {
-    if (error instanceof Error) {
-      return { error: error.message };
-    }
-    return { error: 'An unknown error occurred' };
-  }
-}
-
-// GET: Get specific account (log in)
-export async function getAccount(email: string, password: string) {
-  try {
-    const account = await prisma.accounts.findUnique({
-      where: { email },
-    });
-
-    if (!account || !(await bcrypt.compare(password, account.password))) {
-      return { error: 'Invalid email or password' };
-    }
-
-    if (!account.is_active) {
-      return { error: 'Account is deactivated' };
-    }
-
-    // Update last_active_date on successful login
-    await prisma.accounts.update({
-      where: { account_id: account.account_id },
-      data: { last_active_date: new Date() },
-    });
-
-    return { account };
   } catch (error: unknown) {
     if (error instanceof Error) {
       return { error: error.message };
