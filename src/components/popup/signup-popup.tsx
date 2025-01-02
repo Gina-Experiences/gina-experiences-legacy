@@ -3,9 +3,11 @@
 import { signIn, signOut, useSession } from 'next-auth/react';
 
 const SignupPopup = () => {
-    const { data: session } = useSession();
+    const { data: session, status } = useSession();
     const { user, expires } = session || {};
     const { email, name, image } = user || {};
+    console.log("Session:", session);
+    console.log("Status:", status);
 
     if (session) {
         return (
