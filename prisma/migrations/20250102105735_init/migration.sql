@@ -1,41 +1,85 @@
 -- CreateTable
-CREATE TABLE `Accounts` (
-    `account_id` VARCHAR(191) NOT NULL,
-    `email` VARCHAR(191) NOT NULL,
-    `password` VARCHAR(191) NOT NULL,
-    `role` ENUM('customer', 'admin') NOT NULL,
-    `firstname` VARCHAR(191) NOT NULL,
-    `lastname` VARCHAR(191) NOT NULL,
-    `gender` VARCHAR(191) NOT NULL,
-    `birthdate` DATETIME(3) NOT NULL,
-    `phone` VARCHAR(191) NOT NULL,
-    `address` VARCHAR(191) NOT NULL,
-    `registration_date` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    `imagelink` VARCHAR(191) NOT NULL,
-    `last_active_date` DATETIME(3) NOT NULL,
-    `is_active` BOOLEAN NOT NULL DEFAULT true,
+CREATE TABLE `Account` (
+    `id` VARCHAR(191) NOT NULL,
+    `userId` VARCHAR(191) NOT NULL,
+    `type` VARCHAR(191) NOT NULL,
+    `provider` VARCHAR(191) NOT NULL,
+    `providerAccountId` VARCHAR(191) NOT NULL,
+    `refresh_token` TEXT NULL,
+    `access_token` TEXT NULL,
+    `expires_at` INTEGER NULL,
+    `token_type` VARCHAR(191) NULL,
+    `scope` VARCHAR(191) NULL,
+    `id_token` TEXT NULL,
+    `session_state` VARCHAR(191) NULL,
 
-    UNIQUE INDEX `Accounts_email_key`(`email`),
-    UNIQUE INDEX `Accounts_phone_key`(`phone`),
-    PRIMARY KEY (`account_id`)
+    UNIQUE INDEX `Account_provider_providerAccountId_key`(`provider`, `providerAccountId`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `Session` (
+    `id` VARCHAR(191) NOT NULL,
+    `sessionToken` VARCHAR(191) NOT NULL,
+    `userId` VARCHAR(191) NOT NULL,
+    `expires` DATETIME(3) NOT NULL,
+
+    UNIQUE INDEX `Session_sessionToken_key`(`sessionToken`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `User` (
+    `id` VARCHAR(191) NOT NULL,
+    `name` VARCHAR(191) NULL,
+    `email` VARCHAR(191) NULL,
+    `emailVerified` DATETIME(3) NULL,
+    `image` VARCHAR(191) NULL,
+    `is_complete_information` BOOLEAN NOT NULL DEFAULT false,
+    `firstname` VARCHAR(191) NULL,
+    `lastname` VARCHAR(191) NULL,
+    `gender` VARCHAR(191) NULL,
+    `birthdate` DATETIME(3) NULL,
+    `phone` VARCHAR(191) NULL,
+    `address` VARCHAR(191) NULL,
+    `registration_date` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `last_active_date` DATETIME(3) NULL,
+    `is_active` BOOLEAN NOT NULL DEFAULT true,
+    `role` ENUM('customer', 'admin') NOT NULL DEFAULT 'customer',
+
+    UNIQUE INDEX `User_email_key`(`email`),
+    UNIQUE INDEX `User_phone_key`(`phone`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `VerificationToken` (
+    `id` VARCHAR(191) NOT NULL,
+    `identifier` VARCHAR(191) NOT NULL,
+    `token` VARCHAR(191) NOT NULL,
+    `expires` DATETIME(3) NOT NULL,
+
+    UNIQUE INDEX `VerificationToken_token_key`(`token`),
+    UNIQUE INDEX `VerificationToken_identifier_token_key`(`identifier`, `token`),
+    PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
 CREATE TABLE `Customers` (
     `customer_id` VARCHAR(191) NOT NULL,
-    `account_id` VARCHAR(191) NOT NULL,
+    `userId` VARCHAR(191) NOT NULL,
     `ltv` DOUBLE NOT NULL,
 
-    UNIQUE INDEX `Customers_account_id_key`(`account_id`),
+    UNIQUE INDEX `Customers_userId_key`(`userId`),
     PRIMARY KEY (`customer_id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
 CREATE TABLE `Admin` (
     `admin_id` VARCHAR(191) NOT NULL,
-    `account_id` VARCHAR(191) NOT NULL,
+    `userId` VARCHAR(191) NOT NULL,
 
-    UNIQUE INDEX `Admin_account_id_key`(`account_id`),
+    UNIQUE INDEX `Admin_userId_key`(`userId`),
     PRIMARY KEY (`admin_id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -152,10 +196,16 @@ CREATE TABLE `Hotels` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- AddForeignKey
-ALTER TABLE `Customers` ADD CONSTRAINT `Customers_account_id_fkey` FOREIGN KEY (`account_id`) REFERENCES `Accounts`(`account_id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `Account` ADD CONSTRAINT `Account_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Admin` ADD CONSTRAINT `Admin_account_id_fkey` FOREIGN KEY (`account_id`) REFERENCES `Accounts`(`account_id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `Session` ADD CONSTRAINT `Session_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `Customers` ADD CONSTRAINT `Customers_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `Admin` ADD CONSTRAINT `Admin_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `Transactions` ADD CONSTRAINT `Transactions_customer_id_fkey` FOREIGN KEY (`customer_id`) REFERENCES `Customers`(`customer_id`) ON DELETE RESTRICT ON UPDATE CASCADE;

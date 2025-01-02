@@ -1,21 +1,25 @@
 'use client';
 
 import { signIn, signOut, useSession } from 'next-auth/react';
+import Image from 'next/image';
 
 const SignupPopup = () => {
     const { data: session, status } = useSession();
     const { user, expires } = session || {};
     const { email, name, image } = user || {};
-    console.log("Session:", session);
-    console.log("Status:", status);
+    console.log('Session:', session);
+    console.log('Status:', status);
+    console.log('pictuer', image);
 
     if (session) {
         return (
             <div className="flex items-center gap-2">
-                <img
+                <Image
                     src={image}
-                    alt={name}
-                    className="w-12 h-12 rounded-full"
+                    alt="user profile"
+                    className="gap-2 rounded-full"
+                    width={50}
+                    height={50}
                 />
                 {/* <div className="text-ginaWhite text-sm">{name}</div>
                     <div className="text-ginaWhite text-sm">{email}</div> */}
