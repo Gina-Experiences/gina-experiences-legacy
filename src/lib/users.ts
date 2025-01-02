@@ -29,7 +29,9 @@ export async function getUserById(userId: string) {
 
         return { user };
     } catch (error) {
-        return { error: error instanceof Error ? error.message : 'Unknown error' };
+        return {
+            error: error instanceof Error ? error.message : 'Unknown error',
+        };
     }
 }
 
@@ -102,7 +104,9 @@ export async function createUser(data: {
 
         return { user };
     } catch (error) {
-        return { error: error instanceof Error ? error.message : 'Unknown error' };
+        return {
+            error: error instanceof Error ? error.message : 'Unknown error',
+        };
     }
 }
 
@@ -116,7 +120,9 @@ export async function deactivateUser(userId: string) {
 
         return { message: 'User deactivated successfully', user };
     } catch (error) {
-        return { error: error instanceof Error ? error.message : 'Unknown error' };
+        return {
+            error: error instanceof Error ? error.message : 'Unknown error',
+        };
     }
 }
 
@@ -144,7 +150,9 @@ export async function getAllActiveUsers() {
 
         return { users };
     } catch (error) {
-        return { error: error instanceof Error ? error.message : 'Unknown error' };
+        return {
+            error: error instanceof Error ? error.message : 'Unknown error',
+        };
     }
 }
 
@@ -163,7 +171,10 @@ export async function updateUser(
 ) {
     try {
         // Validate unique phone
-        if (data.phone && (await prisma.user.findUnique({ where: { phone: data.phone } }))) {
+        if (
+            data.phone &&
+            (await prisma.user.findUnique({ where: { phone: data.phone } }))
+        ) {
             return { error: 'Phone number already in use' };
         }
 
@@ -179,7 +190,9 @@ export async function updateUser(
 
         return { updatedUser };
     } catch (error) {
-        return { error: error instanceof Error ? error.message : 'Unknown error' };
+        return {
+            error: error instanceof Error ? error.message : 'Unknown error',
+        };
     }
 }
 
@@ -201,6 +214,8 @@ export async function getUserTransactions(userId: string) {
 
         return { transactions: customer.Transactions };
     } catch (error) {
-        return { error: error instanceof Error ? error.message : 'Unknown error' };
+        return {
+            error: error instanceof Error ? error.message : 'Unknown error',
+        };
     }
 }
