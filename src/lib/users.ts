@@ -1,3 +1,4 @@
+'use server';
 import { prisma } from './prisma';
 import { Role } from '@prisma/client';
 
@@ -10,6 +11,7 @@ export async function getUserById(userId: string) {
                 id: true,
                 email: true,
                 firstname: true,
+                name: true,
                 lastname: true,
                 gender: true,
                 birthdate: true,

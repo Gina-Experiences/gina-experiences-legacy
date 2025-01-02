@@ -2,14 +2,25 @@
 
 import { signIn, signOut, useSession } from 'next-auth/react';
 import Image from 'next/image';
+import { getUserById } from '@/lib/users';
+import { useEffect, useState } from 'react';
 
 const SignupPopup = () => {
     const { data: session, status } = useSession();
     const { user, expires } = session || {};
-    const { email, name, image } = user || {};
-    console.log('Session:', session);
-    console.log('Status:', status);
-    console.log('pictuer', image);
+    const { email, name, image, id } = user || {};
+
+    const getData = async () => {
+        const data = await getUserById(id);
+        console.log('User data:', data);
+    };
+
+    useEffect(() => {
+        if (status === 'authenticated') {
+            getData();
+        }
+    }, [status]);
+
 
     if (session) {
         return (
