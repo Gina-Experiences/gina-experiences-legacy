@@ -49,8 +49,7 @@ export const authOptions: NextAuthOptions = {
                     firstname: token.firstname ?? null,
                     lastname: token.lastname ?? null,
                     role: token.role ?? 'customer',
-                    is_complete_information:
-                        token.is_complete_information ?? false,
+                    is_complete_information: token.is_complete_information ?? false,
                 };
             }
             console.log('Session after:', session);
