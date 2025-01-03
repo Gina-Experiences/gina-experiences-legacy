@@ -13,53 +13,77 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Accounts {
-  account_id        String   @id @default(uuid())
-  email             String   @unique
-  password          String
-  role              Role
-  firstname         String
-  lastname          String
-  gender            String
-  birthdate         DateTime
-  phone             String   @unique
-  address           String
-  registration_date DateTime @default(now())
-  imagelink         String
-  last_active_date  DateTime
-  is_active         Boolean  @default(true)
+model Account {
+  id                 String   @id @default(uuid())
+  userId             String
+  type               String
+  provider           String
+  providerAccountId  String
+  refresh_token      String?   @db.Text
+  access_token       String?   @db.Text 
+  expires_at         Int?      
+  token_type         String?   
+  scope              String?   
+  id_token           String?   @db.Text
+  session_state      String?   
+  user               User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  Customers Customers?
-  Admin     Admin?
+  @@unique([provider, providerAccountId])
 }
 
-model Customers {
-  customer_id  String         @id @default(uuid())
-  account_id   String         @unique
-  ltv          Float
-  Account      Accounts       @relation(fields: [account_id], references: [account_id])
-  Transactions Transactions[]
+model Session {
+  id           String   @id @default(uuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-model Admin {
-  admin_id   String   @id @default(uuid())
-  account_id String   @unique
-  Account    Accounts @relation(fields: [account_id], references: [account_id])
+model User {
+  id                    String         @id @default(uuid())
+  name                  String?
+  email                 String?        @unique
+  emailVerified         DateTime? 
+  image                 String?   
+  is_complete_information Boolean      @default(false) // Tracks info completion
+  accounts              Account[] 
+  sessions              Session[] 
+  firstname             String?
+  lastname              String?
+  gender                String?
+  birthdate             DateTime?
+  phone                 String?        @unique
+  address               String?
+  registration_date     DateTime       @default(now())
+  last_active_date      DateTime?
+  is_active             Boolean        @default(true)
+  role                  Role           @default(customer)
+  ltv                   Float          @default(0.0)
+  Transactions          Transactions[] // Relation to Transactions table
+}
+
+model VerificationToken {
+  id         String      @id @default(uuid())
+  identifier String   
+  token      String   @unique
+  expires    DateTime 
+
+  @@unique([identifier, token])
 }
 
 model Transactions {
   transaction_id     String             @id @default(uuid())
-  customer_id        String
+  userId             String
   product_id         String
   transaction_date   DateTime
   total_Amount       Float
   payment_status     PaymentStatus
   transaction_status TransactionStatus
 
-  Customer Customers @relation(fields: [customer_id], references: [customer_id])
+  User     User      @relation(fields: [userId], references: [id])
   Product  Product   @relation(fields: [product_id], references: [product_id])
 
-  @@index([customer_id])
+  @@index([userId])
   @@index([product_id])
 }
 
