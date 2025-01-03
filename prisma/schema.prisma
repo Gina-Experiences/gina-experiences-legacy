@@ -20,11 +20,11 @@ model Account {
   provider           String
   providerAccountId  String
   refresh_token      String?   @db.Text
-  access_token       String?    @db.Text 
+  access_token       String?   @db.Text 
   expires_at         Int?      
   token_type         String?   
   scope              String?   
-  id_token           String?    @db.Text
+  id_token           String?   @db.Text
   session_state      String?   
   user               User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -40,26 +40,26 @@ model Session {
 }
 
 model User {
-  id                    String    @id @default(uuid())
+  id                    String         @id @default(uuid())
   name                  String?
-  email                 String?   @unique
+  email                 String?        @unique
   emailVerified         DateTime? 
   image                 String?   
-  is_complete_information Boolean @default(false) // Tracks info completion
+  is_complete_information Boolean      @default(false) // Tracks info completion
   accounts              Account[] 
   sessions              Session[] 
   firstname             String?
   lastname              String?
   gender                String?
   birthdate             DateTime?
-  phone                 String?   @unique
+  phone                 String?        @unique
   address               String?
-  registration_date     DateTime  @default(now())
+  registration_date     DateTime       @default(now())
   last_active_date      DateTime?
-  is_active             Boolean   @default(true)
-  role                  Role      @default(customer)
-  Customers             Customers?
-  Admin                 Admin?
+  is_active             Boolean        @default(true)
+  role                  Role           @default(customer)
+  ltv                   Float          @default(0.0)
+  Transactions          Transactions[] // Relation to Transactions table
 }
 
 model VerificationToken {
@@ -71,33 +71,19 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-model Customers {
-  customer_id  String         @id @default(uuid())
-  userId       String         @unique
-  ltv          Float
-  User         User           @relation(fields: [userId], references: [id])
-  Transactions Transactions[]
-}
-
-model Admin {
-  admin_id   String   @id @default(uuid())
-  userId     String   @unique
-  User       User     @relation(fields: [userId], references: [id])
-}
-
 model Transactions {
   transaction_id     String             @id @default(uuid())
-  customer_id        String
+  userId             String
   product_id         String
   transaction_date   DateTime
   total_Amount       Float
   payment_status     PaymentStatus
   transaction_status TransactionStatus
 
-  Customer Customers @relation(fields: [customer_id], references: [customer_id])
+  User     User      @relation(fields: [userId], references: [id])
   Product  Product   @relation(fields: [product_id], references: [product_id])
 
-  @@index([customer_id])
+  @@index([userId])
   @@index([product_id])
 }
 
