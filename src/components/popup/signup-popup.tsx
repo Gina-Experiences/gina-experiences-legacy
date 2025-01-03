@@ -9,7 +9,6 @@ const SignupPopup = () => {
     const { data: session, status } = useSession();
     const { user, expires } = session || {};
     const { email, name, image, id } = user || {};
-
     const getData = async () => {
         const data = await getUserById(id);
         console.log('User data:', data);
@@ -39,6 +38,7 @@ const SignupPopup = () => {
                     onClick={() => signOut()}
                 >
                     Sign Out
+
                 </div>
             </div>
         );
