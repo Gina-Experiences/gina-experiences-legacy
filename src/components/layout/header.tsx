@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { FaBars } from 'react-icons/fa6';
-import { LoginPopup, SignupPopup } from '@/components/popup';
+import { SignupPopup } from '@/components/popup';
 import { ModalButton } from '@/components/layout';
 
 const Header = () => {
@@ -72,22 +72,6 @@ const Header = () => {
             </div>
 
             <div className="flex flex-col xl:flex-row gap-4 xl:w-auto w-full">
-                {/* <ModalButton
-                    buttonContent="Login"
-                    buttonClassName="border border-ginaLightYellow text-ginaLightYellow hover:border-ginaBlue hover:text-ginaBlue duration-200 bg-ginaWhite rounded-lg w-full xl:w-24 p-1"
-                >
-                    <div ref={modalRef}>
-                        <LoginPopup />
-                    </div>
-                </ModalButton> */}
-                {/* <ModalButton
-                    buttonContent="Start Now"
-                    buttonClassName="border border-ginaLightYellow text-ginaWhite bg-ginaLightYellow hover:border-ginaBlue hover:bg-ginaBlue duration-200 rounded-lg w-full xl:w-24 p-1"
-                >
-                    <div ref={modalRef}>
-                        
-                    </div>
-                </ModalButton> */}
                 <SignupPopup />
             </div>
         </div>

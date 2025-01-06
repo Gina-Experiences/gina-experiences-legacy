@@ -1,9 +1,9 @@
-import SignupPopup from '@/components/popup/signup-popup';
+import SignupPopup from '@/components/popup/sign-user';
 
-export default function Login () {
-    return(
+export default function Login() {
+    return (
         <div>
-            <SignupPopup/>
+            <SignupPopup />
         </div>
-    )
+    );
 }
