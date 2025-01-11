@@ -15,7 +15,7 @@ export default function RootLayout({
     return (
         <html lang="en">
             <body
-                className={`${FONTS.alpha.className} w-svw bg-ginaGray relative`}
+                className={`${FONTS.alpha.className} w-svw bg-white relative`}
             >
                 <Header />
                 {children}

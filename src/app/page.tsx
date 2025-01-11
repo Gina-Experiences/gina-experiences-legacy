@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { Hero, Guide, Services, Offers, Events } from '@/components/home';
+import { Hero, Guide, Services, Offers, Events, Testimonials } from '@/components/home';
 import Newsletter from "@/components/newsletter";
 
 export default function Home() {
@@ -10,7 +10,7 @@ export default function Home() {
             <Services />
             <Offers />
             <Events />
-            <Newsletter />
+            <Testimonials />
         </div>
     );
 }
