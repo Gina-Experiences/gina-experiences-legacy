@@ -21,7 +21,7 @@ export default function RootLayout({
                     <link rel="icon" href="/images/gina/logo-icon.png" />
                 </head>
                 <body
-                    className={`${FONTS.alpha.className} w-svw bg-ginaGray relative`}
+                    className={`${FONTS.alpha.className} w-svw bg-ginaWhite relative`}
                 >
                     <Header />
                     {children}
