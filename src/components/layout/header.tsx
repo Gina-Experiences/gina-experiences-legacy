@@ -21,7 +21,7 @@ const Header = () => {
         { name: 'Services', href: '/services', target: '_self' },
         {
             name: 'Contact Us',
-            href: 'https://www.messenger.com/t/109818234961571',
+            href: '/contact',
             target: '_blank',
         },
     ];
