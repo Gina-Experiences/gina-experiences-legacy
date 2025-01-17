@@ -19,11 +19,7 @@ const Header = () => {
         { name: 'About', href: '/about', target: '_self' },
         { name: 'Experiences', href: '/experiences', target: '_self' },
         { name: 'Services', href: '/services', target: '_self' },
-        {
-            name: 'Contact Us',
-            href: '/contact',
-            target: '_blank',
-        },
+        { name: 'Contact Us', href: '/contact-us', target: '_self' },
     ];
 
     const toggleSidebar = () => setIsSidebarOpen((prev) => !prev);
