@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { CompleteInfoForm } from '@/components/popup';
 import { userStore } from '@/stores';
 import { useEffect, useState, useCallback } from 'react';
+import { LogIn, LogOut } from 'lucide-react';
 
 const SignUser = () => {
     const { data: session, status } = useSession();
@@ -19,7 +20,7 @@ const SignUser = () => {
             'Are you sure you want to sign out?'
         );
         if (confirmSignOut) {
-            signOut();
+            signOut({ callbackUrl: '/' });
             console.log('Clearing cache in Zustand and resetting modal state');
             clearCache();
             setShowModal(false);
@@ -54,29 +55,37 @@ const SignUser = () => {
     return (
         <>
             {session && (
-                <div className="flex items-center gap-2">
-                    <Image
-                        src={session.user.image}
+                <div className="w-full flex items-center gap-2">
+                    {/* <Image
+                        src={session.user.image || '/gina/logo-icon.png'}
                         alt="user profile"
                         className="gap-2 rounded-full"
                         width={50}
                         height={50}
-                    />
-                    <div
-                        className="flex justify-center cursor-pointer border border-ginaLightYellow text-ginaWhite bg-ginaLightYellow hover:border-ginaBlue hover:bg-ginaBlue duration-200 rounded-lg w-full xl:w-24 p-1"
-                        onClick={handleSignOut}
-                    >
-                        Sign Out
+                    /> */}
+                    <div className="w-full">
+                        <button
+                            onClick={handleSignOut}
+                            className="w-full bg-ginaOrange/15 rounded-xl p-4 flex items-center gap-3 text-ginaOrange font-medium hover:bg-ginaOrange/25 duration-200"
+                        >
+                            <span>
+                                <LogOut />
+                            </span>
+                            <span>Sign Out</span>
+                        </button>
                     </div>
                 </div>
             )}
 
             {!session && (
                 <button
-                    className="flex justify-center cursor-pointer border border-ginaLightYellow text-ginaWhite bg-ginaLightYellow hover:border-ginaBlue hover:bg-ginaBlue duration-200 rounded-lg w-full xl:w-24 p-1"
+                    className="w-full bg-ginaBlue/15 rounded-xl p-4 flex items-center gap-3 text-ginaBlue font-medium hover:bg-ginaBlue/25 duration-200 xl:py-2 xl:px-4 xl:rounded-full"
                     onClick={() => signIn('google')}
                 >
-                    Start Now
+                    <span>
+                        <LogIn />
+                    </span>
+                    <span>Sign In</span>
                 </button>
             )}
 
