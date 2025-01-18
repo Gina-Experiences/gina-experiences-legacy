@@ -35,18 +35,22 @@ const CompleteInfoForm: React.FC<CompleteInfoFormProps> = ({ onComplete }) => {
             return;
         }
 
-        // Show confirmation dialog
         const isConfirmed = window.confirm(
             'Are you sure you want to submit this information?'
         );
-
-        if (!isConfirmed) {
-            console.log('User canceled submission');
-            return; // Exit if the user does not confirm
-        }
+        if (!isConfirmed) return;
 
         try {
-            // Call the updateUser function from the userStore
+            console.log('Submitting for User ID:', user?.id);
+            console.log('Data:', {
+                firstname: firstName,
+                lastname: lastName,
+                gender,
+                birthdate: new Date(birthdate),
+                phone: contactNum,
+                address,
+            });
+
             await updateUser(user?.id, {
                 firstname: firstName,
                 lastname: lastName,
@@ -58,7 +62,7 @@ const CompleteInfoForm: React.FC<CompleteInfoFormProps> = ({ onComplete }) => {
 
             console.log('User information updated successfully!');
             setError('');
-            onComplete(); // Close the modal after successful completion
+            onComplete();
         } catch (err) {
             console.error('Error updating user:', err);
             setError('Failed to update user information. Please try again.');
@@ -74,26 +78,6 @@ const CompleteInfoForm: React.FC<CompleteInfoFormProps> = ({ onComplete }) => {
 
     const handleCheckboxChange = () => {
         setIsAgreed(!isAgreed);
-    };
-
-    const handleFocus = (
-        field: string,
-        setValue: React.Dispatch<React.SetStateAction<string>>,
-        defaultValue: string
-    ) => {
-        if (field === defaultValue) {
-            setValue('');
-        }
-    };
-
-    const handleBlur = (
-        field: string,
-        setValue: React.Dispatch<React.SetStateAction<string>>,
-        defaultValue: string
-    ) => {
-        if (field.trim() === '') {
-            setValue(defaultValue);
-        }
     };
 
     return (
@@ -144,20 +128,7 @@ const CompleteInfoForm: React.FC<CompleteInfoFormProps> = ({ onComplete }) => {
                             type="text"
                             value={firstName}
                             onChange={(e) => setFirstName(e.target.value)}
-                            onFocus={() =>
-                                handleFocus(
-                                    firstName,
-                                    setFirstName,
-                                    'First Name'
-                                )
-                            }
-                            onBlur={() =>
-                                handleBlur(
-                                    firstName,
-                                    setFirstName,
-                                    'First Name'
-                                )
-                            }
+                            placeholder="First Name"
                             className="flex w-full p-2 px-4 text-xs items-center text-ginaBlue border-2 border-ginaBlue rounded-lg"
                             required
                         />
@@ -165,12 +136,7 @@ const CompleteInfoForm: React.FC<CompleteInfoFormProps> = ({ onComplete }) => {
                             type="text"
                             value={lastName}
                             onChange={(e) => setLastName(e.target.value)}
-                            onFocus={() =>
-                                handleFocus(lastName, setLastName, 'Last Name')
-                            }
-                            onBlur={() =>
-                                handleBlur(lastName, setLastName, 'Last Name')
-                            }
+                            placeholder="Last Name"
                             className="flex w-full p-2 px-4 text-xs items-center text-ginaBlue border-2 border-ginaBlue rounded-lg"
                             required
                         />
@@ -185,20 +151,6 @@ const CompleteInfoForm: React.FC<CompleteInfoFormProps> = ({ onComplete }) => {
                                 type="date"
                                 value={birthdate}
                                 onChange={(e) => setBirthdate(e.target.value)}
-                                onFocus={() =>
-                                    handleFocus(
-                                        birthdate,
-                                        setBirthdate,
-                                        'Date of Birth'
-                                    )
-                                }
-                                onBlur={() =>
-                                    handleBlur(
-                                        birthdate,
-                                        setBirthdate,
-                                        'Date of Birth'
-                                    )
-                                }
                                 className="flex w-full p-2 px-4 text-xs items-center text-ginaBlue border-2 border-ginaBlue rounded-lg"
                                 required
                             />
@@ -226,20 +178,7 @@ const CompleteInfoForm: React.FC<CompleteInfoFormProps> = ({ onComplete }) => {
                         type="text"
                         value={contactNum}
                         onChange={(e) => setContactNum(e.target.value)}
-                        onFocus={() =>
-                            handleFocus(
-                                contactNum,
-                                setContactNum,
-                                'Contact Number'
-                            )
-                        }
-                        onBlur={() =>
-                            handleBlur(
-                                contactNum,
-                                setContactNum,
-                                'Contact Number'
-                            )
-                        }
+                        placeholder="Contact Number"
                         className="flex w-full p-2 px-4 text-xs items-center text-ginaBlue border-2 border-ginaBlue rounded-lg"
                         required
                     />
@@ -247,12 +186,7 @@ const CompleteInfoForm: React.FC<CompleteInfoFormProps> = ({ onComplete }) => {
                         type="text"
                         value={address}
                         onChange={(e) => setAddress(e.target.value)}
-                        onFocus={() =>
-                            handleFocus(address, setAddress, 'Address')
-                        }
-                        onBlur={() =>
-                            handleBlur(address, setAddress, 'Address')
-                        }
+                        placeholder="Address"
                         className="flex w-full p-2 px-4 text-xs items-center text-ginaBlue border-2 border-ginaBlue rounded-lg"
                         required
                     />

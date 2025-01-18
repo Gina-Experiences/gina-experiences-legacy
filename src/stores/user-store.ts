@@ -6,6 +6,7 @@ import { getUserById, updateUser } from '@/lib/users';
 interface UserStore {
     session: any | null;
     user: any | null;
+    isAdmin: boolean;
     isLoading: boolean;
     error: string | null;
 
@@ -30,6 +31,7 @@ const userStore = create<UserStore>()(
         (set) => ({
             session: null,
             user: null,
+            isAdmin: false,
             isLoading: false,
             error: null,
 
@@ -39,8 +41,18 @@ const userStore = create<UserStore>()(
                 set({ isLoading: true, error: null });
                 try {
                     const { user } = await getUserById(userId);
-                    set({ user, isLoading: false });
+                    console.log('[Zustand] User fetched:', user);
+                    set({
+                        user,
+                        isAdmin: user?.role === 'admin',
+                        isLoading: false,
+                    });
+                    console.log(
+                        '[Zustand] isAdmin set to:',
+                        user?.role === 'admin'
+                    );
                 } catch (error) {
+                    console.error('[Zustand] Error fetching user:', error);
                     set({
                         error:
                             error instanceof Error
@@ -55,8 +67,13 @@ const userStore = create<UserStore>()(
                 set({ isLoading: true, error: null });
                 try {
                     const { updatedUser } = await updateUser(userId, data);
+                    if (!updatedUser) {
+                        throw new Error('User update failed on the server.');
+                    }
+                    console.log('Updated User:', updatedUser);
                     set({ user: updatedUser, isLoading: false });
                 } catch (error) {
+                    console.error('Update User Error:', error);
                     set({
                         error:
                             error instanceof Error
@@ -67,7 +84,10 @@ const userStore = create<UserStore>()(
                 }
             },
 
-            clearCache: () => set({ session: null, user: null }),
+            clearCache: () => {
+                localStorageWrapper.removeItem('user-storage'); // Clear local storage
+                set({ session: null, user: null, isAdmin: false });
+            },
         }),
         {
             name: 'user-storage',

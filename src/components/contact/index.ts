@@ -1,4 +1,4 @@
-import ContactLinks from "./contact-links";
-import ContactForm from "./contact-form";
+import ContactLinks from '@/components/contact/contact-links';
+import ContactForm from '@/components/contact/contact-form';
 
 export { ContactLinks, ContactForm };

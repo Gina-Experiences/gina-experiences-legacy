@@ -39,6 +39,7 @@ export default function ContactForm() {
                 {Object.entries(formData).map(([key, value]) =>
                     key !== 'message' ? (
                         <input
+                            key={key} // Add key here
                             type={
                                 key === 'email'
                                     ? 'email'
@@ -56,6 +57,7 @@ export default function ContactForm() {
                         />
                     ) : (
                         <textarea
+                            key={key} // Add key here
                             id={key}
                             name={key}
                             value={value}
