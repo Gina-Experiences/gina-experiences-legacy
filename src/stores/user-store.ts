@@ -54,9 +54,15 @@ const userStore = create<UserStore>()(
             updateUser: async (userId, data) => {
                 set({ isLoading: true, error: null });
                 try {
+                    console.log('Calling server update with:', userId, data);
                     const { updatedUser } = await updateUser(userId, data);
+                    if (!updatedUser) {
+                        throw new Error('User update failed on the server.');
+                    }
+                    console.log('Updated User:', updatedUser);
                     set({ user: updatedUser, isLoading: false });
                 } catch (error) {
+                    console.error('Update User Error:', error);
                     set({
                         error:
                             error instanceof Error
@@ -67,7 +73,10 @@ const userStore = create<UserStore>()(
                 }
             },
 
-            clearCache: () => set({ session: null, user: null }),
+            clearCache: () => {
+                localStorageWrapper.removeItem('user-storage'); // Clear local storage
+                set({ session: null, user: null });
+            },
         }),
         {
             name: 'user-storage',

@@ -29,7 +29,12 @@ const Header = () => {
             target: '_self',
             icon: <BriefcaseBusiness />,
         },
-        { name: 'Contact', href: '/contact', target: '_self', icon: <Phone /> },
+        {
+            name: 'Contact',
+            href: '/contact-us',
+            target: '_self',
+            icon: <Phone />,
+        },
     ];
 
     const toggleSidebar = () => setIsSidebarOpen((prev) => !prev);
