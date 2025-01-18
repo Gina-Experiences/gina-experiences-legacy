@@ -5,8 +5,16 @@ import { usePathname } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { FaBars } from 'react-icons/fa6';
-import { LoginPopup, SignupPopup } from '@/components/popup';
-import { ModalButton } from '@/components/layout';
+import { SignupPopup } from '@/components/popup';
+import {
+    House,
+    Lightbulb,
+    Map,
+    BriefcaseBusiness,
+    Phone,
+    Sparkles,
+} from 'lucide-react';
+import { userStore } from '@/stores';
 
 const Header = () => {
     const pathname = usePathname();
@@ -14,12 +22,39 @@ const Header = () => {
     const sidebarRef = useRef<HTMLDivElement>(null);
     const modalRef = useRef<HTMLDivElement | null>(null);
 
+    const isAdmin = userStore((state) => state.isAdmin);
+
     const Links = [
-        { name: 'Home', href: '/', target: '_self' },
-        { name: 'About', href: '/about', target: '_self' },
-        { name: 'Experiences', href: '/experiences', target: '_self' },
-        { name: 'Services', href: '/services', target: '_self' },
-        { name: 'Contact Us', href: '/contact-us', target: '_self' },
+        { name: 'Home', href: '/', target: '_self', icon: <House /> },
+        { name: 'About', href: '/about', target: '_self', icon: <Lightbulb /> },
+        {
+            name: 'Experiences',
+            href: '/experiences',
+            target: '_self',
+            icon: <Map />,
+        },
+        {
+            name: 'Services',
+            href: '/services',
+            target: '_self',
+            icon: <BriefcaseBusiness />,
+        },
+        {
+            name: 'Contact',
+            href: '/contact-us',
+            target: '_self',
+            icon: <Phone />,
+        },
+        ...(isAdmin
+            ? [
+                  {
+                      name: 'Dashboard',
+                      href: '/dashboard',
+                      target: '_self',
+                      icon: <Sparkles />,
+                  },
+              ]
+            : []),
     ];
 
     const toggleSidebar = () => setIsSidebarOpen((prev) => !prev);
