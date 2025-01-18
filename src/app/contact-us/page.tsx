@@ -1,4 +1,4 @@
-import { ContactLinks } from "@/components/contact";
+import { ContactLinks, ContactForm } from "@/components/contact";
 import Image from 'next/image';
 
 export default function Contact() {
@@ -7,7 +7,10 @@ export default function Contact() {
          <div className="w-full max-w-screen-2xl items-center flex flex-col p-8">
             <div className="w-full rounded-t-3xl h-32 bg-gradient-to-r from-ginaLightYellow to-ginaOrange">
             </div>
-            <ContactLinks />
+            <div className="flex flex-col lg:flex-row-reverse">
+               <ContactLinks />
+               <ContactForm />
+            </div>
          </div>
       </div>
    );
