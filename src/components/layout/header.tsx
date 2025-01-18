@@ -6,13 +6,23 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { FaBars } from 'react-icons/fa6';
 import { SignupPopup } from '@/components/popup';
-import { House, Lightbulb, Map, BriefcaseBusiness, Phone } from 'lucide-react';
+import {
+    House,
+    Lightbulb,
+    Map,
+    BriefcaseBusiness,
+    Phone,
+    Sparkles,
+} from 'lucide-react';
+import { userStore } from '@/stores';
 
 const Header = () => {
     const pathname = usePathname();
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const sidebarRef = useRef<HTMLDivElement>(null);
     const modalRef = useRef<HTMLDivElement | null>(null);
+
+    const isAdmin = userStore((state) => state.isAdmin);
 
     const Links = [
         { name: 'Home', href: '/', target: '_self', icon: <House /> },
@@ -35,6 +45,16 @@ const Header = () => {
             target: '_self',
             icon: <Phone />,
         },
+        ...(isAdmin
+            ? [
+                  {
+                      name: 'Dashboard',
+                      href: '/dashboard',
+                      target: '_self',
+                      icon: <Sparkles />,
+                  },
+              ]
+            : []),
     ];
 
     const toggleSidebar = () => setIsSidebarOpen((prev) => !prev);
