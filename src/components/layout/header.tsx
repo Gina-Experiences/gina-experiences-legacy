@@ -4,7 +4,6 @@ import { useState, useRef, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
-import { FaBars } from 'react-icons/fa6';
 import { SignupPopup } from '@/components/popup';
 import {
     House,
@@ -13,6 +12,7 @@ import {
     BriefcaseBusiness,
     Phone,
     Sparkles,
+    Menu,
 } from 'lucide-react';
 import { userStore } from '@/stores';
 
@@ -130,10 +130,10 @@ const Header = () => {
 
                 <div className="xl:hidden px-12 gap-12 bg-ginaWhite rounded-l-full h-full flex items-center">
                     <button
-                        className=" text-ginaOrange hover:text-ginaBlue transition-all duration-200 ease-in-out"
+                        className=" text-ginaOrange hover:text-ginaBlue duration-300"
                         onClick={toggleSidebar}
                     >
-                        <FaBars size={20} />
+                        <Menu size={26} />
                     </button>
                 </div>
             </div>
