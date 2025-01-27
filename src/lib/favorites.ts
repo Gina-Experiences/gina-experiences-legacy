@@ -139,18 +139,63 @@ export async function updateFavorite(favoriteId: string, data: Partial<{ itemId:
     }
 }
 
-// Delete a favorite (normal delete)
+// Delete a favorite (normal delete with decrement on related item)
 export async function deleteFavorite(favoriteId: string) {
-    try {
-        await prisma.favorites.delete({
-            where: { id: favoriteId },
-        });
+  try {
+    // Find the favorite record before deletion to get itemId and itemType
+    const favorite = await prisma.favorites.findUnique({
+      where: { id: favoriteId },
+    });
 
-        return { message: 'Favorite deleted successfully' };
-    } catch (error: unknown) {
-        if (error instanceof Error) {
-            return { error: error.message };
-        }
-        return { error: 'An unknown error occurred' };
+    if (!favorite) {
+      return { error: 'Favorite not found' };
     }
+
+    const { itemId, itemType } = favorite;
+
+    // Delete the favorite record
+    await prisma.favorites.delete({
+      where: { id: favoriteId },
+    });
+
+    // Decrement the favorites count for the specific item type
+    switch (itemType) {
+      case 'Packages':
+        await prisma.packages.update({
+          where: { package_id: itemId },
+          data: { favorites: { decrement: 1 } },
+        });
+        break;
+      case 'Events':
+        await prisma.events.update({
+          where: { event_id: itemId },
+          data: { favorites: { decrement: 1 } },
+        });
+        break;
+      case 'Activities':
+        await prisma.activities.update({
+          where: { activity_id: itemId },
+          data: { favorites: { decrement: 1 } },
+        });
+        break;
+      case 'Transportation':
+        await prisma.transportation.update({
+          where: { transportation_id: itemId },
+          data: { favorites: { decrement: 1 } },
+        });
+        break;
+      case 'Hotels':
+        await prisma.hotels.update({
+          where: { hotel_id: itemId },
+          data: { favorites: { decrement: 1 } },
+        });
+        break;
+      default:
+        throw new Error('Invalid item type');
+    }
+
+    return { message: 'Favorite deleted and favorites count decremented successfully' };
+  } catch (error: unknown) {
+    return handleError(error);
+  }
 }
