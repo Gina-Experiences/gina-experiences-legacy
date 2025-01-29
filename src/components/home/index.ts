@@ -5,4 +5,4 @@ import Offers from '@/components/home/offers';
 import Events from '@/components/home/events';
 import Testimonials from "./testimonials";
 
-export { Hero, Guide, Services, Offers, Events}
+export { Hero, Guide, Services, Offers, Events, Testimonials };

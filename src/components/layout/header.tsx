@@ -82,9 +82,9 @@ const Header = () => {
 
     const renderLinks = (isMobile: boolean) => (
         <div
-            className={`${isMobile ? 'flex-col p-16' : 'flex-row'} flex items-center justify-between xl:h-auto h-full gap-6`}
+            className={`${isMobile ? 'flex-col overflow-y-auto' : 'flex-row'} flex items-center justify-between gap-6`}
         >
-            <div className="flex flex-col xl:flex-row gap-4">
+            <div className="flex flex-col xl:flex-row gap-1 xl:gap-4 w-full h-full">
                 {Links.map((link) => (
                     <Link
                         key={link.name}
@@ -93,33 +93,14 @@ const Header = () => {
                         onClick={isMobile ? toggleSidebar : undefined}
                         className={`${
                             pathname === link.href
-                                ? 'font-bold text-ginaOrange'
+                                ? 'xl:font-medium xl:bg-transparent xl:text-ginaOrange text-ginaWhite bg-ginaOrange'
                                 : 'text-ginaBlack'
-                        } hover:text-ginaYellow transition duration-200`}
+                        } duration-200 p-4 rounded-xl flex items-center justify-start gap-3 hover:bg-ginaYellow/50 hover:text-ginaBlack xl:hover:bg-transparent xl:hover:text-ginaYellow xl:rounded-none xl:gap-0 xl:p-0`}
                     >
-                        {link.name}
+                        <span className="block xl:hidden">{link.icon}</span>
+                        <span>{link.name}</span>
                     </Link>
                 ))}
-            </div>
-
-            <div className="flex flex-col xl:flex-row gap-4 xl:w-auto w-full">
-                {/* <ModalButton
-                    buttonContent="Login"
-                    buttonClassName="border border-ginaLightYellow text-ginaLightYellow hover:border-ginaBlue hover:text-ginaBlue duration-200 bg-ginaWhite rounded-lg w-full xl:w-24 p-1"
-                >
-                    <div ref={modalRef}>
-                        <LoginPopup />
-                    </div>
-                </ModalButton> */}
-                {/* <ModalButton
-                    buttonContent="Start Now"
-                    buttonClassName="border border-ginaLightYellow text-ginaWhite bg-ginaLightYellow hover:border-ginaBlue hover:bg-ginaBlue duration-200 rounded-lg w-full xl:w-24 p-1"
-                >
-                    <div ref={modalRef}>
-                        
-                    </div>
-                </ModalButton> */}
-                <SignupPopup />
             </div>
         </div>
     );
@@ -140,8 +121,11 @@ const Header = () => {
                     </Link>
                 </div>
 
-                <div className="hidden xl:flex items-center justify-between rounded-l-full w-auto h-full px-12 gap-12 bg-ginaWhite">
+                <div className="hidden xl:flex items-center justify-between rounded-l-full w-auto h-full px-12 gap-6 bg-ginaWhite">
                     {renderLinks(false)}
+                    <div className="flex flex-col gap-4">
+                        <SignupPopup />
+                    </div>
                 </div>
 
                 <div className="xl:hidden px-12 gap-12 bg-ginaWhite rounded-l-full h-full flex items-center">
@@ -151,6 +135,30 @@ const Header = () => {
                     >
                         <Menu size={26} />
                     </button>
+                </div>
+            </div>
+
+            <div
+                ref={sidebarRef}
+                className={`xl:hidden fixed top-0 right-0 w-full sm:w-80 sm:rounded-l-3xl bg-ginaWhite z-30 transform shadow-xl p-8 flex flex-col justify-between h-full gap-6 ${
+                    isSidebarOpen ? 'translate-x-0' : 'translate-x-full'
+                } transition-transform duration-200`}
+            >
+                <div className="h-full flex flex-col gap-6 pb-24">
+                    <div className="flex items-center justify-end">
+                        <button
+                            className="text-ginaGreen/75 hover:text-ginaGreen text-3xl duration-200"
+                            onClick={toggleSidebar}
+                        >
+                            &times;
+                        </button>
+                    </div>
+
+                    {renderLinks(true)}
+                </div>
+
+                <div className="xl:w-auto w-full absolute bg-ginaWhite bottom-0 right-0 p-8">
+                    <SignupPopup />
                 </div>
             </div>
 
