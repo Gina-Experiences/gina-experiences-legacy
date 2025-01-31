@@ -1,7 +1,4 @@
 import Hero from './hero';
-import Activities from './activities';
-import Hotels from './hotels';
-import Transport from './transport';
-import Events from './events';
+import ServicesSection from './services-section';
 
-export { Hero, Activities, Hotels, Transport, Events };
+export { Hero, ServicesSection };
