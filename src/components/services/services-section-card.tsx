@@ -1,14 +1,14 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { Experience } from '@/types/experience';
+import { Service } from '@/types/service';
 import Image from "next/image";
 
 interface ServiceCardProps {
-    service: Experience;
+    service: Service;
 }
 
-export default function ServiceCard({ service }: ServiceCardProps) {
+export default function ServiceSectionCard({ service }: ServiceCardProps) {
     const router = useRouter();
 
     const handleBookNowClick = () => {
