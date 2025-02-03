@@ -12,6 +12,7 @@ import {
     FaHourglassStart,
 } from 'react-icons/fa6';
 import exp from 'constants';
+import AccordionFAQ from '../faq-accordion';
 
 export default function ExperiencePage() {
     const params = useParams();
@@ -161,33 +162,18 @@ export default function ExperiencePage() {
                         </div>
                     </div>
                 </div>
-                <div className="h-5/6 py-16 px-8 md:px-32">
+                <div className="w-full h-5/6 py-16 px-8 md:px-32">
                     <div className="bg-ginaWhite rounded-3xl shadow-xl flex flex-col mt-8">
                         <div className="rounded-t-3xl bg-ginaGreen flex flex-col items-center justify-center text-ginaWhite text-xl p-4 text-center font-medium">
                             Frequently Asked Questions
                         </div>
-                        <div className="px-8 h-full flex flex-col p-8 space-y-4">
-                            {experience.faq && experience.faq.length > 0 ? (
-                                experience.faq.map((faqItem, index) => (
-                                    <div
-                                        key={index}
-                                        className="flex flex-col space-y-2"
-                                    >
-                                        <span className="font-medium">
-                                            Question: {faqItem.question}
-                                        </span>
-                                        <span className="text-ginaGreen">
-                                            <span className="font-medium">
-                                                Answer:
-                                            </span>{' '}
-                                            {faqItem.answer}
-                                        </span>
-                                    </div>
-                                ))
-                            ) : (
-                                <span>No FAQs available</span>
-                            )}
-                        </div>
+                        <AccordionFAQ
+                            id={experience.id.toString()}
+                            data={experienceData.map(({ id, faq }) => ({
+                                id,
+                                faq,
+                            }))}
+                        />
                     </div>
                 </div>
             </div>
