@@ -3,7 +3,7 @@
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
-import { SignupPopup } from '@/components/popup';
+import { SignUser } from '@/components/popup';
 import {
     House,
     ArrowDownUp,
@@ -155,7 +155,7 @@ const Sidebar = () => {
                 </div>
                 {!isCollapsed && (
                     <div className="w-full absolute bottom-0 right-0 p-8">
-                        <SignupPopup />
+                        <SignUser variant="simple" />
                     </div>
                 )}
             </nav>
@@ -187,7 +187,7 @@ const Sidebar = () => {
                 </div>
 
                 <div className="w-full absolute bottom-0 right-0 p-8">
-                    <SignupPopup />
+                    <SignUser variant="simple" />
                 </div>
             </div>
         </>

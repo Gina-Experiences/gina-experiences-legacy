@@ -1,6 +1,6 @@
 'use client';
 
-import Link from "next/link";
+import Link from 'next/link';
 import { X, EyeOff, Eye } from 'lucide-react';
 import { userStore } from '@/stores';
 import React, { useState } from 'react';
@@ -201,11 +201,16 @@ const CompleteInfoForm: React.FC<CompleteInfoFormProps> = ({ onComplete }) => {
                                 className="cursor-pointer"
                                 required
                             />
-                            <Link href={"/terms-and-cons"}>
-                                <span className="text-xs text-ginaBlue/60 uppercase cursor-alias">
-                                    Agree to the terms and conditions
-                                </span>
-                            </Link>
+
+                            <span className="text-xs text-ginaBlue/60 uppercase cursor-alias">
+                                Agree to the{' '}
+                                <Link
+                                    href={'/terms-and-cons'}
+                                    className="cursor-pointer font-medium hover:text-ginaGreen duration-300"
+                                >
+                                    terms and conditions
+                                </Link>
+                            </span>
                         </div>
                         <button
                             type="submit"
