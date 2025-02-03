@@ -1,13 +1,20 @@
 'use client';
 
+import Image from 'next/image';
+import Link from 'next/link';
+import { DropdownButton, ProtectedLinks } from '@/components/layout';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import { CompleteInfoForm } from '@/components/popup';
 import { useCallback, useEffect, useState } from 'react';
-import { LogIn, LogOut } from 'lucide-react';
+import { LogIn, LogOut, ChevronDown } from 'lucide-react';
 import { userStore } from '@/stores';
 import ReactDOM from 'react-dom';
 
-const SignUser = () => {
+interface SignUserProps {
+    variant?: 'dropdown' | 'simple';
+}
+
+const SignUser = ({ variant = 'dropdown' }: SignUserProps) => {
     const { data: session, status } = useSession();
     const setSession = userStore((state) => state.setSession);
     const fetchUser = userStore((state) => state.fetchUser);
@@ -20,15 +27,15 @@ const SignUser = () => {
             'Are you sure you want to sign out?'
         );
         if (confirmSignOut) {
-            await signOut({ callbackUrl: '/' }); // Wait for sign-out to complete
-            clearCache(); // Clear Zustand cache
-            setShowModal(false); // Reset modal visibility
+            await signOut({ callbackUrl: '/' });
+            clearCache();
+            setShowModal(false);
         }
     }, [clearCache]);
 
     useEffect(() => {
         if (status === 'authenticated' && session?.user?.id) {
-            clearCache(); // Clear any stale cache
+            clearCache();
             setSession(session);
             fetchUser(session.user.id);
         }
@@ -40,32 +47,56 @@ const SignUser = () => {
 
     if (status === 'loading') return <p>Loading...</p>;
 
-    return (
-        <>
-            {session && (
-                <div className="w-full flex items-center gap-2">
-                    {/* <Image
-                        src={session.user.image || '/gina/logo-icon.png'}
-                        alt="user profile"
-                        className="gap-2 rounded-full"
-                        width={50}
-                        height={50}
-                    /> */}
-                    <div className="w-full">
+    if (session && variant === 'dropdown') {
+        return (
+            <div className="w-full">
+                <DropdownButton
+                    buttonContent={
+                        <div className="border-2 border-ginaYellow rounded-3xl p-1 flex items-center justify-center">
+                            <Image
+                                src={
+                                    session.user.image || '/gina/logo-icon.png'
+                                }
+                                alt="user profile"
+                                className="gap-2 rounded-full w-8 h-8 cursor-pointer"
+                                width={100}
+                                height={100}
+                            />
+                            <ChevronDown size={22} color="#F6931D" />
+                        </div>
+                    }
+                    buttonClassName="opacity-90 hover:opacity-100 duration-300 ease-in-out flex items-center"
+                    marginTop="mt-4"
+                >
+                    <div className="flex flex-col gap-1 bg-ginaWhite rounded-2xl p-2 h-auto w-auto">
+                        <ProtectedLinks />
                         <button
                             onClick={handleSignOut}
-                            className="w-full bg-ginaOrange/15 rounded-xl p-4 flex items-center gap-3 text-ginaOrange font-medium hover:bg-ginaOrange/25 duration-200"
+                            className="w-full bg-ginaOrange/15 rounded-xl p-3 flex items-center gap-3 text-ginaOrange font-medium hover:bg-ginaOrange/25 duration-200"
                         >
-                            <span>
-                                <LogOut />
-                            </span>
                             <span>Sign Out</span>
                         </button>
                     </div>
-                </div>
-            )}
+                </DropdownButton>
+            </div>
+        );
+    }
 
-            {!session && (
+    return (
+        <>
+            {session ? (
+                <div className="w-full">
+                    <button
+                        onClick={handleSignOut}
+                        className="w-full bg-ginaOrange/15 rounded-xl p-4 flex items-center gap-3 text-ginaOrange font-medium hover:bg-ginaOrange/25 duration-200"
+                    >
+                        <span>
+                            <LogOut />
+                        </span>
+                        <span>Sign Out</span>
+                    </button>
+                </div>
+            ) : (
                 <button
                     className="w-full bg-ginaOrange/15 rounded-xl p-4 flex items-center gap-3 text-ginaOrange font-medium hover:bg-ginaOrange/25 duration-200 xl:py-3 xl:px-12 xl:rounded-full"
                     onClick={() => signIn('google')}

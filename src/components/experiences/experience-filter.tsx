@@ -29,7 +29,7 @@ export default function ExperienceFilter({
                 <h2 className="text-lg text-center font-bold mb-2">FILTER</h2>
                 <div className="border-t-2 border-ginaBlue my-3"></div>
                 <div className="space-y-2">
-                    <label className="flex items-center space-x-2">
+                    <label className="flex items-center space-x-2 opacity-80 hover:opacity-100 duration-200 cursor-pointer">
                         <input
                             type="radio"
                             name="region"
@@ -41,7 +41,7 @@ export default function ExperienceFilter({
                         />
                         <span>Luzon</span>
                     </label>
-                    <label className="flex items-center space-x-2">
+                    <label className="flex items-center space-x-2 opacity-80 hover:opacity-100 duration-200 cursor-pointer">
                         <input
                             type="radio"
                             name="region"
@@ -53,7 +53,7 @@ export default function ExperienceFilter({
                         />
                         <span>Visayas</span>
                     </label>
-                    <label className="flex items-center space-x-2">
+                    <label className="flex items-center space-x-2 opacity-80 hover:opacity-100 duration-200 cursor-pointer">
                         <input
                             type="radio"
                             name="region"
