@@ -59,7 +59,8 @@ model User {
   is_active             Boolean        @default(true)
   role                  Role           @default(customer)
   ltv                   Float          @default(0.0)
-  Transactions          Transactions[] // Relation to Transactions table
+  Transactions          Transactions[]
+  Favorites             Favorites[]
 }
 
 model VerificationToken {
@@ -107,8 +108,13 @@ model Packages {
   package_duration   String
   faqs               String
   package_price      Float
+  number_of_sold_items Int     @default(0)
+  favorites          Int      @default(0)
+  rating             Float    @default(0.0)
+  is_active          Boolean  @default(true)
 
   Product Product @relation(fields: [product_id], references: [product_id])
+  Favorites Favorites[]
 }
 
 model Services {
@@ -132,8 +138,13 @@ model Transportation {
   capacity          Int
   schedule          String
   vehicle_price     Float
+  number_of_sold_items Int     @default(0)
+  favorites          Int      @default(0)
+  rating             Float    @default(0.0)
+  is_active          Boolean  @default(true)
 
   Service Services @relation(fields: [service_id], references: [service_id])
+  Favorites Favorites[]
 }
 
 model Activities {
@@ -147,8 +158,13 @@ model Activities {
   activity_duration  String
   faqs               String
   activity_price     Float
+  number_of_sold_items Int     @default(0)
+  favorites          Int      @default(0)
+  rating             Float    @default(0.0)
+  is_active          Boolean  @default(true)
 
   Service Services @relation(fields: [service_id], references: [service_id])
+  Favorites Favorites[]
 }
 
 model Events {
@@ -163,8 +179,13 @@ model Events {
   event_duration     String
   faqs               String
   event_price        Float
+  number_of_sold_items Int     @default(0)
+  favorites          Int      @default(0)
+  rating             Float    @default(0.0)
+  is_active          Boolean  @default(true)
 
   Service Services @relation(fields: [service_id], references: [service_id])
+  Favorites Favorites[]
 }
 
 model Hotels {
@@ -179,8 +200,26 @@ model Hotels {
   duration       String
   faqs           String
   hotel_price    Float
+  number_of_sold_items Int     @default(0)
+  favorites          Int      @default(0)
+  rating             Float    @default(0.0)
+  is_active          Boolean  @default(true)
 
   Service Services @relation(fields: [service_id], references: [service_id])
+  Favorites Favorites[]
+}
+
+model Favorites {
+  id       String @id @default(uuid())
+  userId   String
+  itemId   String
+  itemType String
+  User     User   @relation(fields: [userId], references: [id])
+  Events   Events?   @relation(fields: [itemId], references: [event_id], map: "Favorites_Events_fkey")
+  Activities Activities? @relation(fields: [itemId], references: [activity_id], map: "Favorites_Activities_fkey")
+  Hotels   Hotels?   @relation(fields: [itemId], references: [hotel_id], map: "Favorites_Hotels_fkey")
+  Packages Packages? @relation(fields: [itemId], references: [package_id], map: "Favorites_Packages_fkey")
+  Transportation Transportation? @relation(fields: [itemId], references: [transportation_id], map: "Favorites_Transportation_fkey")
 }
 
 enum Role {
