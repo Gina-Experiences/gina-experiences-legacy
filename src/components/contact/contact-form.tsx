@@ -1,6 +1,8 @@
 'use client';
 
 import { useState } from 'react';
+import { ModalButton } from "../layout";
+import ConfirmationPopup from "../popup/confirmation-popup";
 
 export default function ContactForm() {
     const [formData, setFormData] = useState({
@@ -52,7 +54,7 @@ export default function ContactForm() {
                             value={value}
                             onChange={handleChange}
                             placeholder={formatLabel(key)}
-                            className="px-4 py-2 border-2 border-ginaBlue rounded-lg placeholder:text-ginaBlue placeholder:text-sm lg:placeholder:text-md"
+                            className="px-4 py-2 border-2 border-ginaBlue focus:border-ginaOrange rounded-lg placeholder:text-ginaBlue placeholder:text-sm lg:placeholder:text-md"
                             required
                         />
                     ) : (
@@ -71,18 +73,15 @@ export default function ContactForm() {
                     )
                 )}
                 <div className="flex gap-4 font-medium text-xs md:col-span-2 justify-center lg:justify-end">
-                    <button
-                        type="submit"
-                        className="border-2 border-ginaBlue bg-ginaWhite p-2 px-4 rounded-lg text-ginaBlue"
+                    <ModalButton
+                        buttonContent="Submit"
+                        buttonClassName="bg-ginaBlue p-2 px-8 lg:px-5 rounded-lg text-ginaWhite"
                     >
-                        Partner With Us!
-                    </button>
-                    <button
-                        type="submit"
-                        className="bg-ginaBlue p-2 px-8 lg:px-5 rounded-lg text-ginaWhite"
-                    >
-                        Submit
-                    </button>
+                        <ConfirmationPopup
+                            messageTitle="Submit Message"
+                            messageContent="Are your sure you want to submit this message?"
+                        />
+                    </ModalButton>
                 </div>
             </form>
         </div>
