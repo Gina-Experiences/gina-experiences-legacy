@@ -1,11 +1,18 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { localStorageWrapper } from '@/stores';
-import { getUserById, updateUser } from '@/lib/users';
+import {
+    getUserById,
+    updateUser,
+    changeUserRole,
+    getAllActiveUsers,
+    deactivateUser,
+} from '@/lib/users';
 
 interface UserStore {
     session: any | null;
     user: any | null;
+    users: any[] | null;
     isAdmin: boolean;
     isLoading: boolean;
     error: string | null;
@@ -23,6 +30,12 @@ interface UserStore {
             address?: string;
         }
     ) => Promise<void>;
+    changeUserRole: (
+        userId: string,
+        newRole: 'admin' | 'customer'
+    ) => Promise<void>;
+    fetchAllUsers: () => Promise<void>;
+    deactivateUser: (userId: string) => Promise<void>;
     clearCache: () => void;
 }
 
@@ -31,6 +44,7 @@ const userStore = create<UserStore>()(
         (set) => ({
             session: null,
             user: null,
+            users: null,
             isAdmin: false,
             isLoading: false,
             error: null,
@@ -84,8 +98,68 @@ const userStore = create<UserStore>()(
                 }
             },
 
+            changeUserRole: async (
+                userId: string,
+                newRole: 'admin' | 'customer'
+            ) => {
+                set({ isLoading: true, error: null });
+                try {
+                    const { message, user } = await changeUserRole(
+                        userId,
+                        newRole
+                    );
+                    console.log(message, user);
+                    set({ user, isLoading: false });
+                } catch (error) {
+                    console.error('[Zustand] Change User Role Error:', error);
+                    set({
+                        error:
+                            error instanceof Error
+                                ? error.message
+                                : 'Failed to change user role!',
+                        isLoading: false,
+                    });
+                }
+            },
+
+            fetchAllUsers: async () => {
+                set({ isLoading: true, error: null });
+                try {
+                    const { users } = await getAllActiveUsers();
+                    console.log('[Zustand] All Active Users:', users);
+                    set({ users, isLoading: false });
+                } catch (error) {
+                    console.error('[Zustand] Error fetching all users:', error);
+                    set({
+                        error:
+                            error instanceof Error
+                                ? error.message
+                                : 'Failed to fetch users!',
+                        isLoading: false,
+                    });
+                }
+            },
+
+            deactivateUser: async (userId: string) => {
+                set({ isLoading: true, error: null });
+                try {
+                    const { message, user } = await deactivateUser(userId);
+                    console.log(message, user);
+                    set({ user, isLoading: false });
+                } catch (error) {
+                    console.error('[Zustand] Deactivate User Error:', error);
+                    set({
+                        error:
+                            error instanceof Error
+                                ? error.message
+                                : 'Failed to deactivate user!',
+                        isLoading: false,
+                    });
+                }
+            },
+
             clearCache: () => {
-                localStorageWrapper.removeItem('user-storage'); // Clear local storage
+                localStorageWrapper.removeItem('user-storage');
                 set({ session: null, user: null, isAdmin: false });
             },
         }),
