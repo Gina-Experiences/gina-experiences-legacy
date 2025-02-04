@@ -1,5 +1,6 @@
-import Hero from './hero';
+import ServicesHero from "./services-hero";
 import ServicesSection from './services-section';
 import ServicesList from "./services-list";
+import IdService from "./id-service";
 
-export { Hero, ServicesSection, ServicesList };
+export { ServicesHero, ServicesSection, ServicesList, IdService };

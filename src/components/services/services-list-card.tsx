@@ -15,16 +15,17 @@ export default function ServicesListCard({ service }: ServiceCardProps) {
 
    const [isLiked, setIsLiked] = useState(false);
 
-   const handleLikeClick = () => {
+   const handleLikeClick = () => 
+   {
       setIsLiked(!isLiked);
    };
 
    const handleBookNowClick = () => {
-      router.push(`/services/${service.id}`);
+      router.push(`/services/services-list/${service.id}`);
    };
 
    return (
-      <div className="shadow-xl rounded-3xl grid grid-cols-1 grid-rows-2 h-full w-full p-2">
+      <div className="shadow-xl rounded-3xl grid grid-cols-1 grid-rows-2 h-full w-full">
          <Image
             src={service.image}
             alt="Service"
@@ -47,7 +48,7 @@ export default function ServicesListCard({ service }: ServiceCardProps) {
                   {service.price}
                </span>
             </div>
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between p-2">
                <div
                   onClick={handleLikeClick}
                   className="cursor-pointer text-ginaOrange"
