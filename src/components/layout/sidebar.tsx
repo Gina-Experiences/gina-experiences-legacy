@@ -170,7 +170,7 @@ const Sidebar = () => {
 
             <div
                 ref={sidebarRef}
-                className={`lg:hidden fixed top-0 left-0 w-full sm:w-80 sm:rounded-r-3xl bg-ginaWhite z-30 transform shadow-xl p-8 flex flex-col justify-between h-full gap-6 ${
+                className={`lg:hidden fixed top-0 left-0 w-full sm:w-80 bg-ginaWhite z-30 transform shadow-xl p-8 flex flex-col justify-between h-full gap-6 ${
                     isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
                 } transition-transform duration-200`}
             >
@@ -182,6 +182,16 @@ const Sidebar = () => {
                         >
                             &times;
                         </button>
+                    </div>
+                    <div className="w-full flex items-center justify-center pb-8">
+                        <Image
+                            src="/images/gina/logo.png"
+                            alt="Gina Experiences Logo"
+                            quality={100}
+                            width={100}
+                            height={100}
+                            className="w-32 h-auto"
+                        />
                     </div>
                     {renderLinks()}
                 </div>
