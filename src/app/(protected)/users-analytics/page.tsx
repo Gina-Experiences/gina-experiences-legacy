@@ -94,7 +94,6 @@ export default function UsersAnalytics() {
                 />
             </div>
 
-            {/* List of Users */}
             <h2>{activeTab === 'admin' ? 'Admins' : 'Customers'}</h2>
             <ul>
                 {filteredUsers?.map((user) => (
@@ -122,7 +121,6 @@ export default function UsersAnalytics() {
                 ))}
             </ul>
 
-            {/* User Details Container */}
             {selectedUser && (
                 <div>
                     <h3>User Details</h3>

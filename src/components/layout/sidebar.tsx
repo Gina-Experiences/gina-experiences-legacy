@@ -116,7 +116,6 @@ const Sidebar = () => {
 
     return (
         <>
-            {/* Desktop Sidebar */}
             <nav
                 className={`hidden lg:flex relative flex-col items-center justify-between h-full bg-ginaWhite rounded-[32px] p-8 ${
                     isCollapsed ? 'w-auto' : 'min-w-80'
@@ -160,7 +159,6 @@ const Sidebar = () => {
                 )}
             </nav>
 
-            {/* Mobile Sidebar */}
             <button
                 className="lg:hidden fixed top-12 left-12 z-20 text-ginaOrange hover:text-ginaBlue duration-300"
                 onClick={toggleMobileSidebar}
@@ -183,15 +181,17 @@ const Sidebar = () => {
                             &times;
                         </button>
                     </div>
-                    <div className="w-full flex items-center justify-center pb-8">
-                        <Image
-                            src="/images/gina/logo.png"
-                            alt="Gina Experiences Logo"
-                            quality={100}
-                            width={100}
-                            height={100}
-                            className="w-32 h-auto"
-                        />
+                    <div className="w-full flex items-center justify-center mb-8">
+                        <Link href="/" className="flex items-center">
+                            <Image
+                                src="/images/gina/logo.png"
+                                alt="Gina Experiences Logo"
+                                quality={100}
+                                width={100}
+                                height={100}
+                                className="w-32 h-auto"
+                            />
+                        </Link>
                     </div>
                     {renderLinks()}
                 </div>

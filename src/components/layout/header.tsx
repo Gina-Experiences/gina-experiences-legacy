@@ -101,15 +101,17 @@ const Header = () => {
                         </button>
                     </div>
 
-                    <div className="w-full flex items-center justify-center pb-8 sm:hidden">
-                        <Image
-                            src="/images/gina/logo.png"
-                            alt="Gina Experiences Logo"
-                            quality={100}
-                            width={100}
-                            height={100}
-                            className="w-32 h-auto"
-                        />
+                    <div className="w-full flex items-center justify-center mb-8 sm:hidden">
+                        <Link href="/" className="flex items-center">
+                            <Image
+                                src="/images/gina/logo.png"
+                                alt="Gina Experiences Logo"
+                                quality={100}
+                                width={100}
+                                height={100}
+                                className="w-32 h-auto"
+                            />
+                        </Link>
                     </div>
                     {renderLinks()}
                 </div>
