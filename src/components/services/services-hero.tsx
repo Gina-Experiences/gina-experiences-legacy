@@ -1,12 +1,12 @@
 import Image from 'next/image';
 
-export default function Hero() {
+export default function ServicesHero() {
     return (
         <div className="flex flex-col items-center justify-center w-svw mb-28">
             <div className="w-full max-w-screen-2xl h-svh p-8">
                 <div className="relative w-full h-full rounded-3xl overflow-hidden">
                     <img
-                        src="/images/services/hero/hero-banner.jpg"
+                        src="/images/services/hero-banner.jpg"
                         alt="Services Hero Banner"
                         className="rounded-3xl w-full h-full object-cover object-center"
                     />
