@@ -85,96 +85,99 @@ export default function ProfilePage() {
     };
 
     return (
-        <div className="w-full min-h-svh flex items-center justify-center flex-col gap-4">
-            <h1>Profile Page</h1>
+        <div className="flex flex-col py-8 lg:py-0">
+            <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-4">
+                <div>
+                    <label className="text-ginaOrange">Email</label>
+                    <input
+                        type="text"
+                        name="email"
+                        value={userData.email || ''}
+                        disabled
+                        className="p-2 px-4 uppercase bg-ginaYellow/15 rounded-xl w-full"
+                    />
+                </div>
 
-            <div>
-                <label>Email</label>
-                <input
-                    type="text"
-                    name="email"
-                    value={userData.email || ''}
-                    disabled
-                    className="uppercase"
-                />
+                <div>
+                    <label className="text-ginaOrange">First Name</label>
+                    <input
+                        type="text"
+                        name="firstname"
+                        value={userData.firstname || ''}
+                        onChange={handleChange}
+                        disabled={!isEditing}
+                        className="p-2 px-4 uppercase bg-ginaYellow/15 rounded-xl w-full"
+                    />
+                </div>
+
+                <div>
+                    <label className="text-ginaOrange">Last Name</label>
+                    <input
+                        type="text"
+                        name="lastname"
+                        value={userData.lastname || ''}
+                        onChange={handleChange}
+                        disabled={!isEditing}
+                        className="p-2 px-4 uppercase bg-ginaYellow/15 rounded-xl w-full"
+                    />
+                </div>
+
+                <div>
+                    <label className="text-ginaOrange">Gender</label>
+                    <input
+                        type="text"
+                        name="gender"
+                        value={userData.gender || ''}
+                        onChange={handleChange}
+                        disabled={!isEditing}
+                        className="p-2 px-4 uppercase bg-ginaYellow/15 rounded-xl w-full"
+                    />
+                </div>
+
+                <div>
+                    <label className="text-ginaOrange">Birthdate</label>
+                    <input
+                        type="date"
+                        name="birthdate"
+                        value={userData.birthdate || ''}
+                        onChange={handleChange}
+                        disabled={!isEditing}
+                        className="p-2 px-4 uppercase bg-ginaYellow/15 rounded-xl w-full"
+                    />
+                </div>
+
+                <div>
+                    <label className="text-ginaOrange">Phone</label>
+                    <input
+                        type="text"
+                        name="phone"
+                        value={userData.phone || ''}
+                        onChange={handleChange}
+                        disabled={!isEditing}
+                        className="p-2 px-4 uppercase bg-ginaYellow/15 rounded-xl w-full"
+                    />
+                </div>
+
+                <div className="lg:col-span-2">
+                    <label className="text-ginaOrange">Address</label>
+                    <input
+                        type="text"
+                        name="address"
+                        value={userData.address || ''}
+                        onChange={handleChange}
+                        disabled={!isEditing}
+                        className="p-2 px-4 uppercase bg-ginaYellow/15 rounded-xl w-full "
+                    />
+                </div>
+
             </div>
-
-            <div>
-                <label>First Name</label>
-                <input
-                    type="text"
-                    name="firstname"
-                    value={userData.firstname || ''}
-                    onChange={handleChange}
-                    disabled={!isEditing}
-                    className="uppercase"
-                />
-            </div>
-
-            <div>
-                <label>Last Name</label>
-                <input
-                    type="text"
-                    name="lastname"
-                    value={userData.lastname || ''}
-                    onChange={handleChange}
-                    disabled={!isEditing}
-                    className="uppercase"
-                />
-            </div>
-
-            <div>
-                <label>Gender</label>
-                <input
-                    type="text"
-                    name="gender"
-                    value={userData.gender || ''}
-                    onChange={handleChange}
-                    disabled={!isEditing}
-                    className="uppercase"
-                />
-            </div>
-
-            <div>
-                <label>Birthdate</label>
-                <input
-                    type="date"
-                    name="birthdate"
-                    value={userData.birthdate || ''}
-                    onChange={handleChange}
-                    disabled={!isEditing}
-                    className="uppercase"
-                />
-            </div>
-
-            <div>
-                <label>Phone</label>
-                <input
-                    type="text"
-                    name="phone"
-                    value={userData.phone || ''}
-                    onChange={handleChange}
-                    disabled={!isEditing}
-                    className="uppercase"
-                />
-            </div>
-
-            <div>
-                <label>Address</label>
-                <input
-                    type="text"
-                    name="address"
-                    value={userData.address || ''}
-                    onChange={handleChange}
-                    disabled={!isEditing}
-                    className="uppercase"
-                />
-            </div>
-
-            <button onClick={() => setIsEditing(!isEditing)}>
+            <button 
+                onClick={() => setIsEditing(!isEditing)}
+                className="rounded-xl bg-ginaYellow py-2 px-6 mt-8 text-white text-sm font-medium shadow-md hover:bg-ginaBlue transition-all duration-200 ease-in-out self-center w-auto"
+            >
                 {isEditing ? 'Cancel' : 'Edit Profile'}
             </button>
-            {isEditing && <button onClick={handleSave}>Save</button>}
+            {isEditing && <button onClick={handleSave} className="rounded-xl border-ginaYellow border-2 py-2 px-6 m-2 text-ginaYellow text-sm font-medium hover:bg-ginaBlue hover:border-ginaBlue hover:text-white transition-all duration-200 ease-in-out self-center">Save</button>}
         </div>
     );
 }
