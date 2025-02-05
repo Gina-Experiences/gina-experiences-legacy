@@ -88,12 +88,6 @@ export const ProtectedLinks = () => {
                       icon: <User />,
                   },
                   {
-                      name: 'Favorites',
-                      href: '/favorites',
-                      target: '_self',
-                      icon: <Heart />,
-                  },
-                  {
                       name: 'Bookings',
                       href: '/bookings',
                       target: '_self',

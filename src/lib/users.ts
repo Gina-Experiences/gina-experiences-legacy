@@ -163,6 +163,7 @@ export async function getAllUsers() {
 }
 
 // Update user details
+// Update user details
 export async function updateUser(
     userId: string,
     data: {
@@ -176,11 +177,18 @@ export async function updateUser(
     }
 ) {
     try {
-        if (
-            data.phone &&
-            (await prisma.user.findUnique({ where: { phone: data.phone } }))
-        ) {
-            return { error: 'Phone number already in use' };
+        const currentUser = await prisma.user.findUnique({
+            where: { id: userId },
+            select: { phone: true },
+        });
+
+        if (data.phone && currentUser?.phone !== data.phone) {
+            const existingPhone = await prisma.user.findUnique({
+                where: { phone: data.phone },
+            });
+            if (existingPhone) {
+                return { error: 'Phone number already in use' };
+            }
         }
 
         if (data.birthdate && data.birthdate >= new Date()) {

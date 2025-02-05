@@ -44,7 +44,6 @@ export const config = {
         '/sales-transactions/:path*',
         '/product-analysis/:path*',
         '/profile/:path*',
-        '/favorites/:path*',
         '/bookings/:path*',
     ],
 };
