@@ -12,10 +12,13 @@ export default function UsersAnalytics() {
         fetchUser,
         changeUserRole,
         deactivateUser,
+        reactivateUser,
         setSession,
     } = userStore();
 
-    const [activeTab, setActiveTab] = useState<'admin' | 'customer'>('admin');
+    const [activeTab, setActiveTab] = useState<
+        'admin' | 'customer' | 'deactivated'
+    >('admin');
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedUser, setSelectedUser] = useState<any | null>(null);
 
@@ -56,23 +59,40 @@ export default function UsersAnalytics() {
         if (window.confirm('Are you sure you want to deactivate this user?')) {
             deactivateUser(userId);
         }
+
+        fetchAllUsers();
     };
 
-    const filteredUsers = users?.filter(
-        (user) =>
-            user.role === activeTab &&
-            (user.firstname
-                ?.toLowerCase()
-                .includes(searchQuery.toLowerCase()) ||
-                user.lastname
+    const handleReactivateUser = (userId: string) => {
+        if (window.confirm('Are you sure you want to reactivate this user?')) {
+            reactivateUser(userId);
+        }
+
+        fetchAllUsers();
+    };
+
+    const filteredUsers = users
+        ?.filter((user) => {
+            if (activeTab === 'deactivated') {
+                return user.is_active === false;
+            } else {
+                return user.is_active === true && user.role === activeTab;
+            }
+        })
+        .filter(
+            (user) =>
+                user.firstname
                     ?.toLowerCase()
-                    .includes(searchQuery.toLowerCase()))
-    );
+                    .includes(searchQuery.toLowerCase()) ||
+                user.lastname?.toLowerCase().includes(searchQuery.toLowerCase())
+        );
 
     return (
         <div>
-            <div className="w-full text-center font-bold text-3xl">
-                User Directory
+            <div>User Directory</div>
+
+            <div>
+                <div></div>
             </div>
 
             {isLoading && <p>Loading...</p>}
@@ -82,6 +102,9 @@ export default function UsersAnalytics() {
                 <button onClick={() => setActiveTab('admin')}>Admins</button>
                 <button onClick={() => setActiveTab('customer')}>
                     Customers
+                </button>
+                <button onClick={() => setActiveTab('deactivated')}>
+                    Deactivated
                 </button>
             </div>
 
@@ -94,7 +117,13 @@ export default function UsersAnalytics() {
                 />
             </div>
 
-            <h2>{activeTab === 'admin' ? 'Admins' : 'Customers'}</h2>
+            <h2>
+                {activeTab === 'admin'
+                    ? 'Admins'
+                    : activeTab === 'customer'
+                      ? 'Customers'
+                      : 'Deactivated Users'}
+            </h2>
             <ul>
                 {filteredUsers?.map((user) => (
                     <li key={user.id}>
@@ -114,9 +143,20 @@ export default function UsersAnalytics() {
                                 ? 'Turn into Customer'
                                 : 'Turn into Admin'}
                         </button>
-                        <button onClick={() => handleDeactivateUser(user.id)}>
-                            Deactivate User
-                        </button>
+                        {activeTab !== 'deactivated' && (
+                            <button
+                                onClick={() => handleDeactivateUser(user.id)}
+                            >
+                                Deactivate User
+                            </button>
+                        )}
+                        {activeTab === 'deactivated' && (
+                            <button
+                                onClick={() => handleReactivateUser(user.id)}
+                            >
+                                Reactivate User
+                            </button>
+                        )}
                     </li>
                 ))}
             </ul>
