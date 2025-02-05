@@ -53,12 +53,6 @@ const Sidebar = () => {
             target: '_self',
             icon: <Package2 />,
         },
-        {
-            name: 'Financial Overview',
-            href: '/financial-overview',
-            target: '_self',
-            icon: <Wallet />,
-        },
     ];
 
     const toggleDesktopSidebar = () => {

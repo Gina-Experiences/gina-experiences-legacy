@@ -5,7 +5,7 @@ import {
     getUserById,
     updateUser,
     changeUserRole,
-    getAllActiveUsers,
+    getAllUsers,
     deactivateUser,
     reactivateUser,
 } from '@/lib/users';
@@ -127,8 +127,8 @@ const userStore = create<UserStore>()(
             fetchAllUsers: async () => {
                 set({ isLoading: true, error: null });
                 try {
-                    const { users } = await getAllActiveUsers();
-                    console.log('[Zustand] All Active Users:', users);
+                    const { users } = await getAllUsers();
+                    console.log('[Zustand] All Users:', users);
                     set({ users, isLoading: false });
                 } catch (error) {
                     console.error('[Zustand] Error fetching all users:', error);

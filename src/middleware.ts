@@ -43,7 +43,6 @@ export const config = {
         '/users-analytics/:path*',
         '/sales-transactions/:path*',
         '/product-analysis/:path*',
-        '/financial-overview/:path*',
         '/profile/:path*',
         '/favorites/:path*',
         '/bookings/:path*',

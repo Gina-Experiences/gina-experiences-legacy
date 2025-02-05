@@ -144,7 +144,7 @@ const CompleteInfoForm: React.FC<CompleteInfoFormProps> = ({ onComplete }) => {
                     </div>
 
                     <div className="flex gap-2 w-full">
-                        <div className="flex gap-2 w-full items-center">
+                        <div className="w-full flex gap-2 items-center p-2 px-4 text-xs text-ginaBlue border-2 border-ginaBlue rounded-lg">
                             <span className="text-xs text-ginaBlue">
                                 Birthdate
                             </span>
@@ -152,27 +152,28 @@ const CompleteInfoForm: React.FC<CompleteInfoFormProps> = ({ onComplete }) => {
                                 type="date"
                                 value={birthdate}
                                 onChange={(e) => setBirthdate(e.target.value)}
-                                className="flex w-full p-2 px-4 text-xs items-center text-ginaBlue border-2 border-ginaBlue rounded-lg"
                                 required
                             />
                         </div>
-                        <select
-                            id="gender"
-                            value={gender}
-                            onChange={handleGenderChange}
-                            className="w-full p-2 px-4 text-xs items-center text-ginaBlue border-2 border-ginaBlue rounded-lg"
-                            required
-                        >
-                            <option value="" disabled>
-                                Gender
-                            </option>
-                            <option value="male">Male</option>
-                            <option value="female">Female</option>
-                            <option value="other">Other</option>
-                            <option value="preferNotToSay">
-                                Prefer Not to Say
-                            </option>
-                        </select>
+                        <div className="w-full flex items-center justify-center p-2 px-4 text-xs text-ginaBlue border-2 border-ginaBlue rounded-lg">
+                            <select
+                                id="gender"
+                                value={gender}
+                                onChange={handleGenderChange}
+                                className="w-full"
+                                required
+                            >
+                                <option value="" disabled>
+                                    Gender
+                                </option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
+                                <option value="preferNotToSay">
+                                    Prefer Not to Say
+                                </option>
+                            </select>
+                        </div>
                     </div>
 
                     <input

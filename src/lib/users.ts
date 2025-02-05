@@ -132,10 +132,9 @@ export async function reactivateUser(userId: string) {
 }
 
 // Get all active users
-export async function getAllActiveUsers() {
+export async function getAllUsers() {
     try {
         const users = await prisma.user.findMany({
-            where: { is_active: true },
             select: {
                 id: true,
                 email: true,
