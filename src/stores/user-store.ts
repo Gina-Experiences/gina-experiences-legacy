@@ -5,8 +5,9 @@ import {
     getUserById,
     updateUser,
     changeUserRole,
-    getAllActiveUsers,
+    getAllUsers,
     deactivateUser,
+    reactivateUser,
 } from '@/lib/users';
 
 interface UserStore {
@@ -36,6 +37,7 @@ interface UserStore {
     ) => Promise<void>;
     fetchAllUsers: () => Promise<void>;
     deactivateUser: (userId: string) => Promise<void>;
+    reactivateUser: (userId: string) => Promise<void>;
     clearCache: () => void;
 }
 
@@ -125,8 +127,8 @@ const userStore = create<UserStore>()(
             fetchAllUsers: async () => {
                 set({ isLoading: true, error: null });
                 try {
-                    const { users } = await getAllActiveUsers();
-                    console.log('[Zustand] All Active Users:', users);
+                    const { users } = await getAllUsers();
+                    console.log('[Zustand] All Users:', users);
                     set({ users, isLoading: false });
                 } catch (error) {
                     console.error('[Zustand] Error fetching all users:', error);
@@ -146,6 +148,10 @@ const userStore = create<UserStore>()(
                     const { message, user } = await deactivateUser(userId);
                     console.log(message, user);
                     set({ user, isLoading: false });
+
+                    if (user?.is_active === false) {
+                        set({ session: null, user: null, isAdmin: false });
+                    }
                 } catch (error) {
                     console.error('[Zustand] Deactivate User Error:', error);
                     set({
@@ -153,6 +159,24 @@ const userStore = create<UserStore>()(
                             error instanceof Error
                                 ? error.message
                                 : 'Failed to deactivate user!',
+                        isLoading: false,
+                    });
+                }
+            },
+
+            reactivateUser: async (userId: string) => {
+                set({ isLoading: true, error: null });
+                try {
+                    const { message, user } = await reactivateUser(userId);
+                    console.log(message, user);
+                    set({ user, isLoading: false });
+                } catch (error) {
+                    console.error('[Zustand] Reactivate User Error:', error);
+                    set({
+                        error:
+                            error instanceof Error
+                                ? error.message
+                                : 'Failed to reactivate user!',
                         isLoading: false,
                     });
                 }
