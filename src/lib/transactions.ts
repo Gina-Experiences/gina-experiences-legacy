@@ -83,11 +83,28 @@ export async function updateTransaction(
             data,
         });
 
+        // Check if payment_status is 'paid' and transaction_status is 'completed'
+        if (
+            data.payment_status === PaymentStatus.paid &&
+            data.transaction_status === TransactionStatus.completed
+        ) {
+            // Increment the user's ltv by the transaction's total_Amount
+            await prisma.user.update({
+                where: { id: updatedTransaction.userId },
+                data: {
+                    ltv: {
+                        increment: updatedTransaction.total_Amount,
+                    },
+                },
+            });
+        }
+
         return { updatedTransaction };
     } catch (error: unknown) {
         return handleError(error);
     }
 }
+
 
 // DELETE: Delete a transaction
 export async function deleteTransaction(transactionId: string) {
