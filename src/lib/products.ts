@@ -1,41 +1,42 @@
 import { prisma } from './prisma';
+import { ProductType } from '@prisma/client';
 
 // POST: Create product
 export async function createProduct(data: {
-    product_name: string;
-    product_type: string;
+    product_type: ProductType;  // Use the ProductType enum directly
 }) {
     try {
-        const newProduct = await prisma.product.create({ data });
+        const newProduct = await prisma.product.create({
+            data: {
+                product_type: data.product_type,
+            },
+        });
         return { newProduct };
     } catch (error: unknown) {
-        if (error instanceof Error) {
-            return { error: error.message };
-        }
-        return { error: 'An unknown error occurred' };
+        return handleError(error);
     }
 }
 
-// GET: Get all products
+// GET: Retrieve all products
 export async function getAllProducts() {
     try {
         const products = await prisma.product.findMany({
             include: {
                 Transactions: true,
                 Packages: true,
-                Services: true,
+                Activities: true,
+                Events: true,
+                Hotels: true,
+                Transportation: true,
             },
         });
         return { products };
     } catch (error: unknown) {
-        if (error instanceof Error) {
-            return { error: error.message };
-        }
-        return { error: 'An unknown error occurred' };
+        return handleError(error);
     }
 }
 
-// GET: Get specific product
+// GET: Retrieve a specific product by ID
 export async function getProduct(productId: string) {
     try {
         const product = await prisma.product.findUnique({
@@ -43,26 +44,25 @@ export async function getProduct(productId: string) {
             include: {
                 Transactions: true,
                 Packages: true,
-                Services: true,
+                Activities: true,
+                Events: true,
+                Hotels: true,
+                Transportation: true,
             },
         });
 
         if (!product) return { error: 'Product not found' };
         return { product };
     } catch (error: unknown) {
-        if (error instanceof Error) {
-            return { error: error.message };
-        }
-        return { error: 'An unknown error occurred' };
+        return handleError(error);
     }
 }
 
-// UPDATE: Update product
+// UPDATE: Update product details
 export async function updateProduct(
     productId: string,
     data: Partial<{
-        product_name: string;
-        product_type: string;
+        product_type: ProductType;
     }>
 ) {
     try {
@@ -73,14 +73,11 @@ export async function updateProduct(
 
         return { updatedProduct };
     } catch (error: unknown) {
-        if (error instanceof Error) {
-            return { error: error.message };
-        }
-        return { error: 'An unknown error occurred' };
+        return handleError(error);
     }
 }
 
-// DELETE: Delete product
+// DELETE: Delete a product
 export async function deleteProduct(productId: string) {
     try {
         await prisma.product.delete({
@@ -89,9 +86,14 @@ export async function deleteProduct(productId: string) {
 
         return { message: 'Product deleted successfully' };
     } catch (error: unknown) {
-        if (error instanceof Error) {
-            return { error: error.message };
-        }
-        return { error: 'An unknown error occurred' };
+        return handleError(error);
     }
+}
+
+// Common error handler
+function handleError(error: unknown) {
+    if (error instanceof Error) {
+        return { error: error.message };
+    }
+    return { error: 'An unknown error occurred' };
 }

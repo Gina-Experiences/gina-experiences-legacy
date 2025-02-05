@@ -1,7 +1,9 @@
 import { prisma } from './prisma';
+import { ProductType } from '@prisma/client';
 
-type ItemType = 'Packages' | 'Events' | 'Activities' | 'Transportation' | 'Hotels';
+type ItemType = keyof typeof ProductType; // Use the enum directly for consistency
 
+// Function to favorite an item
 export async function favoriteItem(userId: string, itemId: string, itemType: ItemType) {
   try {
     // Check if the user already favorited the item
@@ -23,44 +25,52 @@ export async function favoriteItem(userId: string, itemId: string, itemType: Ite
     });
 
     // Update the favorites count for the specific item type
-    switch (itemType) {
-      case 'Packages':
-        await prisma.packages.update({
-          where: { package_id: itemId },
-          data: { favorites: { increment: 1 } },
-        });
-        break;
-      case 'Events':
-        await prisma.events.update({
-          where: { event_id: itemId },
-          data: { favorites: { increment: 1 } },
-        });
-        break;
-      case 'Activities':
-        await prisma.activities.update({
-          where: { activity_id: itemId },
-          data: { favorites: { increment: 1 } },
-        });
-        break;
-      case 'Transportation':
-        await prisma.transportation.update({
-          where: { transportation_id: itemId },
-          data: { favorites: { increment: 1 } },
-        });
-        break;
-      case 'Hotels':
-        await prisma.hotels.update({
-          where: { hotel_id: itemId },
-          data: { favorites: { increment: 1 } },
-        });
-        break;
-      default:
-        throw new Error('Invalid item type');
-    }
+    await updateFavoriteCount(itemType, itemId, 'increment');
 
     return { message: 'Item favorited successfully!' };
   } catch (error: unknown) {
     return handleError(error);
+  }
+}
+
+// Helper to update the favorite count based on item type
+async function updateFavoriteCount(itemType: ItemType, itemId: string, action: 'increment' | 'decrement') {
+  const updateData = { favorites: { [action]: 1 } };
+
+  // Use explicit model handling instead of dynamic indexing
+  switch (itemType) {
+    case 'Packages':
+      await prisma.packages.update({
+        where: { package_id: itemId },
+        data: updateData,
+      });
+      break;
+    case 'Events':
+      await prisma.events.update({
+        where: { event_id: itemId },
+        data: updateData,
+      });
+      break;
+    case 'Activities':
+      await prisma.activities.update({
+        where: { activity_id: itemId },
+        data: updateData,
+      });
+      break;
+    case 'Transportation':
+      await prisma.transportation.update({
+        where: { transportation_id: itemId },
+        data: updateData,
+      });
+      break;
+    case 'Hotels':
+      await prisma.hotels.update({
+        where: { hotel_id: itemId },
+        data: updateData,
+      });
+      break;
+    default:
+      throw new Error('Invalid item type');
   }
 }
 
@@ -72,74 +82,61 @@ function handleError(error: unknown) {
   return { error: 'An unknown error occurred' };
 }
 
-
 // Create a favorite
-export async function createFavorite(data: { userId: string; itemId: string; itemType: string }) {
-    try {
-        const favorite = await prisma.favorites.create({
-            data,
-        });
+export async function createFavorite(data: { userId: string; itemId: string; itemType: ItemType }) {
+  try {
+    const favorite = await prisma.favorites.create({
+      data,
+    });
 
-        return { favorite };
-    } catch (error: unknown) {
-        if (error instanceof Error) {
-            return { error: error.message };
-        }
-        return { error: 'An unknown error occurred' };
-    }
+    return { favorite };
+  } catch (error: unknown) {
+    return handleError(error);
+  }
 }
 
 // Get all favorites for a user
 export async function getFavoritesByUser(userId: string) {
-    try {
-        const favorites = await prisma.favorites.findMany({
-            where: { userId },
-        });
+  try {
+    const favorites = await prisma.favorites.findMany({
+      where: { userId },
+    });
 
-        return { favorites };
-    } catch (error: unknown) {
-        if (error instanceof Error) {
-            return { error: error.message };
-        }
-        return { error: 'An unknown error occurred' };
-    }
+    return { favorites };
+  } catch (error: unknown) {
+    return handleError(error);
+  }
 }
 
 // Get a specific favorite
 export async function getFavoriteById(favoriteId: string) {
-    try {
-        const favorite = await prisma.favorites.findUnique({
-            where: { id: favoriteId },
-        });
+  try {
+    const favorite = await prisma.favorites.findUnique({
+      where: { id: favoriteId },
+    });
 
-        if (!favorite) return { error: 'Favorite not found' };
-        return { favorite };
-    } catch (error: unknown) {
-        if (error instanceof Error) {
-            return { error: error.message };
-        }
-        return { error: 'An unknown error occurred' };
-    }
+    if (!favorite) return { error: 'Favorite not found' };
+    return { favorite };
+  } catch (error: unknown) {
+    return handleError(error);
+  }
 }
 
 // Update a favorite
-export async function updateFavorite(favoriteId: string, data: Partial<{ itemId: string; itemType: string }>) {
-    try {
-        const updatedFavorite = await prisma.favorites.update({
-            where: { id: favoriteId },
-            data,
-        });
+export async function updateFavorite(favoriteId: string, data: Partial<{ itemId: string; itemType: ItemType }>) {
+  try {
+    const updatedFavorite = await prisma.favorites.update({
+      where: { id: favoriteId },
+      data,
+    });
 
-        return { updatedFavorite };
-    } catch (error: unknown) {
-        if (error instanceof Error) {
-            return { error: error.message };
-        }
-        return { error: 'An unknown error occurred' };
-    }
+    return { updatedFavorite };
+  } catch (error: unknown) {
+    return handleError(error);
+  }
 }
 
-// Delete a favorite (normal delete with decrement on related item)
+// Delete a favorite
 export async function deleteFavorite(favoriteId: string) {
   try {
     // Find the favorite record before deletion to get itemId and itemType
@@ -159,40 +156,7 @@ export async function deleteFavorite(favoriteId: string) {
     });
 
     // Decrement the favorites count for the specific item type
-    switch (itemType) {
-      case 'Packages':
-        await prisma.packages.update({
-          where: { package_id: itemId },
-          data: { favorites: { decrement: 1 } },
-        });
-        break;
-      case 'Events':
-        await prisma.events.update({
-          where: { event_id: itemId },
-          data: { favorites: { decrement: 1 } },
-        });
-        break;
-      case 'Activities':
-        await prisma.activities.update({
-          where: { activity_id: itemId },
-          data: { favorites: { decrement: 1 } },
-        });
-        break;
-      case 'Transportation':
-        await prisma.transportation.update({
-          where: { transportation_id: itemId },
-          data: { favorites: { decrement: 1 } },
-        });
-        break;
-      case 'Hotels':
-        await prisma.hotels.update({
-          where: { hotel_id: itemId },
-          data: { favorites: { decrement: 1 } },
-        });
-        break;
-      default:
-        throw new Error('Invalid item type');
-    }
+    await updateFavoriteCount(itemType as ItemType, itemId, 'decrement');
 
     return { message: 'Favorite deleted and favorites count decremented successfully' };
   } catch (error: unknown) {

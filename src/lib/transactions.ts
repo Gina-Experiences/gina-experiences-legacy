@@ -1,26 +1,37 @@
 import { prisma } from './prisma';
+import { PaymentStatus, TransactionStatus } from '@prisma/client';
 
 // POST: Create transaction
 export async function createTransaction(data: {
     userId: string;
     product_id: string;
-    transaction_date: Date;
+    start_date: Date;
+    end_date: Date;
+    time: Date;
+    number_of_participants: number;
     total_Amount: number;
-    payment_status: 'paid' | 'pending' | 'failed';
-    transaction_status: 'completed' | 'failed' | 'pending';
+    payment_status: PaymentStatus;
+    transaction_status: TransactionStatus;
 }) {
     try {
-        const newTransaction = await prisma.transactions.create({ data });
+        const newTransaction = await prisma.transactions.create({
+            data: {
+                ...data,
+                User: {
+                    connect: { id: data.userId },
+                },
+                Product: {
+                    connect: { product_id: data.product_id },
+                },
+            },
+        });
         return { newTransaction };
     } catch (error: unknown) {
-        if (error instanceof Error) {
-            return { error: error.message };
-        }
-        return { error: 'An unknown error occurred' };
+        return handleError(error);
     }
 }
 
-// GET: Get all transactions
+// GET: Retrieve all transactions
 export async function getAllTransactions() {
     try {
         const transactions = await prisma.transactions.findMany({
@@ -31,14 +42,11 @@ export async function getAllTransactions() {
         });
         return { transactions };
     } catch (error: unknown) {
-        if (error instanceof Error) {
-            return { error: error.message };
-        }
-        return { error: 'An unknown error occurred' };
+        return handleError(error);
     }
 }
 
-// GET: Get specific transaction
+// GET: Retrieve a specific transaction by its ID
 export async function getTransaction(transactionId: string) {
     try {
         const transaction = await prisma.transactions.findUnique({
@@ -52,21 +60,21 @@ export async function getTransaction(transactionId: string) {
         if (!transaction) return { error: 'Transaction not found' };
         return { transaction };
     } catch (error: unknown) {
-        if (error instanceof Error) {
-            return { error: error.message };
-        }
-        return { error: 'An unknown error occurred' };
+        return handleError(error);
     }
 }
 
-// UPDATE: Update transaction
+// UPDATE: Update transaction details
 export async function updateTransaction(
     transactionId: string,
     data: Partial<{
-        transaction_date: Date;
+        start_date: Date;
+        end_date: Date;
+        time: Date;
+        number_of_participants: number;
         total_Amount: number;
-        payment_status: 'paid' | 'pending' | 'failed';
-        transaction_status: 'completed' | 'failed' | 'pending';
+        payment_status: PaymentStatus;
+        transaction_status: TransactionStatus;
     }>
 ) {
     try {
@@ -77,14 +85,11 @@ export async function updateTransaction(
 
         return { updatedTransaction };
     } catch (error: unknown) {
-        if (error instanceof Error) {
-            return { error: error.message };
-        }
-        return { error: 'An unknown error occurred' };
+        return handleError(error);
     }
 }
 
-// DELETE: Delete transaction
+// DELETE: Delete a transaction
 export async function deleteTransaction(transactionId: string) {
     try {
         await prisma.transactions.delete({
@@ -93,9 +98,14 @@ export async function deleteTransaction(transactionId: string) {
 
         return { message: 'Transaction deleted successfully' };
     } catch (error: unknown) {
-        if (error instanceof Error) {
-            return { error: error.message };
-        }
-        return { error: 'An unknown error occurred' };
+        return handleError(error);
     }
+}
+
+// Common error handler
+function handleError(error: unknown) {
+    if (error instanceof Error) {
+        return { error: error.message };
+    }
+    return { error: 'An unknown error occurred' };
 }

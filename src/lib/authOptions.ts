@@ -27,13 +27,16 @@ export const authOptions: NextAuthOptions = {
             console.log('User:', user);
             console.log('Token before:', token);
             if (user) {
+                if (user.is_active === false) {
+                    throw new Error('User is deactivated!');
+                }
                 token.id = user.id;
                 token.email = user.email;
                 token.firstname = user.firstname ?? null;
                 token.lastname = user.lastname ?? null;
                 token.role = user.role ?? 'customer'; // Default role
                 token.is_complete_information =
-                    user.is_complete_information ?? false;
+                user.is_complete_information ?? false;
             }
             console.log('Token after:', token);
             return token;
@@ -50,6 +53,7 @@ export const authOptions: NextAuthOptions = {
                     lastname: token.lastname ?? null,
                     role: token.role ?? 'customer',
                     is_complete_information: token.is_complete_information ?? false,
+                    is_active: token.is_active ?? true
                 };
             }
             console.log('Session after:', session);

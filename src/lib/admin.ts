@@ -1,4 +1,4 @@
-import { prisma } from './prisma';
+import { prisma } from "./prisma";
 
 // GET: Total LTV (Lifetime Value) of all users
 export async function getTotalLTV() {
@@ -12,51 +12,41 @@ export async function getTotalLTV() {
     return { totalLTV: totalLTV._sum.ltv || 0 }; // Return 0 if no users
   } catch (error: unknown) {
     return {
-      error: error instanceof Error ? error.message : 'Unknown error',
+      error: error instanceof Error ? error.message : "Unknown error",
     };
   }
 }
 
-// GET: Total items sold across all services
+// GET: Total items sold across all product categories
 export async function getTotalSold() {
   try {
     // Aggregate sold items across all relevant tables
-    const [
-      activitiesSold,
-      eventsSold,
-      hotelsSold,
-      packagesSold,
-      transportationSold,
-    ] = await Promise.all([
-      prisma.activities.aggregate({
-        _sum: { number_of_sold_items: true },
-      }),
-      prisma.events.aggregate({
-        _sum: { number_of_sold_items: true },
-      }),
-      prisma.hotels.aggregate({
-        _sum: { number_of_sold_items: true },
-      }),
-      prisma.packages.aggregate({
-        _sum: { number_of_sold_items: true },
-      }),
-      prisma.transportation.aggregate({
-        _sum: { number_of_sold_items: true },
-      }),
-    ]);
+    const productSales = await prisma.product.findMany({
+      select: {
+        Packages: { select: { number_of_sold_items: true } },
+        Activities: { select: { number_of_sold_items: true } },
+        Events: { select: { number_of_sold_items: true } },
+        Hotels: { select: { number_of_sold_items: true } },
+        Transportation: { select: { number_of_sold_items: true } },
+      },
+    });
 
     // Sum up totals from all tables
-    const totalSold =
-      (activitiesSold._sum.number_of_sold_items || 0) +
-      (eventsSold._sum.number_of_sold_items || 0) +
-      (hotelsSold._sum.number_of_sold_items || 0) +
-      (packagesSold._sum.number_of_sold_items || 0) +
-      (transportationSold._sum.number_of_sold_items || 0);
+    const totalSold = productSales.reduce((sum, product) => {
+      return (
+        sum +
+        (product.Packages?.number_of_sold_items || 0) +
+        (product.Activities?.number_of_sold_items || 0) +
+        (product.Events?.number_of_sold_items || 0) +
+        (product.Hotels?.number_of_sold_items || 0) +
+        (product.Transportation?.number_of_sold_items || 0)
+      );
+    }, 0);
 
     return { totalSold };
   } catch (error: unknown) {
     return {
-      error: error instanceof Error ? error.message : 'Unknown error',
+      error: error instanceof Error ? error.message : "Unknown error",
     };
   }
 }
