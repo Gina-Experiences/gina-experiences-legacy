@@ -1,9 +1,19 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { hotelStore, productStore } from '@/stores';
 
-export default function HotelForm() {
+interface HotelFormProps {
+    hotelId?: string; // Optional ID for editing
+    onCancel: () => void; // Callback for cancel action
+    onSuccess: () => void; // Callback for successful operation
+}
+
+export default function HotelForm({
+    hotelId,
+    onCancel,
+    onSuccess,
+}: HotelFormProps) {
     const productType = 'Hotels';
     const [hotelName, setHotelName] = useState('');
     const [roomType, setRoomType] = useState('');
@@ -14,6 +24,29 @@ export default function HotelForm() {
     const [hotelPrice, setHotelPrice] = useState(0);
     const [durationNumber, setDurationNumber] = useState(1);
     const [durationUnit, setDurationUnit] = useState('H');
+    const [imageLink, setImageLink] = useState('');
+
+    const { fetchHotel, updateHotel, addHotel } = hotelStore();
+
+    useEffect(() => {
+        if (hotelId) {
+            fetchHotel(hotelId).then(() => {
+                const selectedHotel = hotelStore.getState().selectedHotel;
+                if (selectedHotel) {
+                    setHotelName(selectedHotel.hotel_name);
+                    setRoomType(selectedHotel.room_type);
+                    setHighlights(selectedHotel.highlights);
+                    setWhatToExpect(selectedHotel.what_to_expect);
+                    setAmenities(selectedHotel.amenities);
+                    setFaqs(selectedHotel.faqs);
+                    setHotelPrice(selectedHotel.hotel_price);
+                    setDurationNumber(selectedHotel.duration_number);
+                    setDurationUnit(selectedHotel.duration_unit);
+                    setImageLink(selectedHotel.image_link);
+                }
+            });
+        }
+    }, [hotelId, fetchHotel]);
 
     const handleSubmit = async (
         e: React.FormEvent<HTMLFormElement>
@@ -21,21 +54,40 @@ export default function HotelForm() {
         e.preventDefault();
 
         const confirmed = window.confirm(
-            'Are you sure you want to create this hotel?'
+            hotelId
+                ? 'Are you sure you want to update this hotel?'
+                : 'Are you sure you want to create this hotel?'
         );
         if (!confirmed) {
             return;
         }
 
         try {
-            const newProduct: { product_id: string } = await productStore
-                .getState()
-                .addProduct(productType);
+            if (hotelId) {
+                // Update existing hotel
+                await updateHotel(hotelId, {
+                    hotel_name: hotelName,
+                    room_type: roomType,
+                    highlights: highlights,
+                    what_to_expect: whatToExpect,
+                    amenities: amenities,
+                    faqs: faqs,
+                    hotel_price: hotelPrice,
+                    duration_number: durationNumber,
+                    duration_unit: durationUnit as 'H' | 'D',
+                    image_link: imageLink,
+                });
 
-            if (newProduct) {
-                await hotelStore
+                console.log('Hotel updated successfully!');
+                onSuccess(); // Call onSuccess after successful update
+            } else {
+                // Create new hotel
+                const newProduct: { product_id: string } = await productStore
                     .getState()
-                    .addHotel(
+                    .addProduct(productType);
+
+                if (newProduct) {
+                    await addHotel(
                         newProduct.product_id,
                         hotelName,
                         roomType,
@@ -45,30 +97,38 @@ export default function HotelForm() {
                         faqs,
                         hotelPrice,
                         durationNumber,
-                        durationUnit as 'H' | 'D'
+                        durationUnit as 'H' | 'D',
+                        imageLink
                     );
 
-                console.log('Hotel created successfully!');
-
-                // Reset form fields
-                setHotelName('');
-                setRoomType('');
-                setHighlights('');
-                setWhatToExpect('');
-                setAmenities('');
-                setFaqs('');
-                setHotelPrice(0);
-                setDurationNumber(1);
-                setDurationUnit('H');
+                    console.log('Hotel created successfully!');
+                    onSuccess(); // Call onSuccess after successful creation
+                }
             }
+
+            resetForm();
         } catch (error) {
-            console.error('Error creating hotel:', error);
+            console.error('Error processing hotel:', error);
         }
+    };
+
+    const resetForm = () => {
+        setHotelName('');
+        setRoomType('');
+        setHighlights('');
+        setWhatToExpect('');
+        setAmenities('');
+        setFaqs('');
+        setHotelPrice(0);
+        setDurationNumber(1);
+        setDurationUnit('H');
+        setImageLink('');
+        onCancel(); // Call the cancel callback to close the form/modal
     };
 
     return (
         <div className="w-full min-h-[500px]">
-            <h2>Hotel Form</h2>
+            <h2>{hotelId ? 'Edit Hotel' : 'Hotel Form'}</h2>
             <form onSubmit={handleSubmit}>
                 <div>
                     <label htmlFor="hotelName">Hotel Name:</label>
@@ -170,7 +230,25 @@ export default function HotelForm() {
                         <option value="D">Days</option>
                     </select>
                 </div>
-                <button type="submit">Create Hotel</button>
+                <div>
+                    <label htmlFor="imageLink">Image Link:</label>
+                    <input
+                        type="text"
+                        id="imageLink"
+                        name="imageLink"
+                        value={imageLink}
+                        onChange={(e) => setImageLink(e.target.value)}
+                        required
+                    />
+                </div>
+                <div className="flex gap-2 mt-4">
+                    <button type="submit">
+                        {hotelId ? 'Save Hotel' : 'Create Hotel'}
+                    </button>
+                    <button type="button" onClick={resetForm}>
+                        Cancel
+                    </button>
+                </div>
             </form>
         </div>
     );

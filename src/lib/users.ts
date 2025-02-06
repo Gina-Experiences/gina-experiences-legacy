@@ -51,11 +51,17 @@ export async function createUser(data: {
     image?: string;
 }) {
     try {
-        if (data.email && await prisma.user.findUnique({ where: { email: data.email } })) {
+        if (
+            data.email &&
+            (await prisma.user.findUnique({ where: { email: data.email } }))
+        ) {
             return { error: 'Email already in use' };
         }
 
-        if (data.phone && await prisma.user.findUnique({ where: { phone: data.phone } })) {
+        if (
+            data.phone &&
+            (await prisma.user.findUnique({ where: { phone: data.phone } }))
+        ) {
             return { error: 'Phone number already in use' };
         }
 
@@ -122,7 +128,6 @@ export async function reactivateUser(userId: string) {
 export async function getAllUsers() {
     try {
         const users = await prisma.user.findMany({
-            where: { is_active: true },
             select: {
                 id: true,
                 email: true,
@@ -138,6 +143,7 @@ export async function getAllUsers() {
                 role: true,
                 ltv: true,
                 is_complete_information: true,
+                is_active: true,
             },
         });
 

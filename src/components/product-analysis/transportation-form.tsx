@@ -1,15 +1,49 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { transportationStore, productStore } from '@/stores';
 
-export default function TransportationForm() {
+interface TransportationFormProps {
+    transportationId?: string; // Optional ID for editing
+    onCancel: () => void;
+    onSuccess: () => void;
+}
+
+export default function TransportationForm({
+    transportationId,
+    onCancel,
+    onSuccess,
+}: TransportationFormProps) {
     const productType = 'Transportation';
     const [transportationName, setTransportationName] = useState('');
     const [vehicleType, setVehicleType] = useState('');
     const [vehicleInfo, setVehicleInfo] = useState('');
     const [capacity, setCapacity] = useState(1);
     const [vehiclePrice, setVehiclePrice] = useState(0);
+    const [imageLink, setImageLink] = useState('');
+
+    const { fetchTransportation, updateTransportation, addTransportation } =
+        transportationStore();
+
+    // Fetch existing transportation details if editing
+    useEffect(() => {
+        if (transportationId) {
+            fetchTransportation(transportationId).then(() => {
+                const selectedTransportation =
+                    transportationStore.getState().selectedTransportation;
+                if (selectedTransportation) {
+                    setTransportationName(
+                        selectedTransportation.transportation_name
+                    );
+                    setVehicleType(selectedTransportation.vehicle_type);
+                    setVehicleInfo(selectedTransportation.vehicle_info);
+                    setCapacity(selectedTransportation.capacity);
+                    setVehiclePrice(selectedTransportation.vehicle_price);
+                    setImageLink(selectedTransportation.image_link);
+                }
+            });
+        }
+    }, [transportationId, fetchTransportation]);
 
     const handleSubmit = async (
         e: React.FormEvent<HTMLFormElement>
@@ -17,46 +51,73 @@ export default function TransportationForm() {
         e.preventDefault();
 
         const confirmed = window.confirm(
-            'Are you sure you want to create this transportation?'
+            transportationId
+                ? 'Are you sure you want to update this transportation?'
+                : 'Are you sure you want to create this transportation?'
         );
         if (!confirmed) {
             return;
         }
 
         try {
-            const newProduct: { product_id: string } = await productStore
-                .getState()
-                .addProduct(productType);
+            if (transportationId) {
+                // Update existing transportation
+                await updateTransportation(transportationId, {
+                    transportation_name: transportationName,
+                    vehicle_type: vehicleType,
+                    vehicle_info: vehicleInfo,
+                    capacity,
+                    vehicle_price: vehiclePrice,
+                    image_link: imageLink,
+                });
 
-            if (newProduct) {
-                await transportationStore
+                console.log('Transportation updated successfully!');
+                onSuccess(); // Call onSuccess after successful update
+            } else {
+                // Create new transportation
+                const newProduct: { product_id: string } = await productStore
                     .getState()
-                    .addTransportation(
+                    .addProduct(productType);
+
+                if (newProduct) {
+                    await addTransportation(
                         newProduct.product_id,
                         transportationName,
                         vehicleType,
                         vehicleInfo,
                         capacity,
-                        vehiclePrice
+                        vehiclePrice,
+                        imageLink
                     );
 
-                console.log('Transportation created successfully!');
-
-                // Reset form fields
-                setTransportationName('');
-                setVehicleType('');
-                setVehicleInfo('');
-                setCapacity(1);
-                setVehiclePrice(0);
+                    console.log('Transportation created successfully!');
+                    onSuccess(); // Call onSuccess after successful creation
+                }
             }
+
+            resetForm();
         } catch (error) {
-            console.error('Error creating transportation:', error);
+            console.error('Error processing transportation:', error);
         }
+    };
+
+    const resetForm = () => {
+        setTransportationName('');
+        setVehicleType('');
+        setVehicleInfo('');
+        setCapacity(1);
+        setVehiclePrice(0);
+        setImageLink('');
+        onCancel(); // Call the cancel callback to close the form/modal
     };
 
     return (
         <div className="w-full min-h-[500px]">
-            <h2>Transportation Form</h2>
+            <h2>
+                {transportationId
+                    ? 'Edit Transportation'
+                    : 'Transportation Form'}
+            </h2>
             <form onSubmit={handleSubmit}>
                 <div>
                     <label htmlFor="transportationName">
@@ -116,7 +177,27 @@ export default function TransportationForm() {
                         required
                     />
                 </div>
-                <button type="submit">Create Transportation</button>
+                <div>
+                    <label htmlFor="imageLink">Image Link:</label>
+                    <input
+                        type="text"
+                        id="imageLink"
+                        name="imageLink"
+                        value={imageLink}
+                        onChange={(e) => setImageLink(e.target.value)}
+                        required
+                    />
+                </div>
+                <div className="flex gap-2 mt-4">
+                    <button type="submit">
+                        {transportationId
+                            ? 'Save Transportation'
+                            : 'Create Transportation'}
+                    </button>
+                    <button type="button" onClick={resetForm}>
+                        Cancel
+                    </button>
+                </div>
             </form>
         </div>
     );

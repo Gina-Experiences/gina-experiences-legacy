@@ -32,7 +32,19 @@ interface PackageStore {
     ) => Promise<void>;
     updatePackage: (
         packageId: string,
-        data: Partial<PackageUpdateData>
+        data: {
+            product_id?: string;
+            package_name?: string;
+            highlights?: string;
+            what_to_expect?: string;
+            best_time_to_visit?: string;
+            duration_number?: number;
+            duration_unit?: 'H' | 'D';
+            faqs?: string;
+            package_price?: number;
+            image_link?: string;
+            is_active?: boolean;
+        }
     ) => Promise<void>;
     removePackage: (packageId: string) => Promise<void>;
     recoverPackage: (packageId: string) => Promise<void>;
@@ -145,25 +157,23 @@ const packageStore = create<PackageStore>()(
             },
 
             // Update package details
-            updatePackage: async (
-                packageId: string,
-                data: PackageUpdateData
-            ) => {
+            updatePackage: async (packageId, data) => {
                 set({ isLoading: true, error: null });
                 try {
                     const { updatedPackage } = await updatePackage(
                         packageId,
                         data
                     );
-                    console.log('[Zustand] Package updated:', updatedPackage);
+                    if (!updatedPackage) {
+                        throw new Error('Package update failed on the server.');
+                    }
+                    console.log('Updated Package:', updatedPackage);
                     set({
-                        packages: set().packages?.map((pkg) =>
-                            pkg.package_id === packageId ? updatedPackage : pkg
-                        ),
+                        selectedPackage: updatedPackage,
                         isLoading: false,
                     });
                 } catch (error) {
-                    console.error('[Zustand] Error updating package:', error);
+                    console.error('Update Package Error:', error);
                     set({
                         error:
                             error instanceof Error
@@ -178,21 +188,17 @@ const packageStore = create<PackageStore>()(
             removePackage: async (packageId: string) => {
                 set({ isLoading: true, error: null });
                 try {
-                    await deletePackage(packageId);
-                    console.log('[Zustand] Package soft deleted');
-                    set({
-                        packages: set().packages?.filter(
-                            (pkg) => pkg.package_id !== packageId
-                        ),
-                        isLoading: false,
-                    });
+                    const { message, package: packageData } =
+                        await deletePackage(packageId);
+                    console.log(message, packageData);
+                    set({ selectedPackage: packageData, isLoading: false });
                 } catch (error) {
-                    console.error('[Zustand] Error deleting package:', error);
+                    console.error('[Zustand] Remove Package Error:', error);
                     set({
                         error:
                             error instanceof Error
                                 ? error.message
-                                : 'Failed to delete package!',
+                                : 'Failed to remove package!',
                         isLoading: false,
                     });
                 }
@@ -201,18 +207,12 @@ const packageStore = create<PackageStore>()(
             recoverPackage: async (packageId: string) => {
                 set({ isLoading: true, error: null });
                 try {
-                    await recoverPackage(packageId);
-                    console.log('[Zustand] Package recovered');
-                    set({
-                        packages: set().packages?.map((pkg) =>
-                            pkg.package_id === packageId
-                                ? { ...pkg, is_active: true }
-                                : pkg
-                        ),
-                        isLoading: false,
-                    });
+                    const { message, package: packageData } =
+                        await recoverPackage(packageId);
+                    console.log(message, packageData);
+                    set({ selectedPackage: packageData, isLoading: false });
                 } catch (error) {
-                    console.error('[Zustand] Error recovering package:', error);
+                    console.error('[Zustand] Recover Package Error:', error);
                     set({
                         error:
                             error instanceof Error
