@@ -13,6 +13,7 @@ export async function createPackage(data: {
     duration_unit: 'H' | 'D'; // Enum values from DurationUnit
     faqs: string;
     package_price: number;
+    image_link: string;
 }) {
     try {
         const newPackage = await prisma.packages.create({
@@ -25,6 +26,7 @@ export async function createPackage(data: {
                 duration_unit: data.duration_unit,
                 faqs: data.faqs,
                 package_price: data.package_price,
+                image_link: data.image_link,
                 number_of_sold_items: 0,
                 favorites: 0,
                 rating: 0.0,
@@ -82,6 +84,7 @@ export async function updatePackage(
         duration_unit: 'H' | 'D';
         faqs: string;
         package_price: number;
+        image_link: string;
         is_active: boolean;
     }>
 ) {

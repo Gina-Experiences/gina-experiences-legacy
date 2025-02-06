@@ -13,6 +13,7 @@ export async function createEvent(data: {
     duration_number: number;
     duration_unit: 'H' | 'D';
     location: string;
+    image_link: string;
 }) {
     try {
         const newEvent = await prisma.events.create({
@@ -26,6 +27,7 @@ export async function createEvent(data: {
                 duration_unit: data.duration_unit,
                 faqs: data.faqs,
                 event_price: data.event_price,
+                image_link: data.image_link,
                 number_of_sold_items: 0,
                 favorites: 0,
                 rating: 0.0,
@@ -81,6 +83,7 @@ export async function updateEvent(
         duration_number: number;
         duration_unit: 'H' | 'D';
         location: string;
+        image_link: string;
         is_active: boolean;
     }>
 ) {

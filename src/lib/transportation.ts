@@ -10,6 +10,7 @@ export async function createTransportation(data: {
     vehicle_info: string;
     capacity: number;
     vehicle_price: number;
+    image_link: string;
 }) {
     try {
         const newTransportation = await prisma.transportation.create({
@@ -19,6 +20,7 @@ export async function createTransportation(data: {
                 vehicle_info: data.vehicle_info,
                 capacity: data.capacity,
                 vehicle_price: data.vehicle_price,
+                image_link: data.image_link,
                 number_of_sold_items: 0,
                 favorites: 0,
                 rating: 0.0,
@@ -75,6 +77,7 @@ export async function updateTransportation(
         capacity: number;
         faqs: string;
         vehicle_price: number;
+        image_link: string;
         is_active: boolean;
     }>
 ) {

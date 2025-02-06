@@ -13,6 +13,7 @@ export async function createActivity(data: {
     duration_unit: 'H' | 'D';
     faqs: string;
     activity_price: number;
+    image_link: string;
 }) {
     console.log('Data received in createActivity:', data); // Log the input data
     try {
@@ -26,6 +27,7 @@ export async function createActivity(data: {
                 duration_unit: data.duration_unit,
                 faqs: data.faqs,
                 activity_price: data.activity_price,
+                image_link: data.image_link,
                 number_of_sold_items: 0,
                 favorites: 0,
                 rating: 0.0,
@@ -84,6 +86,7 @@ export async function updateActivity(
         duration_unit: 'H' | 'D';
         faqs: string;
         activity_price: number;
+        image_link: string;
         is_active: boolean;
     }>
 ) {
