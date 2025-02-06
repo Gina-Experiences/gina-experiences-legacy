@@ -129,6 +129,19 @@ export async function deleteActivity(activityId: string) {
     }
 }
 
+export async function recoverActivity(activityId: string) {
+    try {
+        await prisma.activities.update({
+            where: { activity_id: activityId },
+            data: { is_active: true },
+        });
+
+        return { message: 'Activity recovered successfully' };
+    } catch (error: unknown) {
+        return handleError(error);
+    }
+}
+
 // Common error handler
 function handleError(error: unknown) {
     if (error instanceof Error) {

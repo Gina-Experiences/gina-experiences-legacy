@@ -6,6 +6,7 @@ import {
     createHotel,
     updateHotel,
     deleteHotel,
+    recoverHotel,
 } from '@/lib/hotels';
 import { localStorageWrapper } from '@/stores';
 
@@ -27,13 +28,15 @@ interface HotelStore {
         faqs: string,
         hotelPrice: number,
         durationNumber: number,
-        durationUnit: 'H' | 'D'
+        durationUnit: 'H' | 'D',
+        image_link: string
     ) => Promise<void>;
     updateHotel: (
         hotelId: string,
         data: Partial<HotelUpdateData>
     ) => Promise<void>;
     removeHotel: (hotelId: string) => Promise<void>;
+    recoverHotel: (hotelId: string) => Promise<void>;
     clearCache: () => void;
 }
 
@@ -48,6 +51,7 @@ interface HotelUpdateData {
     hotel_price?: number;
     duration_number?: number;
     duration_unit?: 'H' | 'D';
+    image_link?: string;
     is_active?: boolean;
 }
 
@@ -108,7 +112,8 @@ const hotelStore = create<HotelStore>()(
                 faqs: string,
                 hotelPrice: number,
                 durationNumber: number,
-                durationUnit: 'H' | 'D'
+                durationUnit: 'H' | 'D',
+                image_link: string
             ) => {
                 set({ isLoading: true, error: null });
                 try {
@@ -123,6 +128,7 @@ const hotelStore = create<HotelStore>()(
                         hotel_price: hotelPrice,
                         duration_number: durationNumber,
                         duration_unit: durationUnit,
+                        image_link: image_link,
                     });
                     console.log('[Zustand] Hotel created:', newHotel);
                     set((state) => ({
@@ -184,6 +190,31 @@ const hotelStore = create<HotelStore>()(
                             error instanceof Error
                                 ? error.message
                                 : 'Failed to delete hotel!',
+                        isLoading: false,
+                    });
+                }
+            },
+
+            recoverHotel: async (hotelId: string) => {
+                set({ isLoading: true, error: null });
+                try {
+                    await recoverHotel(hotelId);
+                    console.log('[Zustand] Hotel recovered');
+                    set({
+                        hotels: set().hotels?.map((hotel) =>
+                            hotel.hotel_id === hotelId
+                                ? { ...hotel, is_active: true }
+                                : hotel
+                        ),
+                        isLoading: false,
+                    });
+                } catch (error) {
+                    console.error('[Zustand] Error recovering hotel:', error);
+                    set({
+                        error:
+                            error instanceof Error
+                                ? error.message
+                                : 'Failed to recover hotel!',
                         isLoading: false,
                     });
                 }

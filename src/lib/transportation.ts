@@ -120,6 +120,18 @@ export async function deleteTransportation(transportationId: string) {
     }
 }
 
+export async function recoverTransportation(transportationId: string) {
+    try {
+        await prisma.transportation.update({
+            where: { transportation_id: transportationId },
+            data: { is_active: true },
+        });
+        return { message: 'Transportation recovered successfully' };
+    } catch (error: unknown) {
+        return handleError(error);
+    }
+}
+
 // Common error handler
 function handleError(error: unknown) {
     if (error instanceof Error) {

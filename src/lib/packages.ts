@@ -126,6 +126,18 @@ export async function deletePackage(packageId: string) {
     }
 }
 
+export async function recoverPackage(packageId: string) {
+    try {
+        await prisma.packages.update({
+            where: { package_id: packageId },
+            data: { is_active: true },
+        });
+        return { message: 'Package recovered successfully' };
+    } catch (error: unknown) {
+        return handleError(error);
+    }
+}
+
 // Common error handler
 function handleError(error: unknown) {
     if (error instanceof Error) {

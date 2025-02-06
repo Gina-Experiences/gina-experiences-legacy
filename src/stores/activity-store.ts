@@ -6,6 +6,7 @@ import {
     createActivity,
     updateActivity,
     deleteActivity,
+    recoverActivity,
 } from '@/lib/activities';
 import { localStorageWrapper } from '@/stores';
 
@@ -26,13 +27,15 @@ interface ActivityStore {
         durationNumber: number,
         durationUnit: 'H' | 'D',
         faqs: string,
-        activityPrice: number
+        activityPrice: number,
+        image_link: string
     ) => Promise<void>;
     updateActivity: (
         activityId: string,
         data: Partial<ActivityUpdateData>
     ) => Promise<void>;
     removeActivity: (activityId: string) => Promise<void>;
+    recoverActivity: (activityId: string) => Promise<void>;
     clearCache: () => void;
 }
 
@@ -46,6 +49,7 @@ interface ActivityUpdateData {
     duration_unit?: 'H' | 'D';
     faqs?: string;
     activity_price?: number;
+    image_link?: string;
     is_active?: boolean;
 }
 
@@ -108,7 +112,8 @@ const activityStore = create<ActivityStore>()(
                 durationNumber: number,
                 durationUnit: 'H' | 'D',
                 faqs: string,
-                activityPrice: number
+                activityPrice: number,
+                image_link: string
             ) => {
                 set({ isLoading: true, error: null });
                 try {
@@ -122,6 +127,7 @@ const activityStore = create<ActivityStore>()(
                         duration_unit: durationUnit,
                         faqs: faqs,
                         activity_price: activityPrice,
+                        image_link: image_link,
                     });
 
                     console.log('[Zustand] Activity created:', newActivity);
@@ -194,6 +200,34 @@ const activityStore = create<ActivityStore>()(
                             error instanceof Error
                                 ? error.message
                                 : 'Failed to delete activity!',
+                        isLoading: false,
+                    });
+                }
+            },
+
+            recoverActivity: async (activityId: string) => {
+                set({ isLoading: true, error: null });
+                try {
+                    await recoverActivity(activityId);
+                    console.log('[Zustand] Activity recovered');
+                    set({
+                        activities: set().activities?.map((activity) =>
+                            activity.activity_id === activityId
+                                ? { ...activity, is_active: true }
+                                : activity
+                        ),
+                        isLoading: false,
+                    });
+                } catch (error) {
+                    console.error(
+                        '[Zustand] Error recovering activity:',
+                        error
+                    );
+                    set({
+                        error:
+                            error instanceof Error
+                                ? error.message
+                                : 'Failed to recover activity!',
                         isLoading: false,
                     });
                 }
