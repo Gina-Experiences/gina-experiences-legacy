@@ -2,11 +2,16 @@ import { prisma } from './prisma';
 
 // POST: Create hotel
 export async function createHotel(data: {
-    service_id: string;
+    product_id: string;      // Updated field name from service_id to product_id based on the schema
+    hotel_name: string;
+    room_type: string;
+    what_to_expect: string;
+    amenities: string;
     highlights: string;
-    what_you_get: string;
     faqs: string;
     hotel_price: number;
+    duration_number: number;
+    duration_unit: 'H' | 'D';  // Enum values from DurationUnit
 }) {
     try {
         const newHotel = await prisma.hotels.create({
@@ -16,6 +21,9 @@ export async function createHotel(data: {
                 favorites: 0,
                 rating: 0.0,
                 is_active: true,
+                Product: {
+                    connect: { product_id: data.product_id },
+                },
             },
         });
         return { newHotel };
@@ -24,10 +32,12 @@ export async function createHotel(data: {
     }
 }
 
+// GET: Retrieve all active hotels
 export async function getAllHotels() {
     try {
         const hotels = await prisma.hotels.findMany({
             where: { is_active: true },
+            include: { Product: true },  // Include the related Product information if needed
         });
         return { hotels };
     } catch (error: unknown) {
@@ -35,10 +45,12 @@ export async function getAllHotels() {
     }
 }
 
+// GET: Retrieve a specific hotel by its ID
 export async function getHotel(hotelId: string) {
     try {
         const hotel = await prisma.hotels.findUnique({
             where: { hotel_id: hotelId },
+            include: { Product: true },  // Include the related Product information if needed
         });
 
         if (!hotel || !hotel.is_active) return { error: 'Hotel not found' };
@@ -48,6 +60,7 @@ export async function getHotel(hotelId: string) {
     }
 }
 
+// DELETE: Soft delete a hotel by setting is_active to false
 export async function deleteHotel(hotelId: string) {
     try {
         await prisma.hotels.update({

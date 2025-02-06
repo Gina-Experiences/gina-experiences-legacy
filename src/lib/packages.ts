@@ -2,13 +2,13 @@ import { prisma } from './prisma';
 
 // POST: Create package
 export async function createPackage(data: {
-    service_id: string;
+    product_id: string;        // Updated field name to product_id based on the schema
+    package_name: string;
     highlights: string;
-    what_you_get: string;
     what_to_expect: string;
     best_time_to_visit: string;
-    package_date: Date;
-    package_duration: string;
+    duration_number: number;
+    duration_unit: 'H' | 'D';  // Enum values from DurationUnit
     faqs: string;
     package_price: number;
 }) {
@@ -20,6 +20,9 @@ export async function createPackage(data: {
                 favorites: 0,
                 rating: 0.0,
                 is_active: true,
+                Product: {
+                    connect: { product_id: data.product_id },
+                },
             },
         });
         return { newPackage };
@@ -28,10 +31,12 @@ export async function createPackage(data: {
     }
 }
 
+// GET: Retrieve all active packages
 export async function getAllPackages() {
     try {
         const packages = await prisma.packages.findMany({
             where: { is_active: true },
+            include: { Product: true },  // Include the related Product information if needed
         });
         return { packages };
     } catch (error: unknown) {
@@ -39,10 +44,12 @@ export async function getAllPackages() {
     }
 }
 
+// GET: Retrieve a specific package by its ID
 export async function getPackage(packageId: string) {
     try {
         const packageData = await prisma.packages.findUnique({
             where: { package_id: packageId },
+            include: { Product: true },  // Include the related Product information if needed
         });
 
         if (!packageData || !packageData.is_active) return { error: 'Package not found' };
@@ -52,6 +59,7 @@ export async function getPackage(packageId: string) {
     }
 }
 
+// DELETE: Soft delete a package by setting is_active to false
 export async function deletePackage(packageId: string) {
     try {
         await prisma.packages.update({

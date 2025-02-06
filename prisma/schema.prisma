@@ -14,19 +14,19 @@ datasource db {
 }
 
 model Account {
-  id                 String   @id @default(uuid())
-  userId             String
-  type               String
-  provider           String
-  providerAccountId  String
-  refresh_token      String?   @db.Text
-  access_token       String?   @db.Text 
-  expires_at         Int?      
-  token_type         String?   
-  scope              String?   
-  id_token           String?   @db.Text
-  session_state      String?   
-  user               User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id                String  @id @default(uuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?  @db.Text
+  access_token      String?  @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?  @db.Text
+  session_state     String?
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }
@@ -40,49 +40,55 @@ model Session {
 }
 
 model User {
-  id                    String         @id @default(uuid())
-  name                  String?
-  email                 String?        @unique
-  emailVerified         DateTime? 
-  image                 String?   
-  is_complete_information Boolean      @default(false) // Tracks info completion
-  accounts              Account[] 
-  sessions              Session[] 
-  firstname             String?
-  lastname              String?
-  gender                String?
-  birthdate             DateTime?
-  phone                 String?        @unique
-  address               String?
-  registration_date     DateTime       @default(now())
-  last_active_date      DateTime?
-  is_active             Boolean        @default(true)
-  role                  Role           @default(customer)
-  ltv                   Float          @default(0.0)
-  Transactions          Transactions[]
-  Favorites             Favorites[]
+  id                      String  @id @default(uuid())
+  name                    String?
+  email                   String? @unique
+  emailVerified           DateTime?
+  image                   String?
+  is_complete_information Boolean @default(false)
+  accounts                Account[]
+  sessions                Session[]
+  firstname               String?
+  lastname                String?
+  gender                  String?
+  birthdate               DateTime?
+  phone                   String? @unique
+  address                 String?
+  registration_date       DateTime @default(now())
+  last_active_date        DateTime?
+  is_active               Boolean @default(true)
+  role                    Role    @default(customer)
+  ltv                     Float   @default(0.0)
+  Transactions            Transactions[]
+  Favorites               Favorites[]
 }
 
 model VerificationToken {
-  id         String      @id @default(uuid())
-  identifier String   
+  id         String   @id @default(uuid())
+  identifier String
   token      String   @unique
-  expires    DateTime 
+  expires    DateTime
 
   @@unique([identifier, token])
 }
 
 model Transactions {
-  transaction_id     String             @id @default(uuid())
-  userId             String
-  product_id         String
-  transaction_date   DateTime
-  total_Amount       Float
-  payment_status     PaymentStatus
-  transaction_status TransactionStatus
+  transaction_id         String   @id @default(uuid())
+  userId                String
+  product_id            String
+  start_date            DateTime
+  end_date              DateTime
+  time                  DateTime
+  number_of_participants Int
+  note                  String?
+  pickup_dropoff        String?
+  receipt_link          String?
+  total_Amount          Float
+  payment_status        PaymentStatus
+  transaction_status    TransactionStatus
 
-  User     User      @relation(fields: [userId], references: [id])
-  Product  Product   @relation(fields: [product_id], references: [product_id])
+  User     User    @relation(fields: [userId], references: [id])
+  Product  Product @relation(fields: [product_id], references: [product_id])
 
   @@index([userId])
   @@index([product_id])
@@ -90,136 +96,119 @@ model Transactions {
 
 model Product {
   product_id   String   @id @default(uuid())
-  product_name String
-  product_type String
+  product_type ProductType
 
   Transactions Transactions[]
-  Packages     Packages[]
-  Services     Services[]
+  Packages     Packages?
+  Activities   Activities?
+  Events       Events?
+  Hotels       Hotels?
+  Transportation Transportation?
+  Favorites    Favorites[]
 }
 
 model Packages {
-  package_id         String  @id @default(uuid())
-  product_id         String
-  highlights         String
-  what_you_get       String
-  what_to_expect     String
-  best_time_to_visit String
-  package_duration   String
-  faqs               String
-  package_price      Float
-  number_of_sold_items Int     @default(0)
-  favorites          Int      @default(0)
-  rating             Float    @default(0.0)
-  is_active          Boolean  @default(true)
+  package_id          String  @id @default(uuid())
+  product_id          String  @unique
+  package_name        String
+  highlights          String
+  what_to_expect      String
+  best_time_to_visit  String
+  duration_number     Int
+  duration_unit       DurationUnit
+  faqs                String
+  package_price       Float
+  number_of_sold_items Int @default(0)
+  favorites           Int @default(0)
+  rating              Float @default(0.0)
+  is_active           Boolean @default(true)
 
   Product Product @relation(fields: [product_id], references: [product_id])
-  Favorites Favorites[]
-}
-
-model Services {
-  service_id    String          @id @default(uuid())
-  product_id    String
-  service_type  String
-  service_price Float
-
-  Product        Product          @relation(fields: [product_id], references: [product_id])
-  Transportation Transportation[]
-  Activities     Activities[]
-  Events         Events[]
-  Hotels         Hotels[]
-}
-
-model Transportation {
-  transportation_id String @id @default(uuid())
-  service_id        String
-  vehicle_type      String
-  vehicle_info      String
-  capacity          Int
-  schedule          String
-  vehicle_price     Float
-  number_of_sold_items Int     @default(0)
-  favorites          Int      @default(0)
-  rating             Float    @default(0.0)
-  is_active          Boolean  @default(true)
-
-  Service Services @relation(fields: [service_id], references: [service_id])
-  Favorites Favorites[]
 }
 
 model Activities {
-  activity_id        String   @id @default(uuid())
-  service_id         String
-  highlights         String
-  what_you_get       String
-  what_to_expect     String
-  best_time_to_visit String
-  activity_date      DateTime
-  activity_duration  String
-  faqs               String
-  activity_price     Float
-  number_of_sold_items Int     @default(0)
-  favorites          Int      @default(0)
-  rating             Float    @default(0.0)
-  is_active          Boolean  @default(true)
+  activity_id         String  @id @default(uuid())
+  product_id          String  @unique
+  activity_name       String
+  highlights          String
+  what_to_expect      String
+  best_time_to_visit  String
+  duration_number     Int
+  duration_unit       DurationUnit
+  faqs                String
+  activity_price      Float
+  number_of_sold_items Int @default(0)
+  favorites           Int @default(0)
+  rating              Float @default(0.0)
+  is_active           Boolean @default(true)
 
-  Service Services @relation(fields: [service_id], references: [service_id])
-  Favorites Favorites[]
+  Product Product @relation(fields: [product_id], references: [product_id])
 }
 
 model Events {
-  event_id           String   @id @default(uuid())
-  service_id         String
-  highlights         String
-  location           String
-  what_you_get       String
-  what_to_expect     String
-  best_time_to_visit String
-  event_date         DateTime
-  event_duration     String
-  faqs               String
-  event_price        Float
-  number_of_sold_items Int     @default(0)
-  favorites          Int      @default(0)
-  rating             Float    @default(0.0)
-  is_active          Boolean  @default(true)
+  event_id            String  @id @default(uuid())
+  product_id          String  @unique
+  event_name          String
+  highlights          String
+  location            String
+  what_to_expect      String
+  best_time_to_visit  String
+  duration_number     Int
+  duration_unit       DurationUnit
+  faqs                String
+  event_price         Float
+  number_of_sold_items Int @default(0)
+  favorites           Int @default(0)
+  rating              Float @default(0.0)
+  is_active           Boolean @default(true)
 
-  Service Services @relation(fields: [service_id], references: [service_id])
-  Favorites Favorites[]
+  Product Product @relation(fields: [product_id], references: [product_id])
 }
 
 model Hotels {
-  hotel_id       String  @id @default(uuid())
-  service_id     String
-  hotel_name     String
-  room_type      String
-  what_you_get   String
-  what_to_expect String
-  amenities      String
-  highlights     String
-  duration       String
-  faqs           String
-  hotel_price    Float
-  number_of_sold_items Int     @default(0)
-  favorites          Int      @default(0)
-  rating             Float    @default(0.0)
-  is_active          Boolean  @default(true)
+  hotel_id            String  @id @default(uuid())
+  product_id          String  @unique
+  hotel_name          String
+  room_type           String
+  what_to_expect      String
+  amenities           String
+  highlights          String
+  faqs                String
+  hotel_price         Float
+  duration_number     Int
+  duration_unit       DurationUnit
+  number_of_sold_items Int @default(0)
+  favorites           Int @default(0)
+  rating              Float @default(0.0)
+  is_active           Boolean @default(true)
 
-  Service Services @relation(fields: [service_id], references: [service_id])
-  Favorites Favorites[]
+  Product Product @relation(fields: [product_id], references: [product_id])
+}
+
+model Transportation {
+  transportation_id   String  @id @default(uuid())
+  product_id          String  @unique
+  transportation_name String
+  vehicle_type        String
+  vehicle_info        String
+  capacity            Int
+  vehicle_price       Float
+  number_of_sold_items Int @default(0)
+  favorites           Int @default(0)
+  rating              Float @default(0.0)
+  is_active           Boolean @default(true)
+
+  Product Product @relation(fields: [product_id], references: [product_id])
 }
 
 model Favorites {
   id       String @id @default(uuid())
   userId   String
   itemId   String
-  itemType String
-  User     User   @relation(fields: [userId], references: [id])
-  Events   Events?   @relation(fields: [itemId], references: [event_id], map: "Favorites_Events_fkey")
-  Activities Activities? @relation(fields: [itemId], references: [activity_id], map: "Favorites_Activities_fkey")
-  Hotels   Hotels?   @relation(fields: [itemId], references: [hotel_id], map: "Favorites_Hotels_fkey")
-  Packages Packages? @relation(fields: [itemId], references: [package_id], map: "Favorites_Packages_fkey")
-  Transportation Transportation? @relation(fields: [itemId], references: [transportation_id], map: "Favorites_Transportation_fkey")
+  itemType ProductType
+
+  User     User     @relation(fields: [userId], references: [id])
+  Product  Product  @relation(fields: [itemId], references: [product_id], onDelete: Cascade)
 }
 
 enum Role {
@@ -237,4 +226,17 @@ enum TransactionStatus {
   completed
   failed
   pending
+}
+
+enum DurationUnit {
+  H // Hours
+  D // Days
+}
+
+enum ProductType {
+  Hotels
+  Packages
+  Events
+  Activities
+  Transportation
 }
