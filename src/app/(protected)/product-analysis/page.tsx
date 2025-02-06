@@ -47,13 +47,22 @@ export default function ProductAnalysis() {
 
                     {/* Conditional Form Rendering based on the selected tab */}
                     <div>
-                        {selectedTab === 'hotel' && <HotelForm />}
-                        {selectedTab === 'event' && <EventForm />}
-                        {selectedTab === 'transportation' && (
-                            <TransportationForm />
+                        {selectedTab === 'hotel' && (
+                            <HotelForm onCancel={() => {}} onSuccess={() => {}} />
                         )}
-                        {selectedTab === 'activity' && <ActivityForm />}
-                        {selectedTab === 'package' && <PackageForm />}
+                        {selectedTab === 'event' && (
+                            <EventForm onCancel={() => {}} onSuccess={() => {}} />
+                        )}
+                        {selectedTab === 'transportation' && (
+                            <TransportationForm onCancel={() => {}} onSuccess={() => {}} />
+                        )}
+                        {selectedTab === 'activity' && (
+                            <ActivityForm onCancel={() => {}} onSuccess={() => {}} />
+                        )}
+                        {selectedTab === 'package' && (
+                            <PackageForm onCancel={() => {}} onSuccess={() => {}} />
+                        )}
+
                     </div>
                 </div>
             </ModalButton>

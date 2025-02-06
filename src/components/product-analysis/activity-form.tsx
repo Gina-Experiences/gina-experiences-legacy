@@ -3,7 +3,17 @@
 import { useState } from 'react';
 import { activityStore, productStore } from '@/stores';
 
-export default function ActivityForm() {
+interface ActivityFormProps {
+    activityId?: string; // Optional ID for editing
+    onCancel: () => void; // Callback for cancel action
+    onSuccess: () => void; // Callback for successful operation
+}
+
+export default function ActivityForm({
+    activityId,
+    onCancel,
+    onSuccess,
+}: ActivityFormProps) {
     const productType = 'Activities';
     const [activityName, setActivityName] = useState('');
     const [highlights, setHighlights] = useState('');
