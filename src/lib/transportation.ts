@@ -58,6 +58,43 @@ export async function getTransportation(transportationId: string) {
     }
 }
 
+// PUT: Update transportation
+export async function updateTransportation(transportationId: string, data: Partial<{
+    product_id: string;
+    transportation_name: string;
+    highlights: string;
+    vehicle_type: string;
+    vehicle_info: string;
+    capacity: number;
+    faqs: string;
+    vehicle_price: number;
+    is_active: boolean;
+}>) {
+    try {
+        // Check if the transportation exists
+        const existingTransportation = await prisma.transportation.findUnique({
+            where: { transportation_id: transportationId },
+        });
+
+        if (!existingTransportation) return { error: 'Transportation not found' };
+
+        // Perform the update
+        const updatedTransportation = await prisma.transportation.update({
+            where: { transportation_id: transportationId },
+            data: {
+                ...data,
+                Product: data.product_id
+                    ? { connect: { product_id: data.product_id } }
+                    : undefined, // Connect a new product if provided
+            },
+        });
+
+        return { updatedTransportation };
+    } catch (error: unknown) {
+        return handleError(error);
+    }
+}
+
 // DELETE: Soft delete a transportation by setting is_active to false
 export async function deleteTransportation(transportationId: string) {
     try {

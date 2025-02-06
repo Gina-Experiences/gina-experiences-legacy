@@ -60,6 +60,45 @@ export async function getHotel(hotelId: string) {
     }
 }
 
+// PUT: Update hotel
+export async function updateHotel(hotelId: string, data: Partial<{
+    product_id: string;
+    hotel_name: string;
+    room_type: string;
+    what_to_expect: string;
+    amenities: string;
+    highlights: string;
+    faqs: string;
+    hotel_price: number;
+    duration_number: number;
+    duration_unit: 'H' | 'D';
+    is_active: boolean;
+}>) {
+    try {
+        // Check if the hotel exists
+        const existingHotel = await prisma.hotels.findUnique({
+            where: { hotel_id: hotelId },
+        });
+
+        if (!existingHotel) return { error: 'Hotel not found' };
+
+        // Perform the update
+        const updatedHotel = await prisma.hotels.update({
+            where: { hotel_id: hotelId },
+            data: {
+                ...data,
+                Product: data.product_id
+                    ? { connect: { product_id: data.product_id } }
+                    : undefined, // Only connect a new product if provided
+            },
+        });
+
+        return { updatedHotel };
+    } catch (error: unknown) {
+        return handleError(error);
+    }
+}
+
 // DELETE: Soft delete a hotel by setting is_active to false
 export async function deleteHotel(hotelId: string) {
     try {
