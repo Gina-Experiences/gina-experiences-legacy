@@ -124,11 +124,18 @@ export default function PackageForm({
     };
 
     return (
-        <div className="w-full min-h-[500px]">
-            <h2>{packageId ? 'Edit Package' : 'Package Form'}</h2>
-            <form onSubmit={handleSubmit}>
+        <div className="w-full min-h-[500px] max-h-screen p-4 bg-white shadow-md rounded-md">
+            <h2 className="text-2xl font-bold mb-4">
+                {packageId ? 'Edit Package' : 'Package Form'}
+            </h2>
+            <form onSubmit={handleSubmit} className="gap-4 grid grid-cols-2">
                 <div>
-                    <label htmlFor="packageName">Package Name:</label>
+                    <label
+                        htmlFor="packageName"
+                        className="block text-sm font-medium text-ginaBlack/80"
+                    >
+                        Package Name:
+                    </label>
                     <input
                         type="text"
                         id="packageName"
@@ -136,30 +143,48 @@ export default function PackageForm({
                         value={packageName}
                         onChange={(e) => setPackageName(e.target.value)}
                         required
+                        className="mt-1 block w-full border border-ginaBlack/60 rounded-md shadow-sm p-2"
                     />
                 </div>
                 <div>
-                    <label htmlFor="highlights">Highlights:</label>
+                    <label
+                        htmlFor="highlights"
+                        className="block text-sm font-medium text-ginaBlack/80"
+                    >
+                        Highlights:
+                    </label>
                     <textarea
                         id="highlights"
                         name="highlights"
                         value={highlights}
                         onChange={(e) => setHighlights(e.target.value)}
                         required
+                        className="mt-1 block w-full border border-ginaBlack/60 rounded-md shadow-sm p-2"
                     ></textarea>
                 </div>
                 <div>
-                    <label htmlFor="whatToExpect">What to Expect:</label>
+                    <label
+                        htmlFor="whatToExpect"
+                        className="block text-sm font-medium text-ginaBlack/80"
+                    >
+                        What to Expect:
+                    </label>
                     <textarea
                         id="whatToExpect"
                         name="whatToExpect"
                         value={whatToExpect}
                         onChange={(e) => setWhatToExpect(e.target.value)}
                         required
+                        className="mt-1 block w-full border border-ginaBlack/60 rounded-md shadow-sm p-2"
                     ></textarea>
                 </div>
                 <div>
-                    <label htmlFor="bestTimeToVisit">Best Time to Visit:</label>
+                    <label
+                        htmlFor="bestTimeToVisit"
+                        className="block text-sm font-medium text-ginaBlack/80"
+                    >
+                        Best Time to Visit:
+                    </label>
                     <input
                         type="text"
                         id="bestTimeToVisit"
@@ -167,10 +192,16 @@ export default function PackageForm({
                         value={bestTimeToVisit}
                         onChange={(e) => setBestTimeToVisit(e.target.value)}
                         required
+                        className="mt-1 block w-full border border-ginaBlack/60 rounded-md shadow-sm p-2"
                     />
                 </div>
                 <div>
-                    <label htmlFor="durationNumber">Duration Number:</label>
+                    <label
+                        htmlFor="durationNumber"
+                        className="block text-sm font-medium text-ginaBlack/80"
+                    >
+                        Duration Number:
+                    </label>
                     <input
                         type="number"
                         id="durationNumber"
@@ -180,33 +211,51 @@ export default function PackageForm({
                             setDurationNumber(Number(e.target.value))
                         }
                         required
+                        className="mt-1 block w-full border border-ginaBlack/60 rounded-md shadow-sm p-2"
                     />
                 </div>
                 <div>
-                    <label htmlFor="durationUnit">Duration Unit:</label>
+                    <label
+                        htmlFor="durationUnit"
+                        className="block text-sm font-medium text-ginaBlack/80"
+                    >
+                        Duration Unit:
+                    </label>
                     <select
                         id="durationUnit"
                         name="durationUnit"
                         value={durationUnit}
                         onChange={(e) => setDurationUnit(e.target.value)}
                         required
+                        className="mt-1 block w-full border border-ginaBlack/60 rounded-md shadow-sm p-2"
                     >
                         <option value="H">Hours</option>
                         <option value="D">Days</option>
                     </select>
                 </div>
                 <div>
-                    <label htmlFor="faqs">FAQs:</label>
+                    <label
+                        htmlFor="faqs"
+                        className="block text-sm font-medium text-ginaBlack/80"
+                    >
+                        FAQs:
+                    </label>
                     <textarea
                         id="faqs"
                         name="faqs"
                         value={faqs}
                         onChange={(e) => setFaqs(e.target.value)}
                         required
+                        className="mt-1 block w-full border border-ginaBlack/60 rounded-md shadow-sm p-2"
                     ></textarea>
                 </div>
                 <div>
-                    <label htmlFor="packagePrice">Package Price:</label>
+                    <label
+                        htmlFor="packagePrice"
+                        className="block text-sm font-medium text-ginaBlack/80"
+                    >
+                        Package Price:
+                    </label>
                     <input
                         type="number"
                         id="packagePrice"
@@ -216,10 +265,16 @@ export default function PackageForm({
                             setPackagePrice(Number(e.target.value))
                         }
                         required
+                        className="mt-1 block w-full border border-ginaBlack/60 rounded-md shadow-sm p-2"
                     />
                 </div>
-                <div>
-                    <label htmlFor="imageLink">Image Link:</label>
+                <div className="col-span-2">
+                    <label
+                        htmlFor="imageLink"
+                        className="block text-sm font-medium text-ginaBlack/80"
+                    >
+                        Image Link:
+                    </label>
                     <input
                         type="text"
                         id="imageLink"
@@ -227,14 +282,22 @@ export default function PackageForm({
                         value={imageLink}
                         onChange={(e) => setImageLink(e.target.value)}
                         required
+                        className="mt-1 block w-full border border-ginaBlack/60 rounded-md shadow-sm p-2"
                     />
                 </div>
-                <div className="flex gap-2 mt-4">
-                    <button type="submit">
-                        {packageId ? 'Save Package' : 'Create Package'}
-                    </button>
-                    <button type="button" onClick={resetForm}>
+                <div className="col-start-2 space-x-4 p-4">
+                    <button
+                        type="button"
+                        onClick={resetForm}
+                        className="px-4 py-2 bg-ginaGray text-ginaBlack rounded-xl"
+                    >
                         Cancel
+                    </button>
+                    <button
+                        type="submit"
+                        className="px-4 py-2 bg-ginaOrange text-white rounded-xl"
+                    >
+                        {packageId ? 'Save Package' : 'Create Package'}
                     </button>
                 </div>
             </form>

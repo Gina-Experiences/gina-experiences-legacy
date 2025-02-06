@@ -62,16 +62,32 @@ export default function EventForm({
             return;
         }
 
-        // DITO MYRONE PATULOY
         try {
-            const newProduct: { product_id: string } = await productStore
-                .getState()
-                .addProduct(productType);
+            if (eventId) {
+                // Update existing event
+                await updateEvent(eventId, {
+                    event_name: eventName,
+                    highlights: highlights,
+                    location: location,
+                    what_to_expect: whatToExpect,
+                    best_time_to_visit: bestTimeToVisit,
+                    duration_number: durationNumber,
+                    duration_unit: durationUnit as 'H' | 'D',
+                    faqs: faqs,
+                    event_price: eventPrice,
+                    image_link: imageLink,
+                });
 
-            if (newProduct) {
-                await eventStore
+                console.log('Event updated successfully!');
+                onSuccess(); // Call onSuccess after successful update
+            } else {
+                // Create new event
+                const newProduct: { product_id: string } = await productStore
                     .getState()
-                    .addEvent(
+                    .addProduct(productType);
+
+                if (newProduct) {
+                    await addEvent(
                         newProduct.product_id,
                         eventName,
                         highlights,
@@ -85,31 +101,44 @@ export default function EventForm({
                         imageLink
                     );
 
-                console.log('Event created successfully!');
-
-                // Reset form fields
-                setEventName('');
-                setHighlights('');
-                setLocation('');
-                setWhatToExpect('');
-                setBestTimeToVisit('');
-                setDurationNumber(1);
-                setDurationUnit('H');
-                setFaqs('');
-                setEventPrice(0);
-                setImageLink('');
+                    console.log('Event created successfully!');
+                    onSuccess(); // Call onSuccess after successful creation
+                }
             }
+
+            resetForm();
         } catch (error) {
-            console.error('Error creating event:', error);
+            console.error('Error processing event:', error);
         }
+    };
+    // Reset function
+    const resetForm = () => {
+        setEventName('');
+        setHighlights('');
+        setLocation('');
+        setWhatToExpect('');
+        setBestTimeToVisit('');
+        setDurationNumber(1);
+        setDurationUnit('H');
+        setFaqs('');
+        setEventPrice(0);
+        setImageLink('');
+        onCancel(); // Call the cancel callback to close the form/modal
     };
 
     return (
-        <div className="w-full min-h-[500px]">
-            <h2>Event Form</h2>
-            <form onSubmit={handleSubmit}>
+        <div className="w-full min-h-[500px] max-h-screen p-4 bg-white shadow-md rounded-md">
+            <h2 className="text-2xl font-bold mb-4">
+                {eventId ? 'Edit Event' : 'Transportation Event'}
+            </h2>
+            <form onSubmit={handleSubmit} className="gap-4 grid grid-cols-2">
                 <div>
-                    <label htmlFor="eventName">Event Name:</label>
+                    <label
+                        htmlFor="eventName"
+                        className="block text-sm font-medium text-ginaBlack/80"
+                    >
+                        Event Name:
+                    </label>
                     <input
                         type="text"
                         id="eventName"
@@ -117,20 +146,32 @@ export default function EventForm({
                         value={eventName}
                         onChange={(e) => setEventName(e.target.value)}
                         required
+                        className="mt-1 block w-full border border-ginaBlack/60 rounded-md shadow-sm p-2"
                     />
                 </div>
                 <div>
-                    <label htmlFor="highlights">Highlights:</label>
+                    <label
+                        htmlFor="highlights"
+                        className="block text-sm font-medium text-ginaBlack/80"
+                    >
+                        Highlights:
+                    </label>
                     <textarea
                         id="highlights"
                         name="highlights"
                         value={highlights}
                         onChange={(e) => setHighlights(e.target.value)}
                         required
+                        className="mt-1 block w-full border border-ginaBlack/60 rounded-md shadow-sm p-2"
                     ></textarea>
                 </div>
                 <div>
-                    <label htmlFor="location">Location:</label>
+                    <label
+                        htmlFor="location"
+                        className="block text-sm font-medium text-ginaBlack/80"
+                    >
+                        Location:
+                    </label>
                     <input
                         type="text"
                         id="location"
@@ -138,20 +179,32 @@ export default function EventForm({
                         value={location}
                         onChange={(e) => setLocation(e.target.value)}
                         required
+                        className="mt-1 block w-full border border-ginaBlack/60 rounded-md shadow-sm p-2"
                     />
                 </div>
                 <div>
-                    <label htmlFor="whatToExpect">What to Expect:</label>
+                    <label
+                        htmlFor="whatToExpect"
+                        className="block text-sm font-medium text-ginaBlack/80"
+                    >
+                        What to Expect:
+                    </label>
                     <textarea
                         id="whatToExpect"
                         name="whatToExpect"
                         value={whatToExpect}
                         onChange={(e) => setWhatToExpect(e.target.value)}
                         required
+                        className="mt-1 block w-full border border-ginaBlack/60 rounded-md shadow-sm p-2"
                     ></textarea>
                 </div>
                 <div>
-                    <label htmlFor="bestTimeToVisit">Best Time to Visit:</label>
+                    <label
+                        htmlFor="bestTimeToVisit"
+                        className="block text-sm font-medium text-ginaBlack/80"
+                    >
+                        Best Time to Visit:
+                    </label>
                     <input
                         type="text"
                         id="bestTimeToVisit"
@@ -159,10 +212,16 @@ export default function EventForm({
                         value={bestTimeToVisit}
                         onChange={(e) => setBestTimeToVisit(e.target.value)}
                         required
+                        className="mt-1 block w-full border border-ginaBlack/60 rounded-md shadow-sm p-2"
                     />
                 </div>
                 <div>
-                    <label htmlFor="durationNumber">Duration Number:</label>
+                    <label
+                        htmlFor="durationNumber"
+                        className="block text-sm font-medium text-ginaBlack/80"
+                    >
+                        Duration Number:
+                    </label>
                     <input
                         type="number"
                         id="durationNumber"
@@ -172,33 +231,51 @@ export default function EventForm({
                             setDurationNumber(Number(e.target.value))
                         }
                         required
+                        className="mt-1 block w-full border border-ginaBlack/60 rounded-md shadow-sm p-2"
                     />
                 </div>
                 <div>
-                    <label htmlFor="durationUnit">Duration Unit:</label>
+                    <label
+                        htmlFor="durationUnit"
+                        className="block text-sm font-medium text-ginaBlack/80"
+                    >
+                        Duration Unit:
+                    </label>
                     <select
                         id="durationUnit"
                         name="durationUnit"
                         value={durationUnit}
                         onChange={(e) => setDurationUnit(e.target.value)}
                         required
+                        className="mt-1 block w-full border border-ginaBlack/60 rounded-md shadow-sm p-2"
                     >
                         <option value="H">Hours</option>
                         <option value="D">Days</option>
                     </select>
                 </div>
                 <div>
-                    <label htmlFor="faqs">FAQs:</label>
+                    <label
+                        htmlFor="faqs"
+                        className="block text-sm font-medium text-ginaBlack/80"
+                    >
+                        FAQs:
+                    </label>
                     <textarea
                         id="faqs"
                         name="faqs"
                         value={faqs}
                         onChange={(e) => setFaqs(e.target.value)}
                         required
+                        className="mt-1 block w-full border border-ginaBlack/60 rounded-md shadow-sm p-2"
                     ></textarea>
                 </div>
                 <div>
-                    <label htmlFor="eventPrice">Event Price:</label>
+                    <label
+                        htmlFor="eventPrice"
+                        className="block text-sm font-medium text-ginaBlack/80"
+                    >
+                        Event Price:
+                    </label>
                     <input
                         type="number"
                         id="eventPrice"
@@ -206,10 +283,16 @@ export default function EventForm({
                         value={eventPrice}
                         onChange={(e) => setEventPrice(Number(e.target.value))}
                         required
+                        className="mt-1 block w-full border border-ginaBlack/60 rounded-md shadow-sm p-2"
                     />
                 </div>
-                <div>
-                    <label htmlFor="imageLink">Image Link:</label>
+                <div className="">
+                    <label
+                        htmlFor="imageLink"
+                        className="block text-sm font-medium text-ginaBlack/80"
+                    >
+                        Image Link:
+                    </label>
                     <input
                         type="text"
                         id="imageLink"
@@ -217,9 +300,24 @@ export default function EventForm({
                         value={imageLink}
                         onChange={(e) => setImageLink(e.target.value)}
                         required
+                        className="mt-1 block w-full border border-ginaBlack/60 rounded-md shadow-sm p-2"
                     />
                 </div>
-                <button type="submit">Create Event</button>
+                <div className="col-start-2 space-x-4 p-4">
+                    <button
+                        type="button"
+                        onClick={onCancel}
+                        className="px-4 py-2 bg-ginaGray text-ginaBlack rounded-xl"
+                    >
+                        Cancel
+                    </button>
+                    <button
+                        type="submit"
+                        className="px-4 py-2 bg-ginaOrange text-white rounded-xl"
+                    >
+                        {eventId ? 'Update Event' : 'Create Event'}
+                    </button>
+                </div>
             </form>
         </div>
     );

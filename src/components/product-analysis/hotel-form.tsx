@@ -127,11 +127,18 @@ export default function HotelForm({
     };
 
     return (
-        <div className="w-full min-h-[500px]">
-            <h2>{hotelId ? 'Edit Hotel' : 'Hotel Form'}</h2>
-            <form onSubmit={handleSubmit}>
+        <div className="w-full min-h-[500px] max-h-screen p-4 bg-white shadow-md rounded-md">
+            <h2 className="text-2xl font-bold mb-4">
+                {hotelId ? 'Edit Hotel' : 'Hotel Form'}
+            </h2>
+            <form onSubmit={handleSubmit} className="gap-4 grid grid-cols-2">
                 <div>
-                    <label htmlFor="hotelName">Hotel Name:</label>
+                    <label
+                        htmlFor="hotelName"
+                        className="block text-sm font-medium text-ginaBlack/80"
+                    >
+                        Hotel Name:
+                    </label>
                     <input
                         type="text"
                         id="hotelName"
@@ -139,10 +146,16 @@ export default function HotelForm({
                         value={hotelName}
                         onChange={(e) => setHotelName(e.target.value)}
                         required
+                        className="mt-1 block w-full border border-ginaBlack/60 rounded-md shadow-sm p-2"
                     />
                 </div>
                 <div>
-                    <label htmlFor="roomType">Room Type:</label>
+                    <label
+                        htmlFor="roomType"
+                        className="block text-sm font-medium text-ginaBlack/80"
+                    >
+                        Room Type:
+                    </label>
                     <input
                         type="text"
                         id="roomType"
@@ -150,30 +163,48 @@ export default function HotelForm({
                         value={roomType}
                         onChange={(e) => setRoomType(e.target.value)}
                         required
+                        className="mt-1 block w-full border border-ginaBlack/60 rounded-md shadow-sm p-2"
                     />
                 </div>
                 <div>
-                    <label htmlFor="highlights">Highlights:</label>
+                    <label
+                        htmlFor="highlights"
+                        className="block text-sm font-medium text-ginaBlack/80"
+                    >
+                        Highlights:
+                    </label>
                     <textarea
                         id="highlights"
                         name="highlights"
                         value={highlights}
                         onChange={(e) => setHighlights(e.target.value)}
                         required
+                        className="mt-1 block w-full border border-ginaBlack/60 rounded-md shadow-sm p-2"
                     ></textarea>
                 </div>
                 <div>
-                    <label htmlFor="whatToExpect">What to Expect:</label>
+                    <label
+                        htmlFor="whatToExpect"
+                        className="block text-sm font-medium text-ginaBlack/80"
+                    >
+                        What to Expect:
+                    </label>
                     <textarea
                         id="whatToExpect"
                         name="whatToExpect"
                         value={whatToExpect}
                         onChange={(e) => setWhatToExpect(e.target.value)}
                         required
+                        className="mt-1 block w-full border border-ginaBlack/60 rounded-md shadow-sm p-2"
                     ></textarea>
                 </div>
                 <div>
-                    <label htmlFor="amenities">Amenities:</label>
+                    <label
+                        htmlFor="amenities"
+                        className="block text-sm font-medium text-ginaBlack/80"
+                    >
+                        Amenities:
+                    </label>
                     <input
                         type="text"
                         id="amenities"
@@ -181,20 +212,32 @@ export default function HotelForm({
                         value={amenities}
                         onChange={(e) => setAmenities(e.target.value)}
                         required
+                        className="mt-1 block w-full border border-ginaBlack/60 rounded-md shadow-sm p-2"
                     />
                 </div>
                 <div>
-                    <label htmlFor="faqs">FAQs:</label>
+                    <label
+                        htmlFor="faqs"
+                        className="block text-sm font-medium text-ginaBlack/80"
+                    >
+                        FAQs:
+                    </label>
                     <textarea
                         id="faqs"
                         name="faqs"
                         value={faqs}
                         onChange={(e) => setFaqs(e.target.value)}
                         required
+                        className="mt-1 block w-full border border-ginaBlack/60 rounded-md shadow-sm p-2"
                     ></textarea>
                 </div>
                 <div>
-                    <label htmlFor="hotelPrice">Hotel Price:</label>
+                    <label
+                        htmlFor="hotelPrice"
+                        className="block text-sm font-medium text-ginaBlack/80"
+                    >
+                        Hotel Price:
+                    </label>
                     <input
                         type="number"
                         id="hotelPrice"
@@ -202,36 +245,52 @@ export default function HotelForm({
                         value={hotelPrice}
                         onChange={(e) => setHotelPrice(Number(e.target.value))}
                         required
+                        className="mt-1 block w-full border border-ginaBlack/60 rounded-md shadow-sm p-2"
                     />
                 </div>
                 <div>
-                    <label htmlFor="durationNumber">Duration Number:</label>
+                    <label
+                        htmlFor="durationNumber"
+                        className="block text-sm font-medium text-ginaBlack/80"
+                    >
+                        Duration Number:
+                    </label>
                     <input
                         type="number"
                         id="durationNumber"
                         name="durationNumber"
                         value={durationNumber}
-                        onChange={(e) =>
-                            setDurationNumber(Number(e.target.value))
-                        }
+                        onChange={(e) => setDurationNumber(Number(e.target.value))}
                         required
+                        className="mt-1 block w-full border border-ginaBlack/60 rounded-md shadow-sm p-2"
                     />
                 </div>
                 <div>
-                    <label htmlFor="durationUnit">Duration Unit:</label>
+                    <label
+                        htmlFor="durationUnit"
+                        className="block text-sm font-medium text-ginaBlack/80"
+                    >
+                        Duration Unit:
+                    </label>
                     <select
                         id="durationUnit"
                         name="durationUnit"
                         value={durationUnit}
                         onChange={(e) => setDurationUnit(e.target.value)}
                         required
+                        className="mt-1 block w-full border border-ginaBlack/60 rounded-md shadow-sm p-2"
                     >
                         <option value="H">Hours</option>
                         <option value="D">Days</option>
                     </select>
                 </div>
-                <div>
-                    <label htmlFor="imageLink">Image Link:</label>
+                <div className="col-span-2">
+                    <label
+                        htmlFor="imageLink"
+                        className="block text-sm font-medium text-ginaBlack/80"
+                    >
+                        Image Link:
+                    </label>
                     <input
                         type="text"
                         id="imageLink"
@@ -239,17 +298,25 @@ export default function HotelForm({
                         value={imageLink}
                         onChange={(e) => setImageLink(e.target.value)}
                         required
+                        className="mt-1 block w-full border border-ginaBlack/60 rounded-md shadow-sm p-2"
                     />
                 </div>
-                <div className="flex gap-2 mt-4">
-                    <button type="submit">
-                        {hotelId ? 'Save Hotel' : 'Create Hotel'}
-                    </button>
-                    <button type="button" onClick={resetForm}>
+                <div className="col-start-2 space-x-4 p-4">
+                    <button
+                        type="button"
+                        onClick={resetForm}
+                        className="px-4 py-2 bg-ginaGray text-ginaBlack rounded-xl"
+                    >
                         Cancel
+                    </button>
+                    <button
+                        type="submit"
+                        className="px-4 py-2 bg-ginaOrange text-white rounded-xl"
+                    >
+                        {hotelId ? 'Save Hotel' : 'Create Hotel'}
                     </button>
                 </div>
             </form>
         </div>
-    );
+    );    
 }
