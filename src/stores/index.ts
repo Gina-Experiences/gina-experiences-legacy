@@ -6,6 +6,7 @@ import transportationStore from '@/stores/transportation-store';
 import activityStore from '@/stores/activity-store';
 import packageStore from '@/stores/package-store';
 import productStore from '@/stores/product-store';
+import adminStore from '@/stores/admin-store';
 
 export {
     userStore,
@@ -16,4 +17,5 @@ export {
     activityStore,
     packageStore,
     productStore,
+    adminStore,
 };
