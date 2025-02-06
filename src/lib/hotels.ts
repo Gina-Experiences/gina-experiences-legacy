@@ -14,6 +14,7 @@ export async function createHotel(data: {
     hotel_price: number;
     duration_number: number;
     duration_unit: 'H' | 'D';
+    image_link: string;
 }) {
     try {
         const newHotel = await prisma.hotels.create({
@@ -27,6 +28,7 @@ export async function createHotel(data: {
                 hotel_price: data.hotel_price,
                 duration_number: data.duration_number,
                 duration_unit: data.duration_unit,
+                image_link: data.image_link,
                 number_of_sold_items: 0,
                 favorites: 0,
                 rating: 0.0,
@@ -84,6 +86,7 @@ export async function updateHotel(
         hotel_price: number;
         duration_number: number;
         duration_unit: 'H' | 'D';
+        image_link: string;
         is_active: boolean;
     }>
 ) {
