@@ -8,6 +8,7 @@ declare module 'next-auth' {
         lastname: string;
         role: string;
         is_complete_information: boolean;
+        is_active: boolean;
     }
 
     interface Session {
@@ -23,5 +24,6 @@ declare module 'next-auth/jwt' {
         lastname: string;
         role: string;
         is_complete_information: boolean;
+        is_active: boolean;
     }
 }

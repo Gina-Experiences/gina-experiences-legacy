@@ -51,39 +51,25 @@ export async function createUser(data: {
     image?: string;
 }) {
     try {
-        const {
-            email,
-            role,
-            firstname,
-            lastname,
-            gender,
-            birthdate,
-            phone,
-            address,
-            image,
-        } = data;
-
-        if (email && (await prisma.user.findUnique({ where: { email } }))) {
+        if (data.email && await prisma.user.findUnique({ where: { email: data.email } })) {
             return { error: 'Email already in use' };
         }
-        if (phone && (await prisma.user.findUnique({ where: { phone } }))) {
+
+        if (data.phone && await prisma.user.findUnique({ where: { phone: data.phone } })) {
             return { error: 'Phone number already in use' };
         }
 
         const isComplete =
-            firstname && lastname && gender && birthdate && phone && address;
+            data.firstname &&
+            data.lastname &&
+            data.gender &&
+            data.birthdate &&
+            data.phone &&
+            data.address;
 
         const user = await prisma.user.create({
             data: {
-                email,
-                role,
-                firstname,
-                lastname,
-                gender,
-                birthdate,
-                phone,
-                address,
-                image,
+                ...data,
                 registration_date: new Date(),
                 is_active: true,
                 last_active_date: new Date(),
@@ -116,6 +102,7 @@ export async function deactivateUser(userId: string) {
     }
 }
 
+// Reactivate a user
 export async function reactivateUser(userId: string) {
     try {
         const user = await prisma.user.update({
@@ -135,6 +122,7 @@ export async function reactivateUser(userId: string) {
 export async function getAllUsers() {
     try {
         const users = await prisma.user.findMany({
+            where: { is_active: true },
             select: {
                 id: true,
                 email: true,
@@ -147,7 +135,6 @@ export async function getAllUsers() {
                 registration_date: true,
                 last_active_date: true,
                 image: true,
-                is_active: true,
                 role: true,
                 ltv: true,
                 is_complete_information: true,
@@ -162,7 +149,6 @@ export async function getAllUsers() {
     }
 }
 
-// Update user details
 // Update user details
 export async function updateUser(
     userId: string,
@@ -255,9 +241,7 @@ export async function changeUserRole(userId: string, newRole: Role) {
 
         const updatedUser = await prisma.user.update({
             where: { id: userId },
-            data: {
-                role: newRole,
-            },
+            data: { role: newRole },
         });
 
         return {
@@ -266,10 +250,7 @@ export async function changeUserRole(userId: string, newRole: Role) {
         };
     } catch (error) {
         return {
-            error:
-                error instanceof Error
-                    ? error.message
-                    : 'An unknown error occurred',
+            error: error instanceof Error ? error.message : 'Unknown error',
         };
     }
 }
@@ -280,11 +261,7 @@ export async function getUserFavorites(userId: string) {
         const favorites = await prisma.favorites.findMany({
             where: { userId },
             include: {
-                Events: true,
-                Activities: true,
-                Hotels: true,
-                Packages: true,
-                Transportation: true,
+                Product: true,
             },
         });
 

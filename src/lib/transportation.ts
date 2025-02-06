@@ -2,12 +2,14 @@ import { prisma } from './prisma';
 
 // POST: Create transportation
 export async function createTransportation(data: {
-    service_id: string;
+    product_id: string;       // Updated field name to product_id based on the schema
+    transportation_name: string;
     highlights: string;
-    transportation_date: Date;
-    transportation_duration: string;
+    vehicle_type: string;
+    vehicle_info: string;
+    capacity: number;
     faqs: string;
-    transportation_price: number;
+    vehicle_price: number;
 }) {
     try {
         const newTransportation = await prisma.transportation.create({
@@ -17,6 +19,9 @@ export async function createTransportation(data: {
                 favorites: 0,
                 rating: 0.0,
                 is_active: true,
+                Product: {
+                    connect: { product_id: data.product_id },
+                },
             },
         });
         return { newTransportation };
@@ -25,10 +30,12 @@ export async function createTransportation(data: {
     }
 }
 
+// GET: Retrieve all active transportations
 export async function getAllTransportations() {
     try {
         const transportations = await prisma.transportation.findMany({
             where: { is_active: true },
+            include: { Product: true },  // Include the related Product information if needed
         });
         return { transportations };
     } catch (error: unknown) {
@@ -36,10 +43,12 @@ export async function getAllTransportations() {
     }
 }
 
+// GET: Retrieve a specific transportation by its ID
 export async function getTransportation(transportationId: string) {
     try {
         const transportation = await prisma.transportation.findUnique({
             where: { transportation_id: transportationId },
+            include: { Product: true },  // Include the related Product information if needed
         });
 
         if (!transportation || !transportation.is_active) return { error: 'Transportation not found' };
@@ -49,6 +58,44 @@ export async function getTransportation(transportationId: string) {
     }
 }
 
+// PUT: Update transportation
+export async function updateTransportation(transportationId: string, data: Partial<{
+    product_id: string;
+    transportation_name: string;
+    highlights: string;
+    vehicle_type: string;
+    vehicle_info: string;
+    capacity: number;
+    faqs: string;
+    vehicle_price: number;
+    is_active: boolean;
+}>) {
+    try {
+        // Check if the transportation exists
+        const existingTransportation = await prisma.transportation.findUnique({
+            where: { transportation_id: transportationId },
+        });
+
+        if (!existingTransportation) return { error: 'Transportation not found' };
+
+        // Perform the update
+        const updatedTransportation = await prisma.transportation.update({
+            where: { transportation_id: transportationId },
+            data: {
+                ...data,
+                Product: data.product_id
+                    ? { connect: { product_id: data.product_id } }
+                    : undefined, // Connect a new product if provided
+            },
+        });
+
+        return { updatedTransportation };
+    } catch (error: unknown) {
+        return handleError(error);
+    }
+}
+
+// DELETE: Soft delete a transportation by setting is_active to false
 export async function deleteTransportation(transportationId: string) {
     try {
         await prisma.transportation.update({

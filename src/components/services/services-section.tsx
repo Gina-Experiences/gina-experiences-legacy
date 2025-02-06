@@ -19,7 +19,7 @@ const servicesProps = [
     },
     {
         flexDir: 'flex-row',
-        serviceType: 'Transport',
+        serviceType: 'Transportation',
         img: '/images/services/sections/transport.png',
         description: 'With flexible choices tailored to your schedule and needs, our transportation ensures a smooth experience, allowing you to focus on exploring and enjoying your adventure without the hassle.',
     },
@@ -56,9 +56,12 @@ export default function ServicesSection() {
                     </div>
                     <div className="flex flex-col lg:w-1/2 items-center text-center lg:text-start mx-12 my-6 space-y-4">
                         <div className="hidden md:flex flex-col">
-                            {serviceData.slice(0, 2).map((exp) => (
-                                <ServiceSectionCard key={exp.id} service={exp} />
-                            ))}
+                            {serviceData
+                                .filter((exp) => exp.type === service.serviceType)
+                                .slice(0, 2)
+                                .map((exp) => (
+                                    <ServiceSectionCard key={exp.id} service={exp} />
+                                ))}
                         </div>
                         <button
                             onClick={() => router.push(`/services/services-list`)}

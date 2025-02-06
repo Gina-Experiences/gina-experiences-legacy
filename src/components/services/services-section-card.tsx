@@ -12,18 +12,18 @@ export default function ServiceSectionCard({ service }: ServiceCardProps) {
     const router = useRouter();
 
     const handleBookNowClick = () => {
-        router.push(`/experiences/${service.id}`);
+        router.push(`/services/services-list/${service.id}`);
     };
 
     return (
         <div className="flex flex-col items-center lg:flex-row bg-white rounded-3xl shadow-xl overflow-hidden my-4">
             <Image
-            src={service.image}
-            alt={service.title}
-            quality={100}
-            width={500}
-            height={500}
-            className="rounded-3xl h-auto lg:w-1/2 p-4"
+                src={service.image}
+                alt={service.title}
+                quality={100}
+                width={500}
+                height={500}
+                className="rounded-3xl h-auto lg:w-1/2 p-4"
             />
             <div className="w-full p-4">
                 <h3 className="text-lg font-semibold">{service.title}</h3>

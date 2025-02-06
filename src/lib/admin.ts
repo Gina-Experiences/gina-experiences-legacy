@@ -1,62 +1,99 @@
-import { prisma } from './prisma';
+import { prisma } from "./prisma";
 
-// GET: Total LTV (Lifetime Value) of all users
-export async function getTotalLTV() {
+export async function getAnalytics() {
   try {
-    const totalLTV = await prisma.user.aggregate({
+    // Step 1: Aggregate Total LTV
+    const totalLTVResult = await prisma.user.aggregate({
       _sum: {
         ltv: true,
       },
     });
+    const totalLTV = totalLTVResult._sum.ltv || 0;
 
-    return { totalLTV: totalLTV._sum.ltv || 0 }; // Return 0 if no users
-  } catch (error: unknown) {
+    // Step 2: Aggregate Total Items Sold across all categories
+    const productSales = await prisma.product.findMany({
+      select: {
+        Packages: { select: { number_of_sold_items: true } },
+        Activities: { select: { number_of_sold_items: true } },
+        Events: { select: { number_of_sold_items: true } },
+        Hotels: { select: { number_of_sold_items: true } },
+        Transportation: { select: { number_of_sold_items: true } },
+      },
+    });
+
+    const totalSold = productSales.reduce((sum, product) => {
+      return (
+        sum +
+        (product.Packages?.number_of_sold_items || 0) +
+        (product.Activities?.number_of_sold_items || 0) +
+        (product.Events?.number_of_sold_items || 0) +
+        (product.Hotels?.number_of_sold_items || 0) +
+        (product.Transportation?.number_of_sold_items || 0)
+      );
+    }, 0);
+
+    // Step 3: Count total users
+    const totalUsers = await prisma.user.count();
+
+    // Step 4: Count total users who signed up this month
+    const firstDayOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+    const totalUsersSignUpThisMonth = await prisma.user.count({
+      where: {
+        registration_date: {
+          gte: firstDayOfMonth,
+        },
+      },
+    });
+
+    // Step 5: Aggregate total sales per month
+    const totalSalesPerMonth = await prisma.transactions.groupBy({
+      by: ['start_date'],
+      _sum: {
+        total_Amount: true,
+      },
+      where: {
+        transaction_status: 'completed',
+      },
+    });
+
+    // Step 6: Count completed and failed bookings
+    const completedBookings = await prisma.transactions.count({
+      where: {
+        transaction_status: 'completed',
+      },
+    });
+
+    const failedBookings = await prisma.transactions.count({
+      where: {
+        transaction_status: 'failed',
+      },
+    });
+
+    // Step 7: Count total bookings
+    const totalBookings = await prisma.transactions.count();
+
+    // Step 8: Count total bookings per month
+    const totalBookingsPerMonth = await prisma.transactions.groupBy({
+      by: ['start_date'],
+      _count: {
+        transaction_id: true,
+      },
+    });
+
     return {
-      error: error instanceof Error ? error.message : 'Unknown error',
+      totalLTV,
+      totalSold,
+      totalUsers,
+      totalUsersSignUpThisMonth,
+      totalSalesPerMonth,
+      completedBookings,
+      failedBookings,
+      totalBookings,
+      totalBookingsPerMonth,
     };
-  }
-}
-
-// GET: Total items sold across all services
-export async function getTotalSold() {
-  try {
-    // Aggregate sold items across all relevant tables
-    const [
-      activitiesSold,
-      eventsSold,
-      hotelsSold,
-      packagesSold,
-      transportationSold,
-    ] = await Promise.all([
-      prisma.activities.aggregate({
-        _sum: { number_of_sold_items: true },
-      }),
-      prisma.events.aggregate({
-        _sum: { number_of_sold_items: true },
-      }),
-      prisma.hotels.aggregate({
-        _sum: { number_of_sold_items: true },
-      }),
-      prisma.packages.aggregate({
-        _sum: { number_of_sold_items: true },
-      }),
-      prisma.transportation.aggregate({
-        _sum: { number_of_sold_items: true },
-      }),
-    ]);
-
-    // Sum up totals from all tables
-    const totalSold =
-      (activitiesSold._sum.number_of_sold_items || 0) +
-      (eventsSold._sum.number_of_sold_items || 0) +
-      (hotelsSold._sum.number_of_sold_items || 0) +
-      (packagesSold._sum.number_of_sold_items || 0) +
-      (transportationSold._sum.number_of_sold_items || 0);
-
-    return { totalSold };
   } catch (error: unknown) {
     return {
-      error: error instanceof Error ? error.message : 'Unknown error',
+      error: error instanceof Error ? error.message : "Unknown error",
     };
   }
 }

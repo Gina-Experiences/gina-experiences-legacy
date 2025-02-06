@@ -1,14 +1,14 @@
-import { prisma } from './prisma';
+import { prisma } from "./prisma";
 
 // POST: Create activity
 export async function createActivity(data: {
-    service_id: string;
+    product_id: string;
+    activity_name: string;
     highlights: string;
-    what_you_get: string;
     what_to_expect: string;
     best_time_to_visit: string;
-    activity_date: Date;
-    activity_duration: string;
+    duration_number: number;
+    duration_unit: "H" | "D";
     faqs: string;
     activity_price: number;
 }) {
@@ -20,6 +20,9 @@ export async function createActivity(data: {
                 favorites: 0,
                 rating: 0.0,
                 is_active: true,
+                Product: {
+                    connect: { product_id: data.product_id },
+                },
             },
         });
         return { newActivity };
@@ -28,11 +31,12 @@ export async function createActivity(data: {
     }
 }
 
-// GET: Get all activities
+// GET: Get all active activities
 export async function getAllActivities() {
     try {
         const activities = await prisma.activities.findMany({
             where: { is_active: true },
+            include: { Product: true },
         });
         return { activities };
     } catch (error: unknown) {
@@ -45,16 +49,55 @@ export async function getActivity(activityId: string) {
     try {
         const activity = await prisma.activities.findUnique({
             where: { activity_id: activityId },
+            include: { Product: true },
         });
 
-        if (!activity || !activity.is_active) return { error: 'Activity not found' };
+        if (!activity || !activity.is_active) return { error: "Activity not found" };
         return { activity };
     } catch (error: unknown) {
         return handleError(error);
     }
 }
 
-// DELETE: Delete activity
+// PUT: Update activity
+export async function updateActivity(activityId: string, data: Partial<{
+    product_id: string;
+    activity_name: string;
+    highlights: string;
+    what_to_expect: string;
+    best_time_to_visit: string;
+    duration_number: number;
+    duration_unit: "H" | "D";
+    faqs: string;
+    activity_price: number;
+    is_active: boolean;
+}>) {
+    try {
+        // Check if the activity exists
+        const existingActivity = await prisma.activities.findUnique({
+            where: { activity_id: activityId },
+        });
+
+        if (!existingActivity) return { error: "Activity not found" };
+
+        // Perform the update
+        const updatedActivity = await prisma.activities.update({
+            where: { activity_id: activityId },
+            data: {
+                ...data,
+                Product: data.product_id
+                    ? { connect: { product_id: data.product_id } }
+                    : undefined, // Only connect a new product if provided
+            },
+        });
+
+        return { updatedActivity };
+    } catch (error: unknown) {
+        return handleError(error);
+    }
+}
+
+// DELETE: Soft delete activity
 export async function deleteActivity(activityId: string) {
     try {
         await prisma.activities.update({
@@ -62,7 +105,7 @@ export async function deleteActivity(activityId: string) {
             data: { is_active: false },
         });
 
-        return { message: 'Activity deleted (soft delete) successfully' };
+        return { message: "Activity deleted (soft delete) successfully" };
     } catch (error: unknown) {
         return handleError(error);
     }
@@ -73,6 +116,5 @@ function handleError(error: unknown) {
     if (error instanceof Error) {
         return { error: error.message };
     }
-    return { error: 'An unknown error occurred' };
+    return { error: "An unknown error occurred" };
 }
-
