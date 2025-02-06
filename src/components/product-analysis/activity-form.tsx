@@ -13,6 +13,7 @@ export default function ActivityForm() {
     const [durationUnit, setDurationUnit] = useState('H');
     const [faqs, setFaqs] = useState('');
     const [activityPrice, setActivityPrice] = useState(0);
+    const [imageLink, setImageLink] = useState('');
 
     const handleSubmit = async (
         e: React.FormEvent<HTMLFormElement>
@@ -43,7 +44,8 @@ export default function ActivityForm() {
                         durationNumber,
                         durationUnit as 'H' | 'D',
                         faqs,
-                        activityPrice
+                        activityPrice,
+                        imageLink
                     );
 
                 console.log('Activity created successfully!');
@@ -56,6 +58,7 @@ export default function ActivityForm() {
                 setDurationUnit('H');
                 setFaqs('');
                 setActivityPrice(0);
+                setImageLink('');
             }
         } catch (error) {
             console.error('Error creating activity:', error);
@@ -154,6 +157,17 @@ export default function ActivityForm() {
                         onChange={(e) =>
                             setActivityPrice(Number(e.target.value))
                         }
+                        required
+                    />
+                </div>
+                <div>
+                    <label htmlFor="imageLink">Image Link:</label>
+                    <input
+                        type="text"
+                        id="imageLink"
+                        name="imageLink"
+                        value={imageLink}
+                        onChange={(e) => setImageLink(e.target.value)}
                         required
                     />
                 </div>

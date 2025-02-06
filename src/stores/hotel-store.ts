@@ -33,7 +33,20 @@ interface HotelStore {
     ) => Promise<void>;
     updateHotel: (
         hotelId: string,
-        data: Partial<HotelUpdateData>
+        data: {
+            product_id?: string;
+            hotel_name?: string;
+            room_type?: string;
+            what_to_expect?: string;
+            amenities?: string;
+            highlights?: string;
+            faqs?: string;
+            hotel_price?: number;
+            duration_number?: number;
+            duration_unit?: 'H' | 'D';
+            image_link?: string;
+            is_active?: boolean;
+        }
     ) => Promise<void>;
     removeHotel: (hotelId: string) => Promise<void>;
     recoverHotel: (hotelId: string) => Promise<void>;
@@ -148,13 +161,16 @@ const hotelStore = create<HotelStore>()(
             },
 
             // Update hotel details
-            updateHotel: async (hotelId: string, data: HotelUpdateData) => {
+            updateHotel: async (hotelId, data) => {
                 set({ isLoading: true, error: null });
                 try {
                     const { updatedHotel } = await updateHotel(hotelId, data);
+                    if (!updatedHotel) {
+                        throw new Error('Hotel update failed on the server.');
+                    }
                     console.log('[Zustand] Hotel updated:', updatedHotel);
                     set({
-                        hotels: set().hotels?.map((hotel) =>
+                        hotels: get().hotels?.map((hotel) =>
                             hotel.hotel_id === hotelId ? updatedHotel : hotel
                         ),
                         isLoading: false,
@@ -175,12 +191,10 @@ const hotelStore = create<HotelStore>()(
             removeHotel: async (hotelId: string) => {
                 set({ isLoading: true, error: null });
                 try {
-                    await deleteHotel(hotelId);
-                    console.log('[Zustand] Hotel soft deleted');
+                    const { message, hotel } = await deleteHotel(hotelId);
+                    console.log(message, hotel);
                     set({
-                        hotels: set().hotels?.filter(
-                            (hotel) => hotel.hotel_id !== hotelId
-                        ),
+                        selectedHotel: hotel,
                         isLoading: false,
                     });
                 } catch (error) {
@@ -198,18 +212,11 @@ const hotelStore = create<HotelStore>()(
             recoverHotel: async (hotelId: string) => {
                 set({ isLoading: true, error: null });
                 try {
-                    await recoverHotel(hotelId);
-                    console.log('[Zustand] Hotel recovered');
-                    set({
-                        hotels: set().hotels?.map((hotel) =>
-                            hotel.hotel_id === hotelId
-                                ? { ...hotel, is_active: true }
-                                : hotel
-                        ),
-                        isLoading: false,
-                    });
+                    const { message, hotel } = await recoverHotel(hotelId);
+                    console.log(message, hotel);
+                    set({ hotel, isLoading: false });
                 } catch (error) {
-                    console.error('[Zustand] Error recovering hotel:', error);
+                    console.error('[Zustand] Recover Hotel Error:', error);
                     set({
                         error:
                             error instanceof Error

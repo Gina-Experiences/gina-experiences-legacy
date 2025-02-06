@@ -29,8 +29,18 @@ interface TransportationStore {
     ) => Promise<void>;
     updateTransportation: (
         transportationId: string,
-        data: Partial<TransportationUpdateData>
+        data: {
+            product_id?: string;
+            transportation_name?: string;
+            vehicle_type?: string;
+            vehicle_info?: string;
+            capacity?: number;
+            vehicle_price?: number;
+            image_link?: string;
+            is_active?: boolean;
+        }
     ) => Promise<void>;
+
     removeTransportation: (transportationId: string) => Promise<void>;
     recoverTransportation: (transportationId: string) => Promise<void>;
     clearCache: () => void;
@@ -157,33 +167,26 @@ const transportationStore = create<TransportationStore>()(
             },
 
             // Update transportation details
-            updateTransportation: async (
-                transportationId: string,
-                data: TransportationUpdateData
-            ) => {
+            updateTransportation: async (transportationId, data) => {
                 set({ isLoading: true, error: null });
                 try {
                     const { updatedTransportation } =
                         await updateTransportation(transportationId, data);
+                    if (!updatedTransportation) {
+                        throw new Error(
+                            'Transportation update failed on the server.'
+                        );
+                    }
                     console.log(
-                        '[Zustand] Transportation updated:',
+                        'Updated Transportation:',
                         updatedTransportation
                     );
                     set({
-                        transportations: set().transportations?.map(
-                            (transportation) =>
-                                transportation.transportation_id ===
-                                transportationId
-                                    ? updatedTransportation
-                                    : transportation
-                        ),
+                        selectedTransportation: updatedTransportation,
                         isLoading: false,
                     });
                 } catch (error) {
-                    console.error(
-                        '[Zustand] Error updating transportation:',
-                        error
-                    );
+                    console.error('Update Transportation Error:', error);
                     set({
                         error:
                             error instanceof Error
@@ -198,26 +201,28 @@ const transportationStore = create<TransportationStore>()(
             removeTransportation: async (transportationId: string) => {
                 set({ isLoading: true, error: null });
                 try {
-                    await deleteTransportation(transportationId);
-                    console.log('[Zustand] Transportation soft deleted');
-                    set({
-                        transportations: set().transportations?.filter(
-                            (transportation) =>
-                                transportation.transportation_id !==
-                                transportationId
-                        ),
-                        isLoading: false,
-                    });
+                    const { message, transportation } =
+                        await deleteTransportation(transportationId);
+                    console.log(message, transportation);
+                    set({ transportation, isLoading: false });
+
+                    if (transportation?.is_active === false) {
+                        set({
+                            session: null,
+                            transportation: null,
+                            isAdmin: false,
+                        });
+                    }
                 } catch (error) {
                     console.error(
-                        '[Zustand] Error deleting transportation:',
+                        '[Zustand] Deactivate Transportation Error:',
                         error
                     );
                     set({
                         error:
                             error instanceof Error
                                 ? error.message
-                                : 'Failed to delete transportation!',
+                                : 'Failed to deactivate transportation!',
                         isLoading: false,
                     });
                 }
@@ -226,21 +231,13 @@ const transportationStore = create<TransportationStore>()(
             recoverTransportation: async (transportationId: string) => {
                 set({ isLoading: true, error: null });
                 try {
-                    await recoverTransportation(transportationId);
-                    console.log('[Zustand] Transportation recovered');
-                    set({
-                        transportations: set().transportations?.map(
-                            (transportation) =>
-                                transportation.transportation_id ===
-                                transportationId
-                                    ? { ...transportation, is_active: true }
-                                    : transportation
-                        ),
-                        isLoading: false,
-                    });
+                    const { message, transportation } =
+                        await recoverTransportation(transportationId);
+                    console.log(message, transportation);
+                    set({ transportation, isLoading: false });
                 } catch (error) {
                     console.error(
-                        '[Zustand] Error recovering transportation:',
+                        '[Zustand] Recover Transportation Error:',
                         error
                     );
                     set({

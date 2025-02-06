@@ -32,7 +32,19 @@ interface ActivityStore {
     ) => Promise<void>;
     updateActivity: (
         activityId: string,
-        data: Partial<ActivityUpdateData>
+        data: {
+            product_id?: string;
+            activity_name?: string;
+            highlights?: string;
+            what_to_expect?: string;
+            best_time_to_visit?: string;
+            duration_number?: number;
+            duration_unit?: 'H' | 'D';
+            faqs?: string;
+            activity_price?: number;
+            image_link?: string;
+            is_active?: boolean;
+        }
     ) => Promise<void>;
     removeActivity: (activityId: string) => Promise<void>;
     recoverActivity: (activityId: string) => Promise<void>;
@@ -150,23 +162,21 @@ const activityStore = create<ActivityStore>()(
             },
 
             // Update activity details
-            updateActivity: async (
-                activityId: string,
-                data: ActivityUpdateData
-            ) => {
+            updateActivity: async (activityId, data) => {
                 set({ isLoading: true, error: null });
                 try {
                     const { updatedActivity } = await updateActivity(
                         activityId,
                         data
                     );
+                    if (!updatedActivity) {
+                        throw new Error(
+                            'Activity update failed on the server.'
+                        );
+                    }
                     console.log('[Zustand] Activity updated:', updatedActivity);
                     set({
-                        activities: get().activities?.map((activity) =>
-                            activity.activity_id === activityId
-                                ? updatedActivity
-                                : activity
-                        ),
+                        selectedActivity: updatedActivity,
                         isLoading: false,
                     });
                 } catch (error) {
@@ -185,11 +195,12 @@ const activityStore = create<ActivityStore>()(
             removeActivity: async (activityId: string) => {
                 set({ isLoading: true, error: null });
                 try {
-                    await deleteActivity(activityId);
-                    console.log('[Zustand] Activity soft deleted');
+                    const { message, activity } =
+                        await deleteActivity(activityId);
+                    console.log(message, activity);
                     set({
-                        activities: set().activities?.filter(
-                            (activity) => activity.activity_id !== activityId
+                        activities: get().activities?.filter(
+                            (a) => a.activity_id !== activityId
                         ),
                         isLoading: false,
                     });
@@ -208,21 +219,12 @@ const activityStore = create<ActivityStore>()(
             recoverActivity: async (activityId: string) => {
                 set({ isLoading: true, error: null });
                 try {
-                    await recoverActivity(activityId);
-                    console.log('[Zustand] Activity recovered');
-                    set({
-                        activities: set().activities?.map((activity) =>
-                            activity.activity_id === activityId
-                                ? { ...activity, is_active: true }
-                                : activity
-                        ),
-                        isLoading: false,
-                    });
+                    const { message, activity } =
+                        await recoverActivity(activityId);
+                    console.log(message, activity);
+                    set({ activity, isLoading: false });
                 } catch (error) {
-                    console.error(
-                        '[Zustand] Error recovering activity:',
-                        error
-                    );
+                    console.error('[Zustand] Recover Activity Error:', error);
                     set({
                         error:
                             error instanceof Error
