@@ -59,6 +59,44 @@ export async function getActivity(activityId: string) {
     }
 }
 
+// PUT: Update activity
+export async function updateActivity(activityId: string, data: Partial<{
+    product_id: string;
+    activity_name: string;
+    highlights: string;
+    what_to_expect: string;
+    best_time_to_visit: string;
+    duration_number: number;
+    duration_unit: "H" | "D";
+    faqs: string;
+    activity_price: number;
+    is_active: boolean;
+}>) {
+    try {
+        // Check if the activity exists
+        const existingActivity = await prisma.activities.findUnique({
+            where: { activity_id: activityId },
+        });
+
+        if (!existingActivity) return { error: "Activity not found" };
+
+        // Perform the update
+        const updatedActivity = await prisma.activities.update({
+            where: { activity_id: activityId },
+            data: {
+                ...data,
+                Product: data.product_id
+                    ? { connect: { product_id: data.product_id } }
+                    : undefined, // Only connect a new product if provided
+            },
+        });
+
+        return { updatedActivity };
+    } catch (error: unknown) {
+        return handleError(error);
+    }
+}
+
 // DELETE: Soft delete activity
 export async function deleteActivity(activityId: string) {
     try {

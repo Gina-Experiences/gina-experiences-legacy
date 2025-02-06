@@ -64,6 +64,45 @@ export async function getEvent(eventId: string) {
     }
 }
 
+// PUT: Update event
+export async function updateEvent(eventId: string, data: Partial<{
+    product_id: string;
+    event_name: string;
+    highlights: string;
+    what_to_expect: string;
+    best_time_to_visit: string;
+    faqs: string;
+    event_price: number;
+    duration_number: number;
+    duration_unit: "H" | "D";
+    location: string;
+    is_active: boolean;
+}>) {
+    try {
+        // Check if the event exists
+        const existingEvent = await prisma.events.findUnique({
+            where: { event_id: eventId },
+        });
+
+        if (!existingEvent) return { error: "Event not found" };
+
+        // Perform the update
+        const updatedEvent = await prisma.events.update({
+            where: { event_id: eventId },
+            data: {
+                ...data,
+                Product: data.product_id
+                    ? { connect: { product_id: data.product_id } }
+                    : undefined, // Connect a new product if provided
+            },
+        });
+
+        return { updatedEvent };
+    } catch (error: unknown) {
+        return handleError(error);
+    }
+}
+
 export async function deleteEvent(eventId: string) {
     try {
         await prisma.events.update({

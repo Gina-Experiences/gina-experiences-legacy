@@ -59,6 +59,44 @@ export async function getPackage(packageId: string) {
     }
 }
 
+// PUT: Update package
+export async function updatePackage(packageId: string, data: Partial<{
+    product_id: string;
+    package_name: string;
+    highlights: string;
+    what_to_expect: string;
+    best_time_to_visit: string;
+    duration_number: number;
+    duration_unit: 'H' | 'D';
+    faqs: string;
+    package_price: number;
+    is_active: boolean;
+}>) {
+    try {
+        // Check if the package exists
+        const existingPackage = await prisma.packages.findUnique({
+            where: { package_id: packageId },
+        });
+
+        if (!existingPackage) return { error: 'Package not found' };
+
+        // Perform the update
+        const updatedPackage = await prisma.packages.update({
+            where: { package_id: packageId },
+            data: {
+                ...data,
+                Product: data.product_id
+                    ? { connect: { product_id: data.product_id } }
+                    : undefined, // Only connect a new product if provided
+            },
+        });
+
+        return { updatedPackage };
+    } catch (error: unknown) {
+        return handleError(error);
+    }
+}
+
 // DELETE: Soft delete a package by setting is_active to false
 export async function deletePackage(packageId: string) {
     try {
