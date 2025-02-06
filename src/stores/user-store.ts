@@ -128,7 +128,7 @@ const userStore = create<UserStore>()(
                 set({ isLoading: true, error: null });
                 try {
                     const { users } = await getAllUsers();
-                    console.log('[Zustand] All Users:', users);
+                    console.log('[Zustand] All Users:', users); // Check if users are fetched
                     set({ users, isLoading: false });
                 } catch (error) {
                     console.error('[Zustand] Error fetching all users:', error);

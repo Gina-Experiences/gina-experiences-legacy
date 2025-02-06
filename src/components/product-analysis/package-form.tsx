@@ -1,9 +1,19 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { packageStore, productStore } from '@/stores';
 
-export default function PackageForm() {
+interface PackageFormProps {
+    packageId?: string; // Optional ID for editing
+    onCancel: () => void; // Callback for cancel action
+    onSuccess: () => void; // Callback for successful operation
+}
+
+export default function PackageForm({
+    packageId,
+    onCancel,
+    onSuccess,
+}: PackageFormProps) {
     const productType = 'Packages';
     const [packageName, setPackageName] = useState('');
     const [highlights, setHighlights] = useState('');
@@ -13,6 +23,28 @@ export default function PackageForm() {
     const [durationUnit, setDurationUnit] = useState('H');
     const [faqs, setFaqs] = useState('');
     const [packagePrice, setPackagePrice] = useState(0);
+    const [imageLink, setImageLink] = useState('');
+
+    const { fetchPackage, updatePackage, addPackage } = packageStore();
+
+    useEffect(() => {
+        if (packageId) {
+            fetchPackage(packageId).then(() => {
+                const selectedPackage = packageStore.getState().selectedPackage;
+                if (selectedPackage) {
+                    setPackageName(selectedPackage.package_name);
+                    setHighlights(selectedPackage.highlights);
+                    setWhatToExpect(selectedPackage.what_to_expect);
+                    setBestTimeToVisit(selectedPackage.best_time_to_visit);
+                    setDurationNumber(selectedPackage.duration_number);
+                    setDurationUnit(selectedPackage.duration_unit);
+                    setFaqs(selectedPackage.faqs);
+                    setPackagePrice(selectedPackage.package_price);
+                    setImageLink(selectedPackage.image_link);
+                }
+            });
+        }
+    }, [packageId, fetchPackage]);
 
     const handleSubmit = async (
         e: React.FormEvent<HTMLFormElement>
@@ -20,52 +52,80 @@ export default function PackageForm() {
         e.preventDefault();
 
         const confirmed = window.confirm(
-            'Are you sure you want to create this package?'
+            packageId
+                ? 'Are you sure you want to update this package?'
+                : 'Are you sure you want to create this package?'
         );
         if (!confirmed) {
             return;
         }
 
         try {
-            const newProduct: { product_id: string } = await productStore
-                .getState()
-                .addProduct(productType);
+            if (packageId) {
+                // Update existing package
+                await updatePackage(packageId, {
+                    package_name: packageName,
+                    highlights: highlights,
+                    what_to_expect: whatToExpect,
+                    best_time_to_visit: bestTimeToVisit,
+                    duration_number: durationNumber,
+                    duration_unit: durationUnit as 'H' | 'D',
+                    faqs: faqs,
+                    package_price: packagePrice,
+                    image_link: imageLink,
+                });
 
-            if (newProduct) {
-                await packageStore
+                console.log('Package updated successfully!');
+                onSuccess(); // Call onSuccess after successful update
+            } else {
+                // Create new package
+                const newProduct: { product_id: string } = await productStore
                     .getState()
-                    .addPackage(
-                        newProduct.product_id,
-                        packageName,
-                        highlights,
-                        whatToExpect,
-                        bestTimeToVisit,
-                        durationNumber,
-                        durationUnit as 'H' | 'D',
-                        faqs,
-                        packagePrice
-                    );
+                    .addProduct(productType);
 
-                console.log('Package created successfully!');
+                if (newProduct) {
+                    await packageStore
+                        .getState()
+                        .addPackage(
+                            newProduct.product_id,
+                            packageName,
+                            highlights,
+                            whatToExpect,
+                            bestTimeToVisit,
+                            durationNumber,
+                            durationUnit as 'H' | 'D',
+                            faqs,
+                            packagePrice,
+                            imageLink
+                        );
 
-                // Reset form fields
-                setPackageName('');
-                setHighlights('');
-                setWhatToExpect('');
-                setBestTimeToVisit('');
-                setDurationNumber(1);
-                setDurationUnit('H');
-                setFaqs('');
-                setPackagePrice(0);
+                    console.log('Package created successfully!');
+                    onSuccess(); // Call onSuccess after successful creation
+                }
             }
+
+            resetForm();
         } catch (error) {
-            console.error('Error creating package:', error);
+            console.error('Error processing package:', error);
         }
+    };
+
+    const resetForm = () => {
+        setPackageName('');
+        setHighlights('');
+        setWhatToExpect('');
+        setBestTimeToVisit('');
+        setDurationNumber(1);
+        setDurationUnit('H');
+        setFaqs('');
+        setPackagePrice(0);
+        setImageLink('');
+        onCancel(); // Call the cancel callback to close the form/modal
     };
 
     return (
         <div className="w-full min-h-[500px]">
-            <h2>Package Form</h2>
+            <h2>{packageId ? 'Edit Package' : 'Package Form'}</h2>
             <form onSubmit={handleSubmit}>
                 <div>
                     <label htmlFor="packageName">Package Name:</label>
@@ -158,7 +218,25 @@ export default function PackageForm() {
                         required
                     />
                 </div>
-                <button type="submit">Create Package</button>
+                <div>
+                    <label htmlFor="imageLink">Image Link:</label>
+                    <input
+                        type="text"
+                        id="imageLink"
+                        name="imageLink"
+                        value={imageLink}
+                        onChange={(e) => setImageLink(e.target.value)}
+                        required
+                    />
+                </div>
+                <div className="flex gap-2 mt-4">
+                    <button type="submit">
+                        {packageId ? 'Save Package' : 'Create Package'}
+                    </button>
+                    <button type="button" onClick={resetForm}>
+                        Cancel
+                    </button>
+                </div>
             </form>
         </div>
     );

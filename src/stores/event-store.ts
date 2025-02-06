@@ -33,7 +33,20 @@ interface EventStore {
     ) => Promise<void>;
     updateEvent: (
         eventId: string,
-        data: Partial<EventUpdateData>
+        data: {
+            product_id?: string;
+            event_name?: string;
+            highlights?: string;
+            what_to_expect?: string;
+            best_time_to_visit?: string;
+            location?: string;
+            duration_number?: number;
+            duration_unit?: 'H' | 'D';
+            faqs?: string;
+            event_price?: number;
+            image_link?: string;
+            is_active?: boolean;
+        }
     ) => Promise<void>;
     removeEvent: (eventId: string) => Promise<void>;
     recoverEvent: (eventId: string) => Promise<void>;
@@ -148,15 +161,16 @@ const eventStore = create<EventStore>()(
             },
 
             // Update event details
-            updateEvent: async (eventId: string, data: EventUpdateData) => {
+            updateEvent: async (eventId, data) => {
                 set({ isLoading: true, error: null });
                 try {
                     const { updatedEvent } = await updateEvent(eventId, data);
+                    if (!updatedEvent) {
+                        throw new Error('Event update failed on the server.');
+                    }
                     console.log('[Zustand] Event updated:', updatedEvent);
                     set({
-                        events: set().events?.map((event) =>
-                            event.event_id === eventId ? updatedEvent : event
-                        ),
+                        selectedEvent: updatedEvent,
                         isLoading: false,
                     });
                 } catch (error) {
@@ -175,14 +189,9 @@ const eventStore = create<EventStore>()(
             removeEvent: async (eventId: string) => {
                 set({ isLoading: true, error: null });
                 try {
-                    await deleteEvent(eventId);
-                    console.log('[Zustand] Event soft deleted');
-                    set({
-                        events: set().events?.filter(
-                            (event) => event.event_id !== eventId
-                        ),
-                        isLoading: false,
-                    });
+                    const { message, event } = await deleteEvent(eventId);
+                    console.log(message, event);
+                    set({ event, isLoading: false });
                 } catch (error) {
                     console.error('[Zustand] Error deleting event:', error);
                     set({
@@ -198,18 +207,11 @@ const eventStore = create<EventStore>()(
             recoverEvent: async (eventId: string) => {
                 set({ isLoading: true, error: null });
                 try {
-                    await recoverEvent(eventId);
-                    console.log('[Zustand] Event recovered');
-                    set({
-                        events: set().events?.map((event) =>
-                            event.event_id === eventId
-                                ? { ...event, is_active: true }
-                                : event
-                        ),
-                        isLoading: false,
-                    });
+                    const { message, event } = await recoverEvent(eventId);
+                    console.log(message, event);
+                    set({ event, isLoading: false });
                 } catch (error) {
-                    console.error('[Zustand] Error recovering event:', error);
+                    console.error('[Zustand] Recover Event Error:', error);
                     set({
                         error:
                             error instanceof Error

@@ -1,9 +1,19 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { eventStore, productStore } from '@/stores';
 
-export default function EventForm() {
+interface EventFormProps {
+    eventId?: string; // Optional ID for editing
+    onCancel: () => void; // Callback for cancel action
+    onSuccess: () => void; // Callback for successful operation
+}
+
+export default function EventForm({
+    eventId,
+    onCancel,
+    onSuccess,
+}: EventFormProps) {
     const productType = 'Events';
     const [eventName, setEventName] = useState('');
     const [highlights, setHighlights] = useState('');
@@ -14,6 +24,29 @@ export default function EventForm() {
     const [durationUnit, setDurationUnit] = useState('H');
     const [faqs, setFaqs] = useState('');
     const [eventPrice, setEventPrice] = useState(0);
+    const [imageLink, setImageLink] = useState('');
+
+    const { fetchEvent, updateEvent, addEvent } = eventStore();
+
+    useEffect(() => {
+        if (eventId) {
+            fetchEvent(eventId).then(() => {
+                const selectedEvent = eventStore.getState().selectedEvent;
+                if (selectedEvent) {
+                    setEventName(selectedEvent.event_name);
+                    setHighlights(selectedEvent.highlights);
+                    setLocation(selectedEvent.location);
+                    setWhatToExpect(selectedEvent.what_to_expect);
+                    setBestTimeToVisit(selectedEvent.best_time_to_visit);
+                    setDurationNumber(selectedEvent.duration_number);
+                    setDurationUnit(selectedEvent.duration_unit);
+                    setFaqs(selectedEvent.faqs);
+                    setEventPrice(selectedEvent.event_price);
+                    setImageLink(selectedEvent.image_link);
+                }
+            });
+        }
+    }, [eventId, fetchEvent]);
 
     const handleSubmit = async (
         e: React.FormEvent<HTMLFormElement>
@@ -21,12 +54,15 @@ export default function EventForm() {
         e.preventDefault();
 
         const confirmed = window.confirm(
-            'Are you sure you want to create this event?'
+            eventId
+                ? 'Are you sure you want to update this event?'
+                : 'Are you sure you want to create this event?'
         );
         if (!confirmed) {
             return;
         }
 
+        // DITO MYRONE PATULOY
         try {
             const newProduct: { product_id: string } = await productStore
                 .getState()
@@ -45,7 +81,8 @@ export default function EventForm() {
                         durationNumber,
                         durationUnit as 'H' | 'D',
                         faqs,
-                        eventPrice
+                        eventPrice,
+                        imageLink
                     );
 
                 console.log('Event created successfully!');
@@ -60,6 +97,7 @@ export default function EventForm() {
                 setDurationUnit('H');
                 setFaqs('');
                 setEventPrice(0);
+                setImageLink('');
             }
         } catch (error) {
             console.error('Error creating event:', error);
@@ -167,6 +205,17 @@ export default function EventForm() {
                         name="eventPrice"
                         value={eventPrice}
                         onChange={(e) => setEventPrice(Number(e.target.value))}
+                        required
+                    />
+                </div>
+                <div>
+                    <label htmlFor="imageLink">Image Link:</label>
+                    <input
+                        type="text"
+                        id="imageLink"
+                        name="imageLink"
+                        value={imageLink}
+                        onChange={(e) => setImageLink(e.target.value)}
                         required
                     />
                 </div>
