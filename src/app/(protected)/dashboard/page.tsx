@@ -1,28 +1,39 @@
-'use client';
+import { getAnalytics } from '@/lib/admin';
+import { DashboardHero } from '@/components/dashboard';
+import { AnalyticsOverview } from '@/components/analytics/overview';
+import { MonthlyStats } from '@/components/analytics/monthly-stats';
+import { BookingStats } from '@/components/analytics/booking-stats';
+import { RefreshButton } from '@/components/analytics/refresh-button';
 
-import { useEffect } from 'react';
-import { adminStore } from '@/stores';
+export default async function Dashboard() {
+    const analyticsData = await getAnalytics();
 
-export default function AnalyticsDashboard() {
-    const { data, isLoading, error, fetchAnalytics } = adminStore();
-
-    useEffect(() => {
-        fetchAnalytics();
-    }, []);
-
-    if (isLoading) return <div>Loading...</div>;
-    if (error) return <div>Error: {error}</div>;
-    if (!data) return null;
+    if ('error' in analyticsData) {
+        return <div className="text-red-500 text-center mt-8">Error: {analyticsData.error}</div>;
+    }
 
     return (
-        <div>
-            <h1>Analytics Dashboard</h1>
-            <div>
-                <h2>Overview</h2>
-                <p>Total Users: {data.totalUsers}</p>
-                <p>Total LTV: ${data.totalLTV.toFixed(2)}</p>
-                <p>Total Items Sold: {data.totalSold}</p>
-                <p>New Users This Month: {data.totalUsersSignUpThisMonth}</p>
+        <div className="container mx-auto px-4 py-8">
+            <div className="flex justify-between items-center mb-8">
+            </div>
+            <div className="grid gap-6 mt-8">
+                <AnalyticsOverview 
+                    totalLTV={analyticsData.totalLTV}
+                    totalSold={analyticsData.totalSold}
+                    totalUsers={analyticsData.totalUsers}
+                    newUsersThisMonth={analyticsData.totalUsersSignUpThisMonth}
+                />
+                {/* <div className="grid md:grid-cols-2 gap-6">
+                    <MonthlyStats 
+                        salesData={analyticsData.totalSalesPerMonth}
+                        bookingsData={analyticsData.totalBookingsPerMonth}
+                    />
+                    <BookingStats 
+                        completedBookings={analyticsData.completedBookings}
+                        failedBookings={analyticsData.failedBookings}
+                        totalBookings={analyticsData.totalBookings}
+                    />
+                </div> */}
             </div>
         </div>
     );
