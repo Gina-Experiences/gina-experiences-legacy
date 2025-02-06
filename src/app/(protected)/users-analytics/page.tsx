@@ -93,13 +93,17 @@ export default function UsersAnalytics() {
 
     return (
         <div className="flex flex-col p-4">
-            <div className="font-semibold text-2xl mb-4 self-center lg:self-start">User Directory</div>
+            <div className="font-semibold text-2xl mb-4 self-center lg:self-start">
+                User Directory
+            </div>
 
             <div className="mb-4">
                 <div className="flex flex-col lg:flex-row lg:space-x-2 space-y-2 lg:space-y-0">
                     <button
                         className={`px-4 py-2 rounded-xl ${
-                            activeTab === 'admin' ? 'bg-ginaYellow text-white font-medium' : 'bg-gray-200'
+                            activeTab === 'admin'
+                                ? 'bg-ginaYellow text-white font-medium'
+                                : 'bg-gray-200'
                         }`}
                         onClick={() => setActiveTab('admin')}
                     >
@@ -107,7 +111,9 @@ export default function UsersAnalytics() {
                     </button>
                     <button
                         className={`px-4 py-2 rounded-xl ${
-                            activeTab === 'customer' ? 'bg-ginaYellow text-white font-medium' : 'bg-gray-200'
+                            activeTab === 'customer'
+                                ? 'bg-ginaYellow text-white font-medium'
+                                : 'bg-gray-200'
                         }`}
                         onClick={() => setActiveTab('customer')}
                     >
@@ -115,7 +121,9 @@ export default function UsersAnalytics() {
                     </button>
                     <button
                         className={`px-4 py-2 rounded-xl ${
-                            activeTab === 'deactivated' ? 'bg-ginaYellow text-white font-medium' : 'bg-gray-200'
+                            activeTab === 'deactivated'
+                                ? 'bg-ginaYellow text-white font-medium'
+                                : 'bg-gray-200'
                         }`}
                         onClick={() => setActiveTab('deactivated')}
                     >
@@ -142,20 +150,35 @@ export default function UsersAnalytics() {
                     {activeTab === 'admin'
                         ? 'Admins'
                         : activeTab === 'customer'
-                        ? 'Customers'
-                        : 'Deactivated Users'}
+                          ? 'Customers'
+                          : 'Deactivated Users'}
                 </h2>
                 <ul className="space-y-2 ">
                     {filteredUsers?.map((user) => (
-                        <li key={user.id} className="p-4 flex flex-col lg:flex-row  justify-between items-center">
-                            <div className="flex flex-col lg:flex-row items-center  space-x-4">
-                                <img
-                                    src={user.image}
-                                    alt={`${user.firstname} ${user.lastname}`}
-                                    className="w-10 h-10 rounded-full"
-                                />
-                                <div>
-                                    {user.firstname} {user.lastname} ({user.role})
+                        <li
+                            key={user.id}
+                            className="p-4 flex flex-col lg:flex-row  justify-between items-center"
+                        >
+                            <div className="flex flex-col items-center space-x-4">
+                                <div className="flex flex-col lg:flex-row items-start space-x-4">
+                                    <img
+                                        src={user.image}
+                                        alt={`${user.firstname} ${user.lastname}`}
+                                        className="w-10 h-10 rounded-full"
+                                    />
+                                    <div className="flex flex-col items-start gap-2">
+                                        <div>
+                                            {user.firstname} {user.lastname} (
+                                            {user.role})
+                                        </div>
+                                        <div>
+                                            <span className="font-medium">
+                                                LTV:
+                                            </span>{' '}
+                                            <span className="text-sm">₱</span>
+                                            {user.ltv}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div className="flex flex-col lg:flex-row space-x-0 space-y-2 lg:space-x-2 lg:space-y-0 p-2">
@@ -169,14 +192,18 @@ export default function UsersAnalytics() {
                                         }
                                     }}
                                 >
-                                    {selectedUser?.id === user.id ? 'Hide Details' : 'View Details'}
+                                    {selectedUser?.id === user.id
+                                        ? 'Hide Details'
+                                        : 'View Details'}
                                 </button>
                                 <button
                                     className="px-4 py-2 bg-ginaGreen text-ginaWhite rounded-xl"
                                     onClick={() =>
                                         handleChangeRole(
                                             user.id,
-                                            user.role === 'admin' ? 'customer' : 'admin'
+                                            user.role === 'admin'
+                                                ? 'customer'
+                                                : 'admin'
                                         )
                                     }
                                 >
@@ -187,7 +214,9 @@ export default function UsersAnalytics() {
                                 {activeTab !== 'deactivated' && (
                                     <button
                                         className="px-4 py-2 bg-red-600 text-ginaWhite rounded-xl"
-                                        onClick={() => handleDeactivateUser(user.id)}
+                                        onClick={() =>
+                                            handleDeactivateUser(user.id)
+                                        }
                                     >
                                         Deactivate User
                                     </button>
@@ -195,7 +224,9 @@ export default function UsersAnalytics() {
                                 {activeTab === 'deactivated' && (
                                     <button
                                         className="px-4 py-2 bg-ginaYellow text-ginaWhite rounded-xl"
-                                        onClick={() => handleReactivateUser(user.id)}
+                                        onClick={() =>
+                                            handleReactivateUser(user.id)
+                                        }
                                     >
                                         Reactivate User
                                     </button>
@@ -207,9 +238,12 @@ export default function UsersAnalytics() {
 
                 {selectedUser && (
                     <div className="p-4 border-t border-ginaYellow">
-                        <h3 className="text-lg font-semibold mb-2">User Details</h3>
+                        <h3 className="text-lg font-semibold mb-2">
+                            User Details
+                        </h3>
                         <p>
-                            <strong>First Name:</strong> {selectedUser.firstname}
+                            <strong>First Name:</strong>{' '}
+                            {selectedUser.firstname}
                         </p>
                         <p>
                             <strong>Last Name:</strong> {selectedUser.lastname}
@@ -229,6 +263,6 @@ export default function UsersAnalytics() {
                     </div>
                 )}
             </div>
-            </div>
+        </div>
     );
 }

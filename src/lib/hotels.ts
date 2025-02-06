@@ -1,8 +1,10 @@
+'use server';
+
 import { prisma } from './prisma';
 
 // POST: Create hotel
 export async function createHotel(data: {
-    product_id: string;      // Updated field name from service_id to product_id based on the schema
+    product_id: string; // Updated field name from service_id to product_id based on the schema
     hotel_name: string;
     room_type: string;
     what_to_expect: string;
@@ -11,12 +13,22 @@ export async function createHotel(data: {
     faqs: string;
     hotel_price: number;
     duration_number: number;
-    duration_unit: 'H' | 'D';  // Enum values from DurationUnit
+    duration_unit: 'H' | 'D';
+    image_link: string;
 }) {
     try {
         const newHotel = await prisma.hotels.create({
             data: {
-                ...data,
+                hotel_name: data.hotel_name,
+                room_type: data.room_type,
+                what_to_expect: data.what_to_expect,
+                amenities: data.amenities,
+                highlights: data.highlights,
+                faqs: data.faqs,
+                hotel_price: data.hotel_price,
+                duration_number: data.duration_number,
+                duration_unit: data.duration_unit,
+                image_link: data.image_link,
                 number_of_sold_items: 0,
                 favorites: 0,
                 rating: 0.0,
@@ -26,6 +38,7 @@ export async function createHotel(data: {
                 },
             },
         });
+        console.log('Hotel created successfully:', newHotel);
         return { newHotel };
     } catch (error: unknown) {
         return handleError(error);
@@ -36,8 +49,7 @@ export async function createHotel(data: {
 export async function getAllHotels() {
     try {
         const hotels = await prisma.hotels.findMany({
-            where: { is_active: true },
-            include: { Product: true },  // Include the related Product information if needed
+            include: { Product: true }, // Include the related Product information if needed
         });
         return { hotels };
     } catch (error: unknown) {
@@ -50,7 +62,7 @@ export async function getHotel(hotelId: string) {
     try {
         const hotel = await prisma.hotels.findUnique({
             where: { hotel_id: hotelId },
-            include: { Product: true },  // Include the related Product information if needed
+            include: { Product: true }, // Include the related Product information if needed
         });
 
         if (!hotel || !hotel.is_active) return { error: 'Hotel not found' };
@@ -61,19 +73,23 @@ export async function getHotel(hotelId: string) {
 }
 
 // PUT: Update hotel
-export async function updateHotel(hotelId: string, data: Partial<{
-    product_id: string;
-    hotel_name: string;
-    room_type: string;
-    what_to_expect: string;
-    amenities: string;
-    highlights: string;
-    faqs: string;
-    hotel_price: number;
-    duration_number: number;
-    duration_unit: 'H' | 'D';
-    is_active: boolean;
-}>) {
+export async function updateHotel(
+    hotelId: string,
+    data: Partial<{
+        product_id: string;
+        hotel_name: string;
+        room_type: string;
+        what_to_expect: string;
+        amenities: string;
+        highlights: string;
+        faqs: string;
+        hotel_price: number;
+        duration_number: number;
+        duration_unit: 'H' | 'D';
+        image_link: string;
+        is_active: boolean;
+    }>
+) {
     try {
         // Check if the hotel exists
         const existingHotel = await prisma.hotels.findUnique({
@@ -107,6 +123,18 @@ export async function deleteHotel(hotelId: string) {
             data: { is_active: false },
         });
         return { message: 'Hotel deleted (soft delete) successfully' };
+    } catch (error: unknown) {
+        return handleError(error);
+    }
+}
+
+export async function recoverHotel(hotelId: string) {
+    try {
+        await prisma.hotels.update({
+            where: { hotel_id: hotelId },
+            data: { is_active: true },
+        });
+        return { message: 'Hotel recovered successfully' };
     } catch (error: unknown) {
         return handleError(error);
     }

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { experienceData } from '@/data';
 import Image from 'next/image';
 import {
@@ -16,6 +16,7 @@ import AccordionFAQ from '../faq-accordion';
 
 export default function ExperiencePage() {
     const params = useParams();
+    const router = useRouter()
     const experienceId = params?.id?.toString();
 
     const experience = experienceId
@@ -34,6 +35,10 @@ export default function ExperiencePage() {
 
     const handleLikeClick = () => {
         setIsLiked(!isLiked);
+    };
+
+    const handleBookNowClick = () => {
+        router.push(`/experiences/${experience.id}/book-experience`);
     };
 
     return (
@@ -81,7 +86,8 @@ export default function ExperiencePage() {
                                                 <FaRegHeart size={25} />
                                             )}
                                         </div>
-                                        <button className="bg-ginaYellow text-ginaWhite rounded-xl py-2 px-6 hover:bg-ginaGreen duration-200">
+                                        <button className="bg-ginaYellow text-ginaWhite rounded-xl py-2 px-6 hover:bg-ginaGreen duration-200"
+                                        onClick={handleBookNowClick}>
                                             Book now
                                         </button>
                                     </div>

@@ -1,20 +1,26 @@
+'use server';
+
 import { prisma } from './prisma';
 
 // POST: Create transportation
 export async function createTransportation(data: {
-    product_id: string;       // Updated field name to product_id based on the schema
+    product_id: string; // Updated field name to product_id based on the schema
     transportation_name: string;
-    highlights: string;
     vehicle_type: string;
     vehicle_info: string;
     capacity: number;
-    faqs: string;
     vehicle_price: number;
+    image_link: string;
 }) {
     try {
         const newTransportation = await prisma.transportation.create({
             data: {
-                ...data,
+                transportation_name: data.transportation_name,
+                vehicle_type: data.vehicle_type,
+                vehicle_info: data.vehicle_info,
+                capacity: data.capacity,
+                vehicle_price: data.vehicle_price,
+                image_link: data.image_link,
                 number_of_sold_items: 0,
                 favorites: 0,
                 rating: 0.0,
@@ -24,6 +30,7 @@ export async function createTransportation(data: {
                 },
             },
         });
+        console.log('Transportation created successfully:', newTransportation);
         return { newTransportation };
     } catch (error: unknown) {
         return handleError(error);
@@ -34,8 +41,7 @@ export async function createTransportation(data: {
 export async function getAllTransportations() {
     try {
         const transportations = await prisma.transportation.findMany({
-            where: { is_active: true },
-            include: { Product: true },  // Include the related Product information if needed
+            include: { Product: true }, // Include the related Product information if needed
         });
         return { transportations };
     } catch (error: unknown) {
@@ -48,10 +54,11 @@ export async function getTransportation(transportationId: string) {
     try {
         const transportation = await prisma.transportation.findUnique({
             where: { transportation_id: transportationId },
-            include: { Product: true },  // Include the related Product information if needed
+            include: { Product: true }, // Include the related Product information if needed
         });
 
-        if (!transportation || !transportation.is_active) return { error: 'Transportation not found' };
+        if (!transportation || !transportation.is_active)
+            return { error: 'Transportation not found' };
         return { transportation };
     } catch (error: unknown) {
         return handleError(error);
@@ -59,24 +66,29 @@ export async function getTransportation(transportationId: string) {
 }
 
 // PUT: Update transportation
-export async function updateTransportation(transportationId: string, data: Partial<{
-    product_id: string;
-    transportation_name: string;
-    highlights: string;
-    vehicle_type: string;
-    vehicle_info: string;
-    capacity: number;
-    faqs: string;
-    vehicle_price: number;
-    is_active: boolean;
-}>) {
+export async function updateTransportation(
+    transportationId: string,
+    data: Partial<{
+        product_id: string;
+        transportation_name: string;
+        highlights: string;
+        vehicle_type: string;
+        vehicle_info: string;
+        capacity: number;
+        faqs: string;
+        vehicle_price: number;
+        image_link: string;
+        is_active: boolean;
+    }>
+) {
     try {
         // Check if the transportation exists
         const existingTransportation = await prisma.transportation.findUnique({
             where: { transportation_id: transportationId },
         });
 
-        if (!existingTransportation) return { error: 'Transportation not found' };
+        if (!existingTransportation)
+            return { error: 'Transportation not found' };
 
         // Perform the update
         const updatedTransportation = await prisma.transportation.update({
@@ -103,6 +115,18 @@ export async function deleteTransportation(transportationId: string) {
             data: { is_active: false },
         });
         return { message: 'Transportation deleted (soft delete) successfully' };
+    } catch (error: unknown) {
+        return handleError(error);
+    }
+}
+
+export async function recoverTransportation(transportationId: string) {
+    try {
+        await prisma.transportation.update({
+            where: { transportation_id: transportationId },
+            data: { is_active: true },
+        });
+        return { message: 'Transportation recovered successfully' };
     } catch (error: unknown) {
         return handleError(error);
     }
