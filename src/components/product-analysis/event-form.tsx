@@ -1,0 +1,177 @@
+'use client';
+
+import { useState } from 'react';
+import { eventStore, productStore } from '@/stores';
+
+export default function EventForm() {
+    const productType = 'Events';
+    const [eventName, setEventName] = useState('');
+    const [highlights, setHighlights] = useState('');
+    const [location, setLocation] = useState('');
+    const [whatToExpect, setWhatToExpect] = useState('');
+    const [bestTimeToVisit, setBestTimeToVisit] = useState('');
+    const [durationNumber, setDurationNumber] = useState(1);
+    const [durationUnit, setDurationUnit] = useState('H');
+    const [faqs, setFaqs] = useState('');
+    const [eventPrice, setEventPrice] = useState(0);
+
+    const handleSubmit = async (
+        e: React.FormEvent<HTMLFormElement>
+    ): Promise<void> => {
+        e.preventDefault();
+
+        const confirmed = window.confirm(
+            'Are you sure you want to create this event?'
+        );
+        if (!confirmed) {
+            return;
+        }
+
+        try {
+            const newProduct: { product_id: string } = await productStore
+                .getState()
+                .addProduct(productType);
+
+            if (newProduct) {
+                await eventStore
+                    .getState()
+                    .addEvent(
+                        newProduct.product_id,
+                        eventName,
+                        highlights,
+                        location,
+                        whatToExpect,
+                        bestTimeToVisit,
+                        durationNumber,
+                        durationUnit as 'H' | 'D',
+                        faqs,
+                        eventPrice
+                    );
+
+                console.log('Event created successfully!');
+
+                // Reset form fields
+                setEventName('');
+                setHighlights('');
+                setLocation('');
+                setWhatToExpect('');
+                setBestTimeToVisit('');
+                setDurationNumber(1);
+                setDurationUnit('H');
+                setFaqs('');
+                setEventPrice(0);
+            }
+        } catch (error) {
+            console.error('Error creating event:', error);
+        }
+    };
+
+    return (
+        <div className="w-full min-h-[500px]">
+            <h2>Event Form</h2>
+            <form onSubmit={handleSubmit}>
+                <div>
+                    <label htmlFor="eventName">Event Name:</label>
+                    <input
+                        type="text"
+                        id="eventName"
+                        name="eventName"
+                        value={eventName}
+                        onChange={(e) => setEventName(e.target.value)}
+                        required
+                    />
+                </div>
+                <div>
+                    <label htmlFor="highlights">Highlights:</label>
+                    <textarea
+                        id="highlights"
+                        name="highlights"
+                        value={highlights}
+                        onChange={(e) => setHighlights(e.target.value)}
+                        required
+                    ></textarea>
+                </div>
+                <div>
+                    <label htmlFor="location">Location:</label>
+                    <input
+                        type="text"
+                        id="location"
+                        name="location"
+                        value={location}
+                        onChange={(e) => setLocation(e.target.value)}
+                        required
+                    />
+                </div>
+                <div>
+                    <label htmlFor="whatToExpect">What to Expect:</label>
+                    <textarea
+                        id="whatToExpect"
+                        name="whatToExpect"
+                        value={whatToExpect}
+                        onChange={(e) => setWhatToExpect(e.target.value)}
+                        required
+                    ></textarea>
+                </div>
+                <div>
+                    <label htmlFor="bestTimeToVisit">Best Time to Visit:</label>
+                    <input
+                        type="text"
+                        id="bestTimeToVisit"
+                        name="bestTimeToVisit"
+                        value={bestTimeToVisit}
+                        onChange={(e) => setBestTimeToVisit(e.target.value)}
+                        required
+                    />
+                </div>
+                <div>
+                    <label htmlFor="durationNumber">Duration Number:</label>
+                    <input
+                        type="number"
+                        id="durationNumber"
+                        name="durationNumber"
+                        value={durationNumber}
+                        onChange={(e) =>
+                            setDurationNumber(Number(e.target.value))
+                        }
+                        required
+                    />
+                </div>
+                <div>
+                    <label htmlFor="durationUnit">Duration Unit:</label>
+                    <select
+                        id="durationUnit"
+                        name="durationUnit"
+                        value={durationUnit}
+                        onChange={(e) => setDurationUnit(e.target.value)}
+                        required
+                    >
+                        <option value="H">Hours</option>
+                        <option value="D">Days</option>
+                    </select>
+                </div>
+                <div>
+                    <label htmlFor="faqs">FAQs:</label>
+                    <textarea
+                        id="faqs"
+                        name="faqs"
+                        value={faqs}
+                        onChange={(e) => setFaqs(e.target.value)}
+                        required
+                    ></textarea>
+                </div>
+                <div>
+                    <label htmlFor="eventPrice">Event Price:</label>
+                    <input
+                        type="number"
+                        id="eventPrice"
+                        name="eventPrice"
+                        value={eventPrice}
+                        onChange={(e) => setEventPrice(Number(e.target.value))}
+                        required
+                    />
+                </div>
+                <button type="submit">Create Event</button>
+            </form>
+        </div>
+    );
+}
