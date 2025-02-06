@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Service, FAQ } from '@/types/service'; // Adjust the import path according to your project structure
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { serviceData } from '@/data';
 import Image from 'next/image';
 import {
@@ -15,6 +15,7 @@ import {
 
 export default function IdService() {
     const params = useParams();
+    const router = useRouter();
     const serviceId = params?.id?.toString();
 
     const service = serviceId
@@ -33,6 +34,10 @@ export default function IdService() {
 
     const handleLikeClick = () => {
         setIsLiked(!isLiked);
+    };
+
+    const handleBookNowClick = () => {
+        router.push(`/services/services-list/${service.id}/book-service`);
     };
 
     return (
@@ -80,7 +85,8 @@ export default function IdService() {
                                                 <FaRegHeart size={25} />
                                             )}
                                         </div>
-                                        <button className="bg-ginaYellow text-ginaWhite rounded-xl py-2 px-6 hover:bg-ginaGreen duration-200">
+                                        <button className="bg-ginaYellow text-ginaWhite rounded-xl py-2 px-6 hover:bg-ginaGreen duration-200"
+                                        onClick={handleBookNowClick}>
                                             Book now
                                         </button>
                                     </div>
