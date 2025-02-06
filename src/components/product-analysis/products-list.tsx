@@ -243,7 +243,7 @@ export default function ProductList() {
     return (
         <div>
             {/* Tabs Navigation */}
-            <div className="flex border-b">
+            <div className="flex border-b overflow-x-auto">
                 {[
                     'packages',
                     'transportations',
@@ -256,7 +256,7 @@ export default function ProductList() {
                         onClick={() => setActiveTab(tab as any)}
                         className={`py-2 px-4 text-sm font-semibold border-b-2 ${
                             activeTab === tab
-                                ? 'border-blue-500 text-blue-500'
+                                ? 'border-ginaYellow text-ginaYellow'
                                 : 'border-transparent text-gray-600'
                         }`}
                     >
@@ -285,7 +285,7 @@ export default function ProductList() {
                 {isLoading && <p>Loading...</p>}
 
                 {/* Render data list */}
-                <ul className="space-y-4">
+                <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                     {filteredData?.map((item) => (
                         <li
                             key={
@@ -295,7 +295,7 @@ export default function ProductList() {
                                 item.event_id ||
                                 item.activity_id
                             }
-                            className="border p-4 rounded-md shadow"
+                            className="flex flex-col items-center border p-4 rounded-xl space-y-2"
                         >
                             <Image
                                 src={
@@ -305,7 +305,7 @@ export default function ProductList() {
                                 alt={item?.name || 'Item Name'}
                                 width={100}
                                 height={100}
-                                className="object-cover object-center w-52 h-52 rounded-md"
+                                className="object-cover object-center w-24 h-24 rounded-md"
                             />
 
                             <h3 className="text-lg font-semibold">
@@ -335,20 +335,21 @@ export default function ProductList() {
                             </p>
 
                             {/* Action Buttons */}
-                            <div className="mt-2 flex gap-2">
+                            <div className="mt-2 flex flex-col gap-2">
                                 <button
                                     className={`px-4 py-2 text-white ${
                                         item.is_active
                                             ? 'bg-red-500'
                                             : 'bg-green-500'
-                                    } rounded-md`}
+                                    } rounded-xl`}
                                     onClick={() => handleAction(item)}
                                 >
                                     {item.is_active
                                         ? 'Deactivate'
                                         : 'Reactivate'}
                                 </button>
-                                <ModalButton buttonContent="Edit">
+                                <ModalButton buttonContent="Edit"
+                                buttonClassName="py-2 px-4 bg-ginaBlue text-ginaWhite rounded-xl">
                                     <div className="bg-ginaWhite p-8">
                                         {activeTab === 'transportations' && (
                                             <TransportationForm
@@ -396,7 +397,7 @@ export default function ProductList() {
 
                 {/* Message if no items */}
                 {!isLoading && !error && filteredData?.length === 0 && (
-                    <p>No items found.</p>
+                    <p className="p-8">No items found.</p>
                 )}
             </div>
         </div>

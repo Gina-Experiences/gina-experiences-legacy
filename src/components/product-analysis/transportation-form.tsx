@@ -112,15 +112,18 @@ export default function TransportationForm({
     };
 
     return (
-        <div className="w-full min-h-[500px]">
-            <h2>
+        <div className="w-full min-h-[500px] max-h-screen p-4 bg-white shadow-md rounded-md">
+            <h2 className="text-2xl font-bold mb-4">
                 {transportationId
                     ? 'Edit Transportation'
                     : 'Transportation Form'}
             </h2>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} className="gap-4 grid grid-cols-2">
                 <div>
-                    <label htmlFor="transportationName">
+                    <label
+                        htmlFor="transportationName"
+                        className="block text-sm font-medium text-ginaBlack/80"
+                    >
                         Transportation Name:
                     </label>
                     <input
@@ -130,10 +133,16 @@ export default function TransportationForm({
                         value={transportationName}
                         onChange={(e) => setTransportationName(e.target.value)}
                         required
+                        className="mt-1 block w-full border border-ginaBlack/60 rounded-md shadow-sm p-2"
                     />
                 </div>
                 <div>
-                    <label htmlFor="vehicleType">Vehicle Type:</label>
+                    <label
+                        htmlFor="vehicleType"
+                        className="block text-sm font-medium text-ginaBlack/80"
+                    >
+                        Vehicle Type:
+                    </label>
                     <input
                         type="text"
                         id="vehicleType"
@@ -141,20 +150,32 @@ export default function TransportationForm({
                         value={vehicleType}
                         onChange={(e) => setVehicleType(e.target.value)}
                         required
+                        className="mt-1 block w-full border border-ginaBlack/60 rounded-md shadow-sm p-2"
                     />
                 </div>
-                <div>
-                    <label htmlFor="vehicleInfo">Vehicle Info:</label>
+                <div className="col-span-2">
+                    <label
+                        htmlFor="vehicleInfo"
+                        className="block text-sm font-medium text-ginaBlack/80"
+                    >
+                        Vehicle Info:
+                    </label>
                     <textarea
                         id="vehicleInfo"
                         name="vehicleInfo"
                         value={vehicleInfo}
                         onChange={(e) => setVehicleInfo(e.target.value)}
                         required
+                        className="mt-1 block w-full border border-ginaBlack/60 rounded-md shadow-sm p-2"
                     ></textarea>
                 </div>
                 <div>
-                    <label htmlFor="capacity">Capacity:</label>
+                    <label
+                        htmlFor="capacity"
+                        className="block text-sm font-medium text-ginaBlack/80"
+                    >
+                        Capacity:
+                    </label>
                     <input
                         type="number"
                         id="capacity"
@@ -162,10 +183,16 @@ export default function TransportationForm({
                         value={capacity}
                         onChange={(e) => setCapacity(Number(e.target.value))}
                         required
+                        className="mt-1 block w-full border border-ginaBlack/60 rounded-md shadow-sm p-2"
                     />
                 </div>
                 <div>
-                    <label htmlFor="vehiclePrice">Vehicle Price:</label>
+                    <label
+                        htmlFor="vehiclePrice"
+                        className="block text-sm font-medium text-ginaBlack/80"
+                    >
+                        Vehicle Price:
+                    </label>
                     <input
                         type="number"
                         id="vehiclePrice"
@@ -175,10 +202,16 @@ export default function TransportationForm({
                             setVehiclePrice(Number(e.target.value))
                         }
                         required
+                        className="mt-1 block w-full border border-ginaBlack/60 rounded-md shadow-sm p-2"
                     />
                 </div>
-                <div>
-                    <label htmlFor="imageLink">Image Link:</label>
+                <div className="col-span-2">
+                    <label
+                        htmlFor="imageLink"
+                        className="block text-sm font-medium text-ginaBlack/80"
+                    >
+                        Image Link:
+                    </label>
                     <input
                         type="text"
                         id="imageLink"
@@ -186,16 +219,24 @@ export default function TransportationForm({
                         value={imageLink}
                         onChange={(e) => setImageLink(e.target.value)}
                         required
+                        className="mt-1 block w-full border border-ginaBlack/60 rounded-md shadow-sm p-2"
                     />
                 </div>
-                <div className="flex gap-2 mt-4">
-                    <button type="submit">
+                <div className="col-start-2 space-x-4 p-4">
+                    <button
+                        type="button"
+                        onClick={resetForm}
+                        className="px-4 py-2 bg-ginaGray text-ginaBlack rounded-xl"
+                    >
+                        Cancel
+                    </button>
+                    <button
+                        type="submit"
+                        className="px-4 py-2 bg-ginaOrange text-white rounded-xl"
+                    >
                         {transportationId
                             ? 'Save Transportation'
                             : 'Create Transportation'}
-                    </button>
-                    <button type="button" onClick={resetForm}>
-                        Cancel
                     </button>
                 </div>
             </form>
