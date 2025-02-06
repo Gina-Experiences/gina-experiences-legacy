@@ -1,9 +1,11 @@
+'use server';
+
 import { prisma } from './prisma';
 import { ProductType } from '@prisma/client';
 
 // POST: Create product
 export async function createProduct(data: {
-    product_type: ProductType;  // Use the ProductType enum directly
+    product_type: ProductType; // Use the ProductType enum directly
 }) {
     try {
         const newProduct = await prisma.product.create({
@@ -11,8 +13,10 @@ export async function createProduct(data: {
                 product_type: data.product_type,
             },
         });
-        return { newProduct };
+        console.log('New Product Created:', newProduct); // Log the new product
+        return { newProduct }; // Ensure this returns the new product
     } catch (error: unknown) {
+        console.error('Error creating product:', error); // Log the error
         return handleError(error);
     }
 }

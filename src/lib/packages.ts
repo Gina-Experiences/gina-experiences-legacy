@@ -1,21 +1,30 @@
+'use server';
+
 import { prisma } from './prisma';
 
 // POST: Create package
 export async function createPackage(data: {
-    product_id: string;        // Updated field name to product_id based on the schema
+    product_id: string; // Updated field name to product_id based on the schema
     package_name: string;
     highlights: string;
     what_to_expect: string;
     best_time_to_visit: string;
     duration_number: number;
-    duration_unit: 'H' | 'D';  // Enum values from DurationUnit
+    duration_unit: 'H' | 'D'; // Enum values from DurationUnit
     faqs: string;
     package_price: number;
 }) {
     try {
         const newPackage = await prisma.packages.create({
             data: {
-                ...data,
+                package_name: data.package_name,
+                highlights: data.highlights,
+                what_to_expect: data.what_to_expect,
+                best_time_to_visit: data.best_time_to_visit,
+                duration_number: data.duration_number,
+                duration_unit: data.duration_unit,
+                faqs: data.faqs,
+                package_price: data.package_price,
                 number_of_sold_items: 0,
                 favorites: 0,
                 rating: 0.0,
@@ -25,6 +34,7 @@ export async function createPackage(data: {
                 },
             },
         });
+        console.log('Package created successfully:', newPackage);
         return { newPackage };
     } catch (error: unknown) {
         return handleError(error);
@@ -35,8 +45,7 @@ export async function createPackage(data: {
 export async function getAllPackages() {
     try {
         const packages = await prisma.packages.findMany({
-            where: { is_active: true },
-            include: { Product: true },  // Include the related Product information if needed
+            include: { Product: true }, // Include the related Product information if needed
         });
         return { packages };
     } catch (error: unknown) {
@@ -49,10 +58,11 @@ export async function getPackage(packageId: string) {
     try {
         const packageData = await prisma.packages.findUnique({
             where: { package_id: packageId },
-            include: { Product: true },  // Include the related Product information if needed
+            include: { Product: true }, // Include the related Product information if needed
         });
 
-        if (!packageData || !packageData.is_active) return { error: 'Package not found' };
+        if (!packageData || !packageData.is_active)
+            return { error: 'Package not found' };
         return { package: packageData };
     } catch (error: unknown) {
         return handleError(error);
@@ -60,18 +70,21 @@ export async function getPackage(packageId: string) {
 }
 
 // PUT: Update package
-export async function updatePackage(packageId: string, data: Partial<{
-    product_id: string;
-    package_name: string;
-    highlights: string;
-    what_to_expect: string;
-    best_time_to_visit: string;
-    duration_number: number;
-    duration_unit: 'H' | 'D';
-    faqs: string;
-    package_price: number;
-    is_active: boolean;
-}>) {
+export async function updatePackage(
+    packageId: string,
+    data: Partial<{
+        product_id: string;
+        package_name: string;
+        highlights: string;
+        what_to_expect: string;
+        best_time_to_visit: string;
+        duration_number: number;
+        duration_unit: 'H' | 'D';
+        faqs: string;
+        package_price: number;
+        is_active: boolean;
+    }>
+) {
     try {
         // Check if the package exists
         const existingPackage = await prisma.packages.findUnique({
