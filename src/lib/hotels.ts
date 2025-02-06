@@ -128,6 +128,18 @@ export async function deleteHotel(hotelId: string) {
     }
 }
 
+export async function recoverHotel(hotelId: string) {
+    try {
+        await prisma.hotels.update({
+            where: { hotel_id: hotelId },
+            data: { is_active: true },
+        });
+        return { message: 'Hotel recovered successfully' };
+    } catch (error: unknown) {
+        return handleError(error);
+    }
+}
+
 // Common error handler
 function handleError(error: unknown) {
     if (error instanceof Error) {

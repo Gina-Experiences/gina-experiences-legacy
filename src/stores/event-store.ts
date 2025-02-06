@@ -6,6 +6,7 @@ import {
     getEvent,
     updateEvent,
     deleteEvent,
+    recoverEvent,
 } from '@/lib/events';
 import { localStorageWrapper } from '@/stores';
 
@@ -27,13 +28,15 @@ interface EventStore {
         durationNumber: number,
         durationUnit: 'H' | 'D',
         faqs: string,
-        eventPrice: number
+        eventPrice: number,
+        image_link: string
     ) => Promise<void>;
     updateEvent: (
         eventId: string,
         data: Partial<EventUpdateData>
     ) => Promise<void>;
     removeEvent: (eventId: string) => Promise<void>;
+    recoverEvent: (eventId: string) => Promise<void>;
     clearCache: () => void;
 }
 
@@ -48,6 +51,7 @@ interface EventUpdateData {
     duration_unit?: 'H' | 'D';
     faqs?: string;
     event_price?: number;
+    image_link?: string;
     is_active?: boolean;
 }
 
@@ -108,7 +112,8 @@ const eventStore = create<EventStore>()(
                 durationNumber: number,
                 durationUnit: 'H' | 'D',
                 faqs: string,
-                eventPrice: number
+                eventPrice: number,
+                image_link: string
             ) => {
                 set({ isLoading: true, error: null });
                 try {
@@ -123,6 +128,7 @@ const eventStore = create<EventStore>()(
                         duration_unit: durationUnit,
                         faqs: faqs,
                         event_price: eventPrice,
+                        image_link: image_link,
                     });
                     console.log('[Zustand] Event created:', newEvent);
                     set((state) => ({
@@ -184,6 +190,31 @@ const eventStore = create<EventStore>()(
                             error instanceof Error
                                 ? error.message
                                 : 'Failed to delete event!',
+                        isLoading: false,
+                    });
+                }
+            },
+
+            recoverEvent: async (eventId: string) => {
+                set({ isLoading: true, error: null });
+                try {
+                    await recoverEvent(eventId);
+                    console.log('[Zustand] Event recovered');
+                    set({
+                        events: set().events?.map((event) =>
+                            event.event_id === eventId
+                                ? { ...event, is_active: true }
+                                : event
+                        ),
+                        isLoading: false,
+                    });
+                } catch (error) {
+                    console.error('[Zustand] Error recovering event:', error);
+                    set({
+                        error:
+                            error instanceof Error
+                                ? error.message
+                                : 'Failed to recover event!',
                         isLoading: false,
                     });
                 }

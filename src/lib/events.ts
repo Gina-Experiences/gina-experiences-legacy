@@ -124,6 +124,18 @@ export async function deleteEvent(eventId: string) {
     }
 }
 
+export async function recoverEvent(eventId: string) {
+    try {
+        await prisma.events.update({
+            where: { event_id: eventId },
+            data: { is_active: true },
+        });
+        return { message: 'Event recovered successfully' };
+    } catch (error: unknown) {
+        return handleError(error);
+    }
+}
+
 // Common error handler
 function handleError(error: unknown) {
     if (error instanceof Error) {

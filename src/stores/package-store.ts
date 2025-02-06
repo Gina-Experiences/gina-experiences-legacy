@@ -6,6 +6,7 @@ import {
     createPackage,
     updatePackage,
     deletePackage,
+    recoverPackage,
 } from '@/lib/packages';
 import { localStorageWrapper } from '@/stores';
 
@@ -26,13 +27,15 @@ interface PackageStore {
         durationNumber: number,
         durationUnit: 'H' | 'D',
         faqs: string,
-        packagePrice: number
+        packagePrice: number,
+        image_link: string
     ) => Promise<void>;
     updatePackage: (
         packageId: string,
         data: Partial<PackageUpdateData>
     ) => Promise<void>;
     removePackage: (packageId: string) => Promise<void>;
+    recoverPackage: (packageId: string) => Promise<void>;
     clearCache: () => void;
 }
 
@@ -46,6 +49,7 @@ interface PackageUpdateData {
     duration_unit?: 'H' | 'D';
     faqs?: string;
     package_price?: number;
+    image_link?: string;
     is_active?: boolean;
 }
 
@@ -106,7 +110,8 @@ const packageStore = create<PackageStore>()(
                 durationNumber: number,
                 durationUnit: 'H' | 'D',
                 faqs: string,
-                packagePrice: number
+                packagePrice: number,
+                image_link: string
             ) => {
                 set({ isLoading: true, error: null });
                 try {
@@ -120,6 +125,7 @@ const packageStore = create<PackageStore>()(
                         duration_unit: durationUnit,
                         faqs: faqs,
                         package_price: packagePrice,
+                        image_link: image_link,
                     });
                     console.log('[Zustand] Package created:', newPackage);
                     set((state) => ({
@@ -187,6 +193,31 @@ const packageStore = create<PackageStore>()(
                             error instanceof Error
                                 ? error.message
                                 : 'Failed to delete package!',
+                        isLoading: false,
+                    });
+                }
+            },
+
+            recoverPackage: async (packageId: string) => {
+                set({ isLoading: true, error: null });
+                try {
+                    await recoverPackage(packageId);
+                    console.log('[Zustand] Package recovered');
+                    set({
+                        packages: set().packages?.map((pkg) =>
+                            pkg.package_id === packageId
+                                ? { ...pkg, is_active: true }
+                                : pkg
+                        ),
+                        isLoading: false,
+                    });
+                } catch (error) {
+                    console.error('[Zustand] Error recovering package:', error);
+                    set({
+                        error:
+                            error instanceof Error
+                                ? error.message
+                                : 'Failed to recover package!',
                         isLoading: false,
                     });
                 }
