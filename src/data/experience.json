@@ -714,12 +714,12 @@
     },
     {
         "id": 12,
-        "title": "Lorem Ipsum Visayas Tour",
-        "location": "Lorem City",
+        "title": "Cebueno Visayas Tour",
+        "location": "Cebu City",
         "island": "Visayas",
         "price": "P 5,000.00",
         "highlights": "Embark on an exhilarating Naga Bike Tour that lets you experience the city's vibrant culture, scenic beauty, and hidden gems from the unique perspective of a bicycle. Immerse yourself in the rhythm of Naga's streets, winding through charming neighborhoods, bustling markets, and historic landmarks. Led by experienced local guides, this tour combines outdoor exploration with cultural insights, creating an unforgettable biking adventure through the heart of Naga.",
-        "image": "/images/experiences/tour-experiences/1.jpg",
+        "image": "/images/experiences/tour-experiences/12.jpg",
         "get": null,
         "expect": [
             "What to Expect:",
@@ -785,12 +785,12 @@
     },
     {
         "id": 13,
-        "title": "Lorem Ipsum Mindanao Tour",
-        "location": "Lorem City",
+        "title": "Davaoeños Mindanao Tour",
+        "location": "Davao City",
         "island": "Mindanao",
         "price": "P 5,000.00",
         "highlights": "Embark on an exhilarating Naga Bike Tour that lets you experience the city's vibrant culture, scenic beauty, and hidden gems from the unique perspective of a bicycle. Immerse yourself in the rhythm of Naga's streets, winding through charming neighborhoods, bustling markets, and historic landmarks. Led by experienced local guides, this tour combines outdoor exploration with cultural insights, creating an unforgettable biking adventure through the heart of Naga.",
-        "image": "/images/experiences/tour-experiences/2.jpg",
+        "image": "/images/experiences/tour-experiences/13.jpg",
         "get": null,
         "expect": [
             "What to Expect:",
@@ -856,12 +856,12 @@
     },
     {
         "id": 14,
-        "title": "Lorem Ipsum Tour",
-        "location": "Lorem City",
+        "title": "BGC Tour",
+        "location": "Taguig City",
         "island": "Luzon",
         "price": "P 5,000.00",
         "highlights": "Embark on an exhilarating Naga Bike Tour that lets you experience the city's vibrant culture, scenic beauty, and hidden gems from the unique perspective of a bicycle. Immerse yourself in the rhythm of Naga's streets, winding through charming neighborhoods, bustling markets, and historic landmarks. Led by experienced local guides, this tour combines outdoor exploration with cultural insights, creating an unforgettable biking adventure through the heart of Naga.",
-        "image": "/images/experiences/tour-experiences/3.jpg",
+        "image": "/images/experiences/tour-experiences/14.jpg",
         "get": null,
         "expect": [
             "What to Expect:",
