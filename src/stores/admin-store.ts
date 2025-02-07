@@ -4,18 +4,19 @@ import { localStorageWrapper } from '@/stores';
 import { getAnalytics } from '@/lib/admin';
 
 interface AnalyticsStore {
-    totalLTV: number;
-    totalSold: number;
-    totalUsers: number;
-    totalUsersSignUpThisMonth: number;
-    totalSalesPerMonth: any[];
-    completedBookings: number;
-    failedBookings: number;
-    totalBookings: number;
-    totalBookingsPerMonth: any[];
+    data: {
+        totalLTV: number;
+        totalSold: number;
+        totalUsers: number;
+        totalUsersSignUpThisMonth: number;
+        totalSalesPerMonth: any[];
+        completedBookings: number;
+        failedBookings: number;
+        totalBookings: number;
+        totalBookingsPerMonth: any[];
+    } | null;
     isLoading: boolean;
     error: string | null;
-
     fetchAnalytics: () => Promise<void>;
     clearCache: () => void;
 }
@@ -23,40 +24,28 @@ interface AnalyticsStore {
 const adminStore = create<AnalyticsStore>()(
     persist(
         (set) => ({
-            totalLTV: 0,
-            totalSold: 0,
-            totalUsers: 0,
-            totalUsersSignUpThisMonth: 0,
-            totalSalesPerMonth: [],
-            completedBookings: 0,
-            failedBookings: 0,
-            totalBookings: 0,
-            totalBookingsPerMonth: [],
+            data: null,
             isLoading: false,
             error: null,
 
             fetchAnalytics: async () => {
                 set({ isLoading: true, error: null });
                 try {
-                    const analyticsData = await getAnalytics();
-                    console.log('[Zustand] Analytics fetched:', analyticsData);
+                    const response = await getAnalytics();
+
+                    if ('error' in response) {
+                        throw new Error(response.error);
+                    }
+
                     set({
-                        totalLTV: analyticsData.totalLTV,
-                        totalSold: analyticsData.totalSold,
-                        totalUsers: analyticsData.totalUsers,
-                        totalUsersSignUpThisMonth:
-                            analyticsData.totalUsersSignUpThisMonth,
-                        totalSalesPerMonth: analyticsData.totalSalesPerMonth,
-                        completedBookings: analyticsData.completedBookings,
-                        failedBookings: analyticsData.failedBookings,
-                        totalBookings: analyticsData.totalBookings,
-                        totalBookingsPerMonth:
-                            analyticsData.totalBookingsPerMonth,
+                        data: response,
                         isLoading: false,
+                        error: null,
                     });
                 } catch (error) {
                     console.error('[Zustand] Error fetching analytics:', error);
                     set({
+                        data: null,
                         error:
                             error instanceof Error
                                 ? error.message
@@ -69,21 +58,19 @@ const adminStore = create<AnalyticsStore>()(
             clearCache: () => {
                 localStorageWrapper.removeItem('analytics-storage');
                 set({
-                    totalLTV: 0,
-                    totalSold: 0,
-                    totalUsers: 0,
-                    totalUsersSignUpThisMonth: 0,
-                    totalSalesPerMonth: [],
-                    completedBookings: 0,
-                    failedBookings: 0,
-                    totalBookings: 0,
-                    totalBookingsPerMonth: [],
+                    data: null,
+                    isLoading: false,
+                    error: null,
                 });
             },
         }),
         {
             name: 'analytics-storage',
             storage: localStorageWrapper,
+            version: 1,
+            onRehydrateStorage: () => (state) => {
+                console.log('Analytics store rehydrated:', state);
+            },
         }
     )
 );
