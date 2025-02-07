@@ -4,6 +4,8 @@ import Link from 'next/link';
 import { X, EyeOff, Eye } from 'lucide-react';
 import { userStore } from '@/stores';
 import React, { useState } from 'react';
+import { ModalButton } from '@/components/layout';
+import { TermsCon } from '@/components/popup';
 
 interface CompleteInfoFormProps {
     onComplete: () => void;
@@ -205,12 +207,14 @@ const CompleteInfoForm: React.FC<CompleteInfoFormProps> = ({ onComplete }) => {
 
                             <span className="text-xs text-ginaBlue/60 uppercase cursor-alias">
                                 Agree to the{' '}
-                                <Link
-                                    href={'/terms-and-cons'}
-                                    className="cursor-pointer font-medium hover:text-ginaGreen duration-300"
+                                <ModalButton
+                                    buttonContent="Terms and Conditions"
+                                    buttonClassName="uppercase cursor-pointer font-medium hover:text-ginaGreen duration-300"
                                 >
-                                    terms and conditions
-                                </Link>
+                                    <div className="w-[95svw] h-[95svh] bg-ginaWhite box-border">
+                                        <TermsCon />
+                                    </div>
+                                </ModalButton>
                             </span>
                         </div>
                         <button

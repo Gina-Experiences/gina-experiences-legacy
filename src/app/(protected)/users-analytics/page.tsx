@@ -159,15 +159,26 @@ export default function UsersAnalytics() {
                             key={user.id}
                             className="p-4 flex flex-col lg:flex-row  justify-between items-center"
                         >
-                            <div className="flex flex-col lg:flex-row items-center  space-x-4">
-                                <img
-                                    src={user.image}
-                                    alt={`${user.firstname} ${user.lastname}`}
-                                    className="w-10 h-10 rounded-full"
-                                />
-                                <div>
-                                    {user.firstname} {user.lastname} (
-                                    {user.role})
+                            <div className="flex flex-col items-center space-x-4">
+                                <div className="flex flex-col lg:flex-row items-start space-x-4">
+                                    <img
+                                        src={user.image}
+                                        alt={`${user.firstname} ${user.lastname}`}
+                                        className="w-10 h-10 rounded-full"
+                                    />
+                                    <div className="flex flex-col items-start gap-2">
+                                        <div>
+                                            {user.firstname} {user.lastname} (
+                                            {user.role})
+                                        </div>
+                                        <div>
+                                            <span className="font-medium">
+                                                LTV:
+                                            </span>{' '}
+                                            <span className="text-sm">₱</span>
+                                            {user.ltv}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div className="flex flex-col lg:flex-row space-x-0 space-y-2 lg:space-x-2 lg:space-y-0 p-2">

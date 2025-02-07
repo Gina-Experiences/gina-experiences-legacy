@@ -1,6 +1,6 @@
 'use client';
 
-import Link from "next/link";
+import Link from 'next/link';
 
 import Image from 'next/image';
 import {
@@ -67,7 +67,7 @@ const Footer = () => {
                         </div>
                         <div className="flex flex-col items-center sm:items-start">
                             <span className="text-3xl font-bold">LEGAL</span>
-                            <Link href={"/terms-and-cons"}>
+                            <Link href={'/terms-and-cons'}>
                                 <button className="text-left">
                                     Terms & Conditions
                                 </button>
@@ -110,7 +110,7 @@ const Footer = () => {
                 <div className="flex justify-between w-72 pt-2">
                     <button>FAQs</button>
                     <button>Privacy</button>
-                    <Link href={"/terms-and-cons"}>
+                    <Link href={'/terms-and-cons'}>
                         <button>Terms & Conditions</button>
                     </Link>
                 </div>
