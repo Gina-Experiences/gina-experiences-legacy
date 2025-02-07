@@ -10,6 +10,9 @@ interface AnalyticsOverviewProps {
 export function AnalyticsOverview({ totalLTV, totalSold, totalUsers, newUsersThisMonth }: AnalyticsOverviewProps) {
     const formatNumber = (num: number) => num.toLocaleString();
 
+
+
+    
     return (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             <div className="bg-white p-6 rounded-lg shadow">
