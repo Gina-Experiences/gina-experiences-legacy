@@ -3,7 +3,7 @@ import { DashboardHero } from '@/components/dashboard';
 import { AnalyticsOverview } from '@/components/analytics/overview';
 import { MonthlyStats } from '@/components/analytics/monthly-stats';
 import { BookingStats } from '@/components/analytics/booking-stats';
-import { RefreshButton } from '@/components/analytics/refresh-button';
+
 
 export default async function Dashboard() {
     const analyticsData = await getAnalytics();
