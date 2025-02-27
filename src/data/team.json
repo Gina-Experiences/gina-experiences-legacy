@@ -4,20 +4,20 @@
         "name": "Mary Gwyneth Joson",
         "title": "Chief Executive Officer / Founder",
         "description": "Mary is the visionary leader and founder of our team, guiding us with her deep passion and commitment to excellence. With a wealth of experience and an innovative mindset, she empowers our team to push boundaries and exceed expectations.",
-        "image": "/images/team/joson.jpg"
+        "image": "/images/about/team/joson.jpg"
     },
     {
         "id": 1,
         "name": "Caleb Andaya",
         "title": "Chief Operations Officer",
         "description": "Caleb is the cornerstone of our operations, meticulously overseeing the efficiency and organization of every project we undertake. His strategic approach and attention to detail keep our processes streamlined, allowing our team to focus on delivering exceptional results.",
-        "image": "/images/team/andaya.jpg"
+        "image": "/images/about/team/andaya.jpg"
     },
     {
         "id": 2,
         "name": "Angeline Mae Manalang",
         "title": "Chief Marketing Officer",
         "description": "Angeline is the creative spark behind our brand's voice, leading our marketing efforts with a blend of innovation and strategic insight. She crafts campaigns that resonate with audiences, building connections that reflect our values and vision.",
-        "image": "/images/team/manalang.jpg"
+        "image": "/images/about/team/manalang.jpg"
     }
 ]

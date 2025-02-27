@@ -2,28 +2,28 @@ import Image from 'next/image';
 
 const TestimonialsData = [
    {
-      userImage: '/images/home/testimonials/userImage.png',
-      userName: 'Zeke Andrei David',
+      userImage: '/images/home/testimonials/Tes1.png',
+      userName: 'Anya Taylor',
       userOccupation: 'Travel Vlogger',
       rating: 5,
       testimonial: 'Every moment was memorable in Gina Experiences, and it felt like more than just a vacation – it was an immersive and enriching experience.',
       datePosted: 'January 1, 2024 | 11:59PM'
    },
    {
-      userImage: '/images/home/testimonials/userImage.png',
-      userName: 'Zeke Andrei David',
+      userImage: '/images/home/testimonials/Tes2.png',
+      userName: 'Bradd Pitt',
       userOccupation: 'Travel Vlogger',
       rating: 4,
-      testimonial: 'Every moment was memorable in Gina Experiences, and it felt like more than just a vacation – it was an immersive and enriching experience.',
-      datePosted: 'January 1, 2024 | 11:59PM'
+      testimonial: 'Booking with this service was a game-changer! The trip was seamless, from personalized recommendations to smooth transfers.',
+      datePosted: 'Febuary 8, 2024 | 10:59PM'
    },
    {
-      userImage: '/images/home/testimonials/userImage.png',
-      userName: 'Zeke Andrei David',
+      userImage: '/images/home/testimonials/Tes3.png',
+      userName: 'Brandon White',
       userOccupation: 'Travel Vlogger',
       rating: 5,
-      testimonial: 'Every moment was memorable in Gina Experiences, and it felt like more than just a vacation – it was an immersive and enriching experience.',
-      datePosted: 'January 1, 2024 | 11:59PM'
+      testimonial: 'I’ve never experienced travel like this before! The service went above and beyond to cater to our interests, ensuring every moment was special.',
+      datePosted: 'December 1, 2024 | 11:59PM'
    },
 ];
 
